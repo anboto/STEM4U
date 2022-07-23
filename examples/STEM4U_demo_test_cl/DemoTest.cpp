@@ -13,7 +13,7 @@
 #include <STEM4U/SeaWaves.h>
 #include <STEM4U/Utility.h>
 #include <STEM4U/CrossCorrelation.h>
-#include <ScatterDraw/DataSource.h>
+#include <Scatter/ScatterDraw/DataSource.h>
 #include <STEM4U/Rootfinding.h>
 
 using namespace Upp;
