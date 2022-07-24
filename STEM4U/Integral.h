@@ -3,8 +3,8 @@
 #ifndef _STEM4U_Integral_h_
 #define _STEM4U_Integral_h_
 
-#include <Scatter/ScatterDraw/DataSource.h>
-#include <Scatter/ScatterDraw/Equation.h>
+#include <ScatterDraw/DataSource.h>
+#include <ScatterDraw/Equation.h>
 
 namespace Upp {
 	

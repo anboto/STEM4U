@@ -3,7 +3,7 @@
 #ifndef _STEM4U_ShortestPath_h_
 #define _STEM4U_ShortestPath_h_
 
-#include <Scatter/ScatterDraw/MultiDimMatrixIndex.h>
+#include <ScatterDraw/MultiDimMatrixIndex.h>
 
 namespace Upp {
 

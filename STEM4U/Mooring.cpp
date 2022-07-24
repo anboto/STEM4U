@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2021 - 2022, the Anboto author and contributors
 #include <Core/Core.h>
-#include <Eigen/Eigen/Eigen.h>
+#include <Eigen/Eigen.h>
 #include "Sundials.h"
 #include "Mooring.h"
 

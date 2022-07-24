@@ -5,7 +5,7 @@ noblitz;
 uses
 	Core,
 	plugin/png,
-	STEM4U/STEM4U;
+	STEM4U;
 
 file
 	DemoTest.cpp,

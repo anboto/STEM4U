@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2021 - 2022, the Anboto author and contributors
-#include <STEM4U/STEM4U/Combinations.h>
+#include <STEM4U/Combinations.h>
 #include <vector>
 #include <numeric>
 

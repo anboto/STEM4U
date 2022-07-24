@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2021 - 2022, the Anboto author and contributors
 #include <Core/Core.h>
-#include <Functions4U/Functions4U/Functions4U.h>
-#include <Eigen/Eigen/Eigen.h>
-#include <STEM4U/STEM4U/IntInf.h>
-#include <STEM4U/STEM4U/Rational.h>
-#include <STEM4U/STEM4U/Polynomial.h>
-#include <STEM4U/STEM4U/Sundials.h>
-#include <STEM4U/STEM4U/Integral.h>
-#include <STEM4U/STEM4U/TravellingSalesman.h>
-#include <STEM4U/STEM4U/ShortestPath.h>
-#include <STEM4U/STEM4U/SeaWaves.h>
-#include <STEM4U/STEM4U/Utility.h>
-#include <STEM4U/STEM4U/CrossCorrelation.h>
-#include <Scatter/ScatterDraw/DataSource.h>
-#include <STEM4U/STEM4U/Rootfinding.h>
+#include <Functions4U/Functions4U.h>
+#include <Eigen/Eigen.h>
+#include <STEM4U/IntInf.h>
+#include <STEM4U/Rational.h>
+#include <STEM4U/Polynomial.h>
+#include <STEM4U/Sundials.h>
+#include <STEM4U/Integral.h>
+#include <STEM4U/TravellingSalesman.h>
+#include <STEM4U/ShortestPath.h>
+#include <STEM4U/SeaWaves.h>
+#include <STEM4U/Utility.h>
+#include <STEM4U/CrossCorrelation.h>
+#include <ScatterDraw/DataSource.h>
+#include <STEM4U/Rootfinding.h>
 
 using namespace Upp;
 
