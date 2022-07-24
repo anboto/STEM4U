@@ -4,10 +4,9 @@ noblitz;
 
 uses
 	Core,
-	plugin/sundials,
-	ScatterDraw,
-	Eigen,
-	Geom;
+	Geom,
+	Sundials/plugin/sundials,
+	Scatter/ScatterDraw;
 
 file
 	Rational.cpp,

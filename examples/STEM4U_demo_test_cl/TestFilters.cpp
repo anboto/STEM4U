@@ -2,10 +2,10 @@
 // Copyright 2021 - 2022, the Anboto author and contributors
 #include <Core/Core.h>
 #include <Scatter/ScatterDraw/ScatterDraw.h>
-#include <Eigen/Eigen.h>
-#include <Functions4U/Functions4U.h>
-#include <STEM4U/LocalFitting.h>
-#include <STEM4U/Butterworth.h>
+#include <Eigen/Eigen/Eigen.h>
+#include <Functions4U/Functions4U/Functions4U.h>
+#include <STEM4U/STEM4U/LocalFitting.h>
+#include <STEM4U/STEM4U/Butterworth.h>
 #include <plugin/png/png.h>
 
 

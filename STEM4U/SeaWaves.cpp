@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2021 - 2022, the Anboto author and contributors
 #include <Core/Core.h>
-#include <Functions4U/Functions4U.h>
-#include <Eigen/Eigen.h>
-#include <ScatterDraw/DataSource.h>
-#include <ScatterDraw/Equation.h>
+#include <Functions4U/Functions4U/Functions4U.h>
+#include <Eigen/Eigen/Eigen.h>
+#include <Scatter/ScatterDraw/DataSource.h>
+#include <Scatter/ScatterDraw/Equation.h>
 #include "SeaWaves.h"
 
 

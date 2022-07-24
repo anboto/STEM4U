@@ -1,7 +1,7 @@
 #ifndef _STEM4U_Rootfinding_h_
 #define _STEM4U_Rootfinding_h_
 
-#include <STEM4U/Utility.h>
+#include <STEM4U/STEM4U/Utility.h>
 
 
 namespace Upp {
