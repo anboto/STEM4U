@@ -17,7 +17,68 @@
 #include <STEM4U/Rootfinding.h>
 
 using namespace Upp;
+using namespace Eigen;
 
+void TestVectorMatrixHealing() {
+	UppLog() << "\n\nUncomplete vector and matrix healing and filling";
+	
+	{
+		VectorXd x(4), nx;
+		VectorXd z(4), nz;
+		
+		x << 2, 4, 6, 10;
+		z << 0, 1, 2, 4;
+		
+		UppLog() << "\nInitial data";
+		UppLog() << "\nx:\n" << x.transpose();
+		UppLog() << "\nz:\n" << z.transpose();
+		
+		GapFilling(x, z, nx, nz, true, 10);
+		
+		UppLog() << "\nFilled with zero";
+		UppLog() << "\nx:\n" << nx.transpose();
+		UppLog() << "\nz:\n" << nz.transpose();
+	
+		GapFilling(x, z, nx, nz, false, 10);
+		
+		UppLog() << "\nInterpolated";
+		UppLog() << "\nx:\n" << nx.transpose();
+		UppLog() << "\nz:\n" << nz.transpose();
+		
+		UppLog() << "\n";
+	}
+	{
+		VectorXd x(4), y(3), nx, ny;
+		MatrixXd z(3, 4), nz;
+		
+		x << 2, 4, 6, 10;
+		y << 1, 3, 7;
+		z << 0, 1, 2, 4,
+			 1, 2, 3, 5,
+			 3, 4, 5, 7;
+		
+		UppLog() << "\nInitial data";
+		UppLog() << "\nx:\n" << x.transpose();
+		UppLog() << "\ny:\n" << y.transpose();
+		UppLog() << "\nz:\n" << z;
+		
+		GapFilling(x, y, z, nx, ny, nz, true, 10);
+		
+		UppLog() << "\nFilled with zero";
+		UppLog() << "\nx:\n" << nx.transpose();
+		UppLog() << "\ny:\n" << ny.transpose();
+		UppLog() << "\nz:\n" << nz;
+	
+		GapFilling(x, y, z, nx, ny, nz, false, 10);
+		
+		UppLog() << "\nInterpolated";
+		UppLog() << "\nx:\n" << nx.transpose();
+		UppLog() << "\ny:\n" << ny.transpose();
+		UppLog() << "\nz:\n" << nz;
+		
+		UppLog() << "\n";
+	}
+}
 
 void TestRootfinding() {
 	UppLog() << "\n\nRoot finding functions";
@@ -127,7 +188,7 @@ void TestPolynomial() {
 	UppLog() << "\n" << "num: " << num;
 	UppLog() << "\n" << "den: " << den;
 
-	Vector<Rational> b;	
+	UVector<Rational> b;	
 	b.SetCount(int(NT), 0);
  
 	Rational sum_bN = 0;
@@ -162,9 +223,9 @@ T Loop() {
 void TestTravellingSalesman() {
 	UppLog() << "\n\nTravelling salesman";
 
-	const Vector<Point_<int>> points = {{0, 0},{4, 4},{4, 0},{2, 4},{0, 4},{4, 2},{0, 2},{2, 0}};
+	const UVector<Point_<int>> points = {{0, 0},{4, 4},{4, 0},{2, 4},{0, 4},{4, 2},{0, 2},{2, 0}};
 
-	Vector<int> orderp;
+	UVector<int> orderp;
 	int distp = TSP(points, orderp, TSP_NEAREST_NEIGHBOR);
 	UppLog() << "\nTotal distance between points is: " << distp;
 	VERIFY(distp == 16);
@@ -179,7 +240,7 @@ void TestTravellingSalesman() {
 	VERIFY(sorderp == "0 -> 7 -> 2 -> 5 -> 1 -> 3 -> 4 -> 6 -> 0");
 		
 	// Example from https://developers.google.com/optimization/routing/tsp#printer
-	const Vector<Vector<int>> cities = {
+	const UVector<UVector<int>> cities = {
 		{0, 2451, 713, 1018, 1631, 1374, 2408, 213, 2571, 875, 1420, 2145, 1972},
 		{2451, 0, 1745, 1524, 831, 1240, 959, 2596, 403, 1589, 1374, 357, 579},
 		{7133, 1745, 0, 355, 920, 803, 1737, 851, 1858, 262, 940, 1453, 1260},
@@ -195,7 +256,7 @@ void TestTravellingSalesman() {
 		{1972, 579, 1260, 987, 371, 999, 701, 2099, 600, 1162, 1200, 504, 0},
 	};
 
-	Vector<int> order;
+	UVector<int> order;
 	int dist = TSP(cities, order, TSP_CONSECUTIVE);
 	
 	UppLog() << "\nTotal distance between cities is: " << dist;
@@ -215,7 +276,7 @@ void TestShortestPath() {
 	
 	using Seg = SegSP<int>;
 	
-	Vector<Vector<Seg>> adjList;
+	UVector<UVector<Seg>> adjList;
 	
 	adjList.Add() << Seg(1, 2) << Seg(2, 3);
     adjList.Add() << Seg(0, 2) << Seg(5, 1);
@@ -229,7 +290,7 @@ void TestShortestPath() {
 	
 	UppLog() << "\n\nDijkstra method";
 	{
-		Vector<Seg> dist = Dijkstra(adjList, start);
+		UVector<Seg> dist = Dijkstra(adjList, start);
 		
 		UppLog() << Format("\nShortest distance from node %d", start);
     	for(int i = 0; i < dist.size(); i++) 
@@ -247,7 +308,7 @@ void TestShortestPath() {
 	}
 	UppLog() << "\n\nBellman-Ford method";
 	{
-		Vector<Seg> dist = BellmanFord(adjList, start);
+		UVector<Seg> dist = BellmanFord(adjList, start);
 		
 		UppLog() << Format("\nShortest distance from node %d", start);
     	for(int i = 0; i < dist.size(); i++) 
@@ -266,7 +327,7 @@ void TestShortestPath() {
 	UppLog() << "\n\nFloyd-Warshall method";
 	{
 		const int inf = std::numeric_limits<int>::max();
-		Vector<Vector<int>> adjMatrix = {
+		UVector<UVector<int>> adjMatrix = {
 			{0,  2,  3,  inf,inf,inf,inf},
 			{2,  0,  inf,4,  inf,1,  inf},
 			{3,  inf,0,  inf,inf,2,  inf},
@@ -276,7 +337,7 @@ void TestShortestPath() {
 			{inf,inf,inf,2,  1,  2,  0}
 		};
 		
-		Vector<Vector<int>> dist = FloydWarshall(adjMatrix);
+		UVector<UVector<int>> dist = FloydWarshall(adjMatrix);
 
     	UppLog() << "\nShortest distance for all nodes";
     	for(int i = 0; i < dist.size(); i++)
@@ -338,7 +399,7 @@ void TestDAESolver() {
 		}
 	);
 }
-using namespace  Eigen;
+
 
 void TestIntegral() {	
 	UppLog() << "\n\nIntegral demo";
@@ -539,6 +600,7 @@ CONSOLE_APP_MAIN
 	try {
 		bool test = CommandLine().size() > 0 && CommandLine()[0] == "-test";
 		
+		TestVectorMatrixHealing();
 		TestRootfinding();
 		TestOthers();
 		TestCombinations();
