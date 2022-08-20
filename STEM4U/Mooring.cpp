@@ -225,8 +225,8 @@ MooringStatus CatenaryGetLen(double rho_m, double rho_m3, double rho_water, doub
 }
 
 const char *MooringStatusStr(MooringStatus status) {
-	const char *str[5] = {"loose on floor", "catenary on floor", "catenary", 
-						 "line length exceeded", "break load exdeeded"};
+	const char *str[5] = {t_("loose on seabed"), t_("catenary on seabed"), t_("catenary"), 
+						  t_("line length exceeded"), t_("break load exdeeded")};
 	ASSERT(int(status) < 5);
 	return str[int(status)];
 }
