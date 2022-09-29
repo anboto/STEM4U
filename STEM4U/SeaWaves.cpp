@@ -14,7 +14,10 @@ using namespace Eigen;
 
 
 // From "Direct Solution of Wave Dispersion Equation" (Hunt, 1979), read from "Water Wave Mechanics for Engineers and Scientists" (Dean & Dalrymple)
-double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {
+double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {		// rad/m
+	if (h < 0)		// Infinite depth
+		return sqr(2*M_PI/T)/g;
+	
 	double y = 4*M_PI*M_PI*h/g/(T*T);
 	double k1 = 1 + 0.6666666666*y + 0.3555555555*pow(y,2) + 0.1608465608*pow(y,3) 
 				+ 0.0632098765*pow(y,4) + 0.0217540484*pow(y,5) + 0.0065407983*pow(y,6);
@@ -29,6 +32,9 @@ double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {
 }
 
 SeaWaves::SEA_TYPE SeaWaves::GetSeaType(double T, double h, double g) {
+	if (h < 0)
+		return DEEP;
+			
     double h_L = h/WaveLength(T, h, g);
 	if (h_L < 1./20)
 		return SHALLOW;
@@ -37,24 +43,36 @@ SeaWaves::SEA_TYPE SeaWaves::GetSeaType(double T, double h, double g) {
 	return DEEP;
 }
 
-double SeaWaves::WaveLength(double T, double h, double g) 	{return 2*M_PI/WaveNumber(T, h, g);}
+double SeaWaves::WaveLength(double T, double h, double g) 	{return 2*M_PI/WaveNumber(T, h, g);}	// m
 
-double SeaWaves::Celerity(double T, double h, double g)	  	{return WaveLength(T, h, g)/T;}
+double SeaWaves::Celerity(double T, double h, double g)	  	{return WaveLength(T, h, g)/T;}			// m/s
 
-double SeaWaves::GroupCelerity(double T, double h, double g) {
+double SeaWaves::GroupCelerity(double T, double h, double g) {		// m/s
     double k = WaveNumber(T, h, g);
-    double L = 2*M_PI/k;			
-    double c = L/T;               	
-    double n = 0.5*(1 + 2*k*h/sinh(2*k*h));   
+    double L = 2*M_PI/k;	// Wavelength			
+    double c = L/T;         // Celerity      	
+    double n;
+    if (h < 0)
+    	n = 0.5;
+    else
+    	n = (1 + 2*k*h/sinh(2*k*h))/2.;   
     return c*n;                
 }
 
-double SeaWaves::Power(double Te, double Hs, double h, double g, double rho) {
-	double k = WaveNumber(Te, h, g);
-	double L = 2*M_PI/k;			// Wavelength, L (m)	
-	double c = L/Te;               	// Wave celerity, c (m/s)
-	double n = 0.5*(1 + 2*k*h/sinh(2*k*h));   
-	double Cg = c*n;                // Group celerity, Cg (m/s)
+double SeaWaves::Steepness(double H, double T, double h, double g) {
+	return H/WaveNumber(T, h, g);
+}
+	
+double SeaWaves::BreakingWaveH(double T, double h, double g) {	// m. The maximum wave height before breaking
+	double lambda = WaveLength(T, h, g);
+	
+	if (h < 0)
+		return lambda/7;
+	return 0.142*lambda*tanh(2*M_PI*h/lambda);	
+}
+	
+double SeaWaves::Power(double Te, double Hs, double h, double g, double rho) {		// kW/m
+	double Cg = GroupCelerity(Te, h, g);	// Group celerity, Cg (m/s)
 	double E = 1/16.*rho*g*Hs*Hs;	// Energy per unit area
 	return E*Cg/1000.;   			// Energy flow, or power per unit width (kW/m of width)	    	
 }
@@ -470,8 +488,8 @@ double SeaWaves::SpectrumPower(const Vector<Pointf> &psd, double h, double g, do
 	
 		double Si   = psd[i].y;
 		double Si_1 = psd[i-1].y;
-		double ki   = WaveNumber(1/fi, h, false);
-		double ki_1 = WaveNumber(1/fi_1, h, false);
+		double ki   = WaveNumber(1/fi, h, g, false);
+		double ki_1 = WaveNumber(1/fi_1, h, g, false);
 		
 		if (fi != 0 && fi_1 != 0) {
 			double right = Si*fi/ki/2*(1 + 2*ki*h/sinh(2*ki*h));

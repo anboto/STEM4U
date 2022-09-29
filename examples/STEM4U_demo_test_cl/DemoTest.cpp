@@ -450,11 +450,11 @@ void TestSeaWaves() {
 	double depth = 50;
 	double H = 2;
 	
-	double rho = 1028, g = 9.81;
+	double rho = 1025, g = 9.81;
 	
-	double waveNumber  = SeaWaves::WaveNumber(T, depth, false);
+	double waveNumber  = SeaWaves::WaveNumber(T, depth, g, false);
 	UppLog() << "\n" << Format("Wave number: %f rad/m", waveNumber);
-	double waveNumberE = SeaWaves::WaveNumber(T, depth, true);
+	double waveNumberE = SeaWaves::WaveNumber(T, depth, g, true);
 	UppLog() << "\n" << Format("Wave number (exact): %f rad/m", waveNumberE);
 	double waveLength = SeaWaves::WaveLength(T, depth, g);
 	UppLog() << "\n" << Format("Wave length: %f m", waveLength);

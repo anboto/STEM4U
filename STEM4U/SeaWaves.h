@@ -58,6 +58,9 @@ public:
 	static double Celerity(double T, double h, double g);		
 	static double GroupCelerity(double T, double h, double g);
 	
+	static double Steepness(double H, double T, double h, double g);
+	static double BreakingWaveH(double T, double h, double g);
+
 	static double JONSWAP_Spectrum(double Hm0, double Tp, double gamma, double freq);
 	bool JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma);
 		
