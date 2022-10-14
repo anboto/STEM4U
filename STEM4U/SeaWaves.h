@@ -54,6 +54,7 @@ public:
 	static double Power(double Te, double Hs, double h, double g, double rho);
 
 	static double WaveNumber(double T, double h, double g, bool exact = true);
+	static double WaveNumber_w(double w, double h, double g, bool exact = true);
 	static double WaveLength(double T, double h, double g);
 	static double Celerity(double T, double h, double g);		
 	static double GroupCelerity(double T, double h, double g);
