@@ -184,6 +184,18 @@ typename Range::value_type R2(const Range &tserie, const Range &serie, const Ran
 }
 
 template <class Range>
+typename Range::value_type RMS(const Range &serie) {
+	using Scalar = typename Range::value_type;
+	
+	Scalar ret = 0;
+	auto sz = serie.size();
+	for (auto i = 0; i < sz; ++i) 
+		ret += sqr(serie[i]);
+
+	return sqrt(ret/sz);
+}
+
+template <class Range>
 typename Range::value_type RMSE(const Range &serie, const Range &serie0) {
 	using Scalar = typename Range::value_type;
 	

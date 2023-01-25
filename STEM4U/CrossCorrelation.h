@@ -7,7 +7,7 @@
 namespace Upp {
 
 template <class Range>
-void XCorr(const Range &_x, const Range &_y, Range &_R, Range &lags, char scale = 'n', size_t maxlag = 0) {
+void XCorr(const Range &_x, const Range &_y, Range &_r, Range &lags, char scale = 'n', size_t maxlag = 0) {
 	size_t N = std::max(_x.size(), _y.size());
 
 	if (maxlag == 0)
@@ -18,7 +18,7 @@ void XCorr(const Range &_x, const Range &_y, Range &_R, Range &lags, char scale 
 	size_t P = _x.size();
 	size_t M = size_t(pow(2, NextPow2(int(N + maxlag))));
 	
-	Eigen::VectorXd x, y, R;
+	Eigen::VectorXd x, y, r;
 	
 	Copy(_x, x);
 	
@@ -37,8 +37,8 @@ void XCorr(const Range &_x, const Range &_y, Range &_R, Range &lags, char scale 
 		Eigen::VectorXd cor;
 		fft.inv(cor, pre);
 		
-		Resize(R, 2*maxlag+1);
-		R << cor.tail(maxlag), cor.head(maxlag+1);		
+		Resize(r, 2*maxlag+1);
+		r << cor.tail(maxlag), cor.head(maxlag+1);		
 	} else {			
 		Eigen::VectorXcd pre, post;
 		Eigen::FFT<double> fft;
@@ -59,40 +59,40 @@ void XCorr(const Range &_x, const Range &_y, Range &_R, Range &lags, char scale 
 		
 		Eigen::VectorXd cor;
 		fft.inv(cor, pre);
-		R = cor.segment(0, 2*maxlag + 1);
+		r = cor.segment(0, 2*maxlag + 1);
 	}
 	
 	double dN = double(N);
 	double dmaxlag = double(maxlag);
 	
-  	if (scale == 'b')
-    	R /= dN;
-  	else if (scale == 'u') {
+  	if (scale == 'b')				// biased	
+    	r /= dN;
+  	else if (scale == 'u') {		// unbiased
   		Vector<double> left, right;
   		LinSpaced(left, int(maxlag), dN-dmaxlag, dN-1);
   		left << dN;
   		LinSpaced(right, int(maxlag), dN-1, dN-dmaxlag);
   		left.Append(right);
-    	R = R.cwiseQuotient(Eigen::Map<Eigen::VectorXd>(left, left.size()));
-  	} else if (scale == 'c') {
+    	r = r.cwiseQuotient(Eigen::Map<Eigen::VectorXd>(left, left.size()));
+  	} else if (scale == 'c') {		// coeff
 	    if (y.size() == 0)
-	      	R /= R[maxlag];
+	      	r /= r[maxlag];
 	    else
-	      	R /= ::sqrt(x.squaredNorm()*y.squaredNorm());
- 	} else if (scale == 'n')
+	      	r /= ::sqrt(x.squaredNorm()*y.squaredNorm());
+ 	} else if (scale == 'n')		// none
  		;	
  	else 
  		NEVER_("Unknown scale");
 	
-	Copy(R, _R);
+	Copy(r, _r);
 	
     LinSpaced(lags, 2*int(maxlag)+1, -dmaxlag, dmaxlag);
 }
 
 template <class Range>
-void XCorr(const Range &x, Range &R, Range &lags, char scale = 'n', size_t maxlag = 0) {
+void XCorr(const Range &x, Range &r, Range &lags, char scale = 'n', size_t maxlag = 0) {
 	Range y;
-	XCorr(x, y, R, lags, scale, maxlag);	 
+	XCorr(x, y, r, lags, scale, maxlag);	 
 }
 
 }
