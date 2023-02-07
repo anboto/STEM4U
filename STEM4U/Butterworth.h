@@ -393,7 +393,7 @@ void subvector_reverse(const Range1 &vec, size_t idx_end, size_t idx_start, Rang
 }
 
 template <class Range>
-void Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
+bool Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     using namespace Eigen;
 	using Scalar = typename Range::value_type;
 	
@@ -466,7 +466,12 @@ void Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
 
     auto bb = VectorXd::Map(B.data(), B.size());
     auto aa = VectorXd::Map(A.data(), A.size());
-    MatrixXd zzi = (sp.inverse() * (bb.segment(1, nfilt - 1) - (bb(0) * aa.segment(1, nfilt - 1))));
+    
+    FullPivLU<MatrixXd> sp_(sp);
+	if (!sp_.isInvertible())
+	   return false;
+	   
+    VectorXd zzi = sp.inverse() * (bb.segment(1, nfilt - 1) - (bb(0) * aa.segment(1, nfilt - 1)));
     zi.resize(zzi.size());
 
     // Do the forward and backward filtering
@@ -478,6 +483,8 @@ void Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     std::transform(zzi.data(), zzi.data() + zzi.size(), zi.begin(), [y0](Scalar val){ return val*y0; });
     filter_(B, A, signal2, signal1, zi);
     subvector_reverse(signal1, signal1.size() - nfact - 1, nfact, Y);
+    
+    return true;
 }
 
 

@@ -8,6 +8,8 @@ namespace Upp {
 
 template <class Range>
 void XCorr(const Range &_x, const Range &_y, Range &_r, Range &lags, char scale = 'n', size_t maxlag = 0) {
+	ASSERT(_y.size() == 0 || _x.size() == _y.size());
+	
 	size_t N = std::max(_x.size(), _y.size());
 
 	if (maxlag == 0)

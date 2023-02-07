@@ -88,8 +88,8 @@ typename Range::value_type GetSampleRate(const Range &x, int numDecimals, double
 }
 
 template <typename T>
-void LinSpaced(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, Eigen::Index n, T min, T max) {
-	v.LinSpaced(n, min, max);
+void LinSpaced(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, int n, T min, T max) {
+	v = Eigen::Matrix<T, Eigen::Dynamic, 1>::LinSpaced(n, min, max);
 }
 
 template <class Range>
@@ -108,7 +108,7 @@ void LinSpaced(Range &v, int n, typename Range::value_type min, typename Range::
 template <typename T>
 void Arange(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, T min, T max, T step) {
 	int num = int((max - min)/step)+1;
-	v.LinSpaced(int((max - min)/step)+1, min, min + (num-1)*step);
+	v = Eigen::Matrix<T, Eigen::Dynamic, 1>::LinSpaced(int((max - min)/step)+1, min, min + (num-1)*step);
 }
 
 template <class Range>
