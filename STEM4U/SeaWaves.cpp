@@ -556,7 +556,7 @@ bool SeaWaves::JONSWAP_Fit(const Vector<Pointf> &psd, double Hm0, double Tp, dou
 
 
 
-// DNV-RP-C205, page 34 
+// DNV-RP-C205, page 49 
 double Te_fTp(double Tp, double gamma) 	  {return Tp*(4.2 + gamma)/(5 + gamma);}
 double Tp_fTe(double Te, double gamma) 	  {return Te*(5 + gamma)/(4.2 + gamma);}
 double gamma_fTp_Te(double Tp, double Te) {return (Te*5 - Tp*4.2)/(Tp - Te);}

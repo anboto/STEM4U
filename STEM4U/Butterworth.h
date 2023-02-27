@@ -467,8 +467,7 @@ bool Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     auto bb = VectorXd::Map(B.data(), B.size());
     auto aa = VectorXd::Map(A.data(), A.size());
     
-    FullPivLU<MatrixXd> sp_(sp);
-	if (!sp_.isInvertible())
+	if (!FullPivLU<MatrixXd>(sp).isInvertible())
 	   return false;
 	   
     VectorXd zzi = sp.inverse() * (bb.segment(1, nfilt - 1) - (bb(0) * aa.segment(1, nfilt - 1)));

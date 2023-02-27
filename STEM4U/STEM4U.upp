@@ -22,6 +22,8 @@ file
 	Integral.h,
 	Financial.cpp,
 	Financial.h,
+	Wind.cpp,
+	Wind.h,
 	ShortestPath.cpp,
 	ShortestPath.h,
 	TravellingSalesman.cpp,

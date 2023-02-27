@@ -7,20 +7,20 @@
 namespace Upp {
 
 template <class Range>
-void XCorr(const Range &_x, const Range &_y, Range &_r, Range &lags, char scale = 'n', size_t maxlag = 0) {
+void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale = 'n', size_t maxlag = 0) {
 	ASSERT(_y.size() == 0 || _x.size() == _y.size());
 	
-	size_t N = std::max(_x.size(), _y.size());
+	size_t n = std::max(_x.size(), _y.size());
 
 	if (maxlag == 0)
-		maxlag = N-1;
+		maxlag = n-1;
 	
-	ASSERT(maxlag <= N-1);
+	ASSERT(maxlag <= n-1);
 
 	size_t P = _x.size();
-	size_t M = size_t(pow(2, NextPow2(int(N + maxlag))));
+	size_t M = size_t(pow(2, NextPow2(int(n + maxlag))));
 	
-	Eigen::VectorXd x, y, r;
+	Eigen::VectorXd x, y;
 	
 	Copy(_x, x);
 	
@@ -64,7 +64,7 @@ void XCorr(const Range &_x, const Range &_y, Range &_r, Range &lags, char scale 
 		r = cor.segment(0, 2*maxlag + 1);
 	}
 	
-	double dN = double(N);
+	double dN = double(n);
 	double dmaxlag = double(maxlag);
 	
   	if (scale == 'b')				// biased	
@@ -79,14 +79,17 @@ void XCorr(const Range &_x, const Range &_y, Range &_r, Range &lags, char scale 
   	} else if (scale == 'c') {		// coeff
 	    if (y.size() == 0)
 	      	r /= r[maxlag];
-	    else
-	      	r /= ::sqrt(x.squaredNorm()*y.squaredNorm());
+	    else {
+	        double den = ::sqrt(x.squaredNorm()*y.squaredNorm());
+	        if (den < 1e-10)
+	            r = VectorXd::Zero(r.size());
+	        else
+	      		r /= den;
+	    }
  	} else if (scale == 'n')		// none
  		;	
  	else 
  		NEVER_("Unknown scale");
-	
-	Copy(r, _r);
 	
     LinSpaced(lags, 2*int(maxlag)+1, -dmaxlag, dmaxlag);
 }

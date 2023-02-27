@@ -143,14 +143,14 @@ T NextPow2(const T& in) {
 	return T(ceil(log(in))/log(2));
 }
 
-template <class Range>
-inline typename Range::value_type Avg(const Range &d) {
-	return std::accumulate(d.begin(), d.end(), 0.)/d.size();
-}
-
 template <typename T>
 inline T Avg(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
 	return d.mean();
+}
+
+template <class Range>
+inline typename Range::value_type Avg(const Range &d) {
+	return std::accumulate(d.begin(), d.end(), 0.)/d.size();
 }
 
 template <class Range>
@@ -183,16 +183,20 @@ typename Range::value_type R2(const Range &tserie, const Range &serie, const Ran
 	return R2(serie, nserie0, meanserie);
 }
 
+template <typename T>
+inline T RMS(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
+	return sqrt(d.array().square().sum()/d.size());
+}
+
 template <class Range>
-typename Range::value_type RMS(const Range &serie) {
+typename Range::value_type RMS(const Range &d) {
 	using Scalar = typename Range::value_type;
 	
-	Scalar ret = 0;
-	auto sz = serie.size();
-	for (auto i = 0; i < sz; ++i) 
-		ret += sqr(serie[i]);
-
-	return sqrt(ret/sz);
+	Scalar accum = 0;
+	std::for_each (std::begin(d), std::end(d), [&](const Scalar v) {
+    	accum += sqr(v);
+	});
+	return sqrt(accum/d.size());
 }
 
 template <class Range>
@@ -215,6 +219,57 @@ typename Range::value_type RMSE(const Range &tserie, const Range &serie, const R
 	Resample(tserie0, serie0, tserie, nserie0);
 	
 	return R2(serie, nserie0);
+}
+
+template <typename T>
+inline T StdDev(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
+	return sqrt((d.array() - d.mean()).square().sum()/(d.size() - 1));
+}
+
+template <class Range>
+inline typename Range::value_type StdDev(const Range &d) {
+	using Scalar = typename Range::value_type;
+	
+	Scalar avg = Avg(d);
+
+	Scalar accum = 0;
+	std::for_each (std::begin(d), std::end(d), [&](const Scalar v) {
+    	accum += sqr(v - avg);
+	});
+	return sqrt(accum/(d.size() - 1));
+}
+
+template <class Range>
+void Segment(const Range &x, const Range &y, typename Range::value_type fromx, typename Range::value_type tox, Range &xx, Range &yy) {
+	ASSERT(x.size() == y.size());
+	ASSERT(fromx <= tox);
+	
+	int ibegin = Null;
+	for (int i = 0; i < x.size(); ++i) {
+		if (x[i] >= fromx) {
+			ibegin = i;
+			break;
+		}
+	}
+	if (IsNull(ibegin)) {
+		Clear(xx);
+		Clear(yy);
+	}
+	
+	int iend = Null;
+	for (int i = x.size()-1; i >= 0; --i) {
+		if (x[i] <= tox) {
+			iend = i;
+			break;
+		}
+	}
+	if (IsNull(iend)) {
+		Clear(xx);
+		Clear(yy);
+	}
+	
+	xx = Segment(x, ibegin, iend-ibegin+1);
+	yy = Segment(y, ibegin, iend-ibegin+1);
 }
 
 template <class Range>
