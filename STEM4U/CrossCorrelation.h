@@ -82,7 +82,7 @@ void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale =
 	    else {
 	        double den = ::sqrt(x.squaredNorm()*y.squaredNorm());
 	        if (den < 1e-10)
-	            r = VectorXd::Zero(r.size());
+	            Zero(r);
 	        else
 	      		r /= den;
 	    }
