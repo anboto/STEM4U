@@ -257,7 +257,7 @@ void Segment(const Range &x, const Range &y, typename Range::value_type fromx, t
 	}
 	
 	int iend = Null;
-	for (int i = x.size()-1; i >= 0; --i) {
+	for (int i = int(x.size())-1; i >= 0; --i) {
 		if (x[i] <= tox) {
 			iend = i;
 			break;
