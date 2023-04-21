@@ -145,11 +145,15 @@ T NextPow2(const T& in) {
 
 template <typename T>
 inline T Avg(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
+	if (d.size() == 0)
+		return Null;
 	return d.mean();
 }
 
 template <class Range>
 inline typename Range::value_type Avg(const Range &d) {
+	if (d.size() == 0)
+		return Null;
 	return std::accumulate(d.begin(), d.end(), 0.)/d.size();
 }
 
@@ -223,11 +227,16 @@ typename Range::value_type RMSE(const Range &tserie, const Range &serie, const R
 
 template <typename T>
 inline T StdDev(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
+	if (d.size() < 2)
+		return Null;
 	return sqrt((d.array() - d.mean()).square().sum()/(d.size() - 1));
 }
 
 template <class Range>
 inline typename Range::value_type StdDev(const Range &d) {
+	if (d.size() < 2)
+		return Null;
+	
 	using Scalar = typename Range::value_type;
 	
 	Scalar avg = Avg(d);
