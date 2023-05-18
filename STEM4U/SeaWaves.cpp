@@ -15,6 +15,8 @@ using namespace Eigen;
 
 // From "Direct Solution of Wave Dispersion Equation" (Hunt, 1979), read from "Water Wave Mechanics for Engineers and Scientists" (Dean & Dalrymple)
 double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {		// rad/m
+	ASSERT(T > 0);
+	
 	if (h < 0)		// Infinite depth
 		return sqr(2*M_PI/T)/g;
 	
