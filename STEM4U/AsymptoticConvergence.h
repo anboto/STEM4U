@@ -105,8 +105,8 @@ public:
 	}
 	AsymptoticEquation &GetEquation()			{return asy;}
 
-	UVector<double> &GetRealX()					{return xx;}
-	UVector<double> &GetRealY()					{return yy;}
+	UVector<double> &GetRealX() 				{return xx;}
+	UVector<double> &GetRealY() 				{return yy;}
 
 private:
 	AsymptoticEquation asy;
