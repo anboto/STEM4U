@@ -584,6 +584,21 @@ void TestOthers() {
 	}
 }
 
+void TestScatter() {		// Functions found in Scatter
+	
+	UVector<double> t = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1},
+					y = {3.70, 1.00, 4.12, 4.09, 4.76, 3.93, 4.59, 7.37, 6.23, 6.79, 8.29};
+	
+	UVector<double> yres, yres2;
+ 	MovingAverage(t, y, 0.4, yres);
+	MovingAverage(t, y, 0.4, t, yres2, true);
+	
+	UVector<double> t2(t.size());
+	for (int i = 0; i < t.size(); ++i)
+		t2[i] = t[i] + .05;
+	
+	MovingAverage(t, y, 0.4, t2, yres2, true);
+}
 
 void TestLocalFitting(bool test);
 void TestMooring(bool test);
@@ -600,6 +615,7 @@ CONSOLE_APP_MAIN
 	try {
 		bool test = CommandLine().size() > 0 && CommandLine()[0] == "-test";
 		
+		TestScatter();
 		TestVectorMatrixHealing();
 		TestRootfinding();
 		TestOthers();

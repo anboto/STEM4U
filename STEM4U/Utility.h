@@ -167,7 +167,7 @@ typename Range::value_type R2(const Range &serie, const Range &serie0, typename 
 	auto sz = min(serie.size(), serie0.size());
 	for (auto i = 0; i < sz; ++i) {
 		auto y = serie[i];
-		auto err = y - serie0(i);
+		auto err = y - serie0[i];
 		sse += err*err;
 		auto d = y - meanserie;
 		sst += d*d;
@@ -222,7 +222,7 @@ typename Range::value_type RMSE(const Range &tserie, const Range &serie, const R
 	Range nserie0;
 	Resample(tserie0, serie0, tserie, nserie0);
 	
-	return R2(serie, nserie0);
+	return RMSE(serie, nserie0);
 }
 
 template <typename T>
