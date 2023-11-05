@@ -582,6 +582,49 @@ void TestOthers() {
 		VERIFY(EqualDecimals(a, 5.2, 10));	
 		VERIFY(EqualDecimals(b, -1.6, 10));
 	}
+	{
+		MatrixXd a(4, 4);
+		a <<  0,  1,  2,  3,
+			 10, 11, 12, 13,
+			 20, 21, 22, 23,
+			 30, 31, 32, 33;
+	
+		MatrixXd b = a;
+		b.array() += 100.;
+		
+		{
+			MatrixXd A = a;
+			
+			UppLog() << "\nSource matrix:\n";
+			UppLog() << a;
+			
+			Swap(A, 1, 3);
+			
+			UppLog() << "\nSwap row and col 1 with 3:\n";
+			UppLog() << A << "\n";
+			
+			VERIFY(A(3, 1) == 13);
+			VERIFY(A(1, 3) == 31);
+		}
+		{
+			MatrixXd A = a,
+					 B = b;
+			
+			UppLog() << "\nSource matrices:\n";
+			UppLog() << a << "\n";
+			UppLog() << b;
+			
+			Swap(A, B, 1, 3);
+			
+			UppLog() << "\nSwap row and col 1 of 1st matrix with 3 of 2nd matrix:\n";
+			UppLog() << A << "\n";		
+			UppLog() << B << "\n";			
+			
+			VERIFY(A(3, 1) == 13);
+			VERIFY(B(1, 3) == 131);
+		}
+		
+	}
 }
 
 void TestScatter() {		// Functions found in Scatter

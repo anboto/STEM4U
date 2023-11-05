@@ -4,9 +4,9 @@ noblitz;
 
 uses
 	Core,
-	Geom,
 	plugin/sundials,
-	ScatterDraw;
+	ScatterDraw,
+	Geom;
 
 file
 	Numerical readonly separator,
