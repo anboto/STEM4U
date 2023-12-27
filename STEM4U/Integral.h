@@ -40,13 +40,15 @@ typename Range::value_type Integral(const Range &x, const Range &y, IntegralType
 	} else if (type == SIMPSON_1_3) {
 		int i;
 		for (i = 2; i < n; i += 2)
-			ret += (x[i] - x[i-2])/6.*(y[i-2] + 4*y[i-1] + y[i]);
+			ret += (x[i] - x[i-2])*(y[i-2] + 4*y[i-1] + y[i]);
+		ret /= 6.;
 		if (i == n)
 			ret += Avg(y[n-1], y[n-2])*(x[n-1] - x[n-2]);
 	} else if (type == SIMPSON_3_8) {
 		int i;
 		for (i = 3; i < n; i += 3)
-			ret += (x[i] - x[i-3])/8.*(y[i-3] + 3*y[i-2] + 3*y[i-1] + y[i]);
+			ret += (x[i] - x[i-3])*(y[i-3] + 3*y[i-2] + 3*y[i-1] + y[i]);
+		ret /= 8.;
 		if (i == n)
 			ret += (x[n-1] - x[n-3])/6.*(y[n-3] + 4*y[n-2] + y[n-1]);
 		else if (i == n+1)
