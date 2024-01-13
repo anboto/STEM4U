@@ -33,7 +33,7 @@ double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {		// rad/
 	return SolveNonLinearEquation(k, [&](double k)->double {return w*w - g*k*tanh(k*h);});
 }
 
-double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// rad/m
+double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// rad^2/m
 	if (h < 0)		// Infinite depth
 		return w*w/g;
 	

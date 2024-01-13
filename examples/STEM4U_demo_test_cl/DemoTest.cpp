@@ -15,6 +15,7 @@
 #include <STEM4U/CrossCorrelation.h>
 #include <ScatterDraw/DataSource.h>
 #include <STEM4U/Rootfinding.h>
+#include <ScatterDraw/MultiDimMatrixIndex.h>
 
 
 using namespace Upp;
@@ -560,6 +561,21 @@ void TestXCorr() {
 }
 
 void TestOthers() {
+	{
+		MultiDimMatrixIndex idx(2, 4);
+		idx.RowMajor();
+		Matrix<double, 2, 4, RowMajor> d;
+		double *p = d.data();
+		d(1, 2) = 27;
+		VERIFY(p[idx(1, 2)] == 27);
+	}
+	{
+		MultiDimMatrixIndex idx(2, 4);
+		MatrixXd d(2, 4);
+		double *p = d.data();
+		d(1, 2) = 27;
+		VERIFY(p[idx(1, 2)] == 27);
+	}
 	{
 		double x, y, dy, d2y;
 		
