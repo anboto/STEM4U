@@ -389,7 +389,7 @@ template <class Range1, class Range2>
 void subvector_reverse(const Range1 &vec, size_t idx_end, size_t idx_start, Range2 &result) {
 	Resize(result, idx_end + 1 - idx_start);
     std::copy(&vec[idx_start], &vec[idx_end+1], Begin(result));
-    Reverse(result);
+    ReverseX(result);
 }
 
 template <class Range>

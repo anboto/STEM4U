@@ -15,7 +15,7 @@
 #include <STEM4U/CrossCorrelation.h>
 #include <ScatterDraw/DataSource.h>
 #include <STEM4U/Rootfinding.h>
-#include <ScatterDraw/MultiDimMatrixIndex.h>
+#include <Eigen/MultiDimMatrixIndex.h>
 
 
 using namespace Upp;
