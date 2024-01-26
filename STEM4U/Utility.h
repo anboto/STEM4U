@@ -106,15 +106,15 @@ void LinSpaced(Range &v, int n, typename Range::value_type min, typename Range::
 }
 
 template <typename T>
-void Arange(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, T min, T max, T step) {
+void Arange(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, T min, T max, T step = 1) {
 	int num = int((max - min)/step)+1;
-	v = Eigen::Matrix<T, Eigen::Dynamic, 1>::LinSpaced(int((max - min)/step)+1, min, min + (num-1)*step);
+	v = Eigen::Matrix<T, Eigen::Dynamic, 1>::LinSpaced(num, min, min + (num-1)*step);
 }
 
 template <class Range>
-void Arange(Range &v, typename Range::value_type min, typename Range::value_type max, typename Range::value_type step) {
+void Arange(Range &v, typename Range::value_type min, typename Range::value_type max, typename Range::value_type step = 1) {
 	int num = int((max - min)/step)+1;
-	LinSpaced(v, int((max - min)/step)+1, min, min + (num-1)*step);
+	LinSpaced(v, num, min, min + (num-1)*step);
 }
 
 
