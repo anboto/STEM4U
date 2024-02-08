@@ -562,6 +562,17 @@ void TestXCorr() {
 
 void TestOthers() {
 	{
+		UppLog() << "\nVerifying SmoothStep():\n";
+		
+		for (int order : UVector<int>({3, 5, 7})) {
+			VERIFY(-10 == SmoothStep(-11., order, -10., 20., -10., 30.));
+			VERIFY(-10 == SmoothStep(-10., order, -10., 20., -10., 30.));
+			VERIFY( 10 == SmoothStep(  5., order, -10., 20., -10., 30.));
+			VERIFY( 30 == SmoothStep( 20., order, -10., 20., -10., 30.));
+			VERIFY( 30 == SmoothStep( 21., order, -10., 20., -10., 30.));
+		}
+	}
+	{
 		MultiDimMatrixIndex idx(2, 4);
 		idx.RowMajor();
 		Matrix<double, 2, 4, RowMajor> d;
