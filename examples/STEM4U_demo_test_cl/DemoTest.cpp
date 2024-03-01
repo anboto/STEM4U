@@ -148,7 +148,7 @@ void TestPolynomial() {
 	int n = 6;
 	Rational NT = 111;
 	
-	int r = int(pow(10, int(log10(int(NT))-1)));
+	int r = int(Pow10Int<double>(int(log10(int(NT))-1)));
 	int m = int(NT/2);
 
 	int M = int((NT-1) / 2);

@@ -291,8 +291,7 @@ double SeaWaves::ZSurf(double x, double y, double t) {
 	for (int ifr = 0; ifr < nf; ifr++) {
 		double w = 2*M_PI*frec[ifr];
     	for (int id = 0; id < nd; id++) 
-	        zSurf += A(id, ifr)*cos(k[ifr]*cos(dirs[id])*x 
-	        	   + k[ifr]*sin(dirs[id])*y - w*t + ph(id, ifr));  
+	        zSurf += A(id, ifr)*cos(k[ifr]*cos(dirs[id])*x + k[ifr]*sin(dirs[id])*y - w*t + ph(id, ifr));  
 	}
     return zSurf;
 }

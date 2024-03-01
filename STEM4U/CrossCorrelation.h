@@ -18,7 +18,7 @@ void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale =
 	ASSERT(maxlag <= n-1);
 
 	size_t P = _x.size();
-	size_t M = size_t(pow(2, NextPow2(int(n + maxlag))));
+	size_t M = size_t(PowInt(2., NextPow2(int(n + maxlag))));
 	
 	Eigen::VectorXd x, y;
 	
