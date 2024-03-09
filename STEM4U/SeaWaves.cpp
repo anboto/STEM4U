@@ -54,8 +54,9 @@ double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// ra
 SeaWaves::SEA_TYPE SeaWaves::GetSeaType(double T, double h, double g) {
 	if (h < 0)
 		return DEEP;
-			
-    double h_L = h/WaveLength(T, h, g);
+	
+	double wl = WaveLength(T, h, g);
+    double h_L = h/wl;
 	if (h_L < 1./20)
 		return SHALLOW;
 	else if (h_L < 1./2)
@@ -72,10 +73,15 @@ double SeaWaves::GroupCelerity(double T, double h, double g) {		// m/s
     double L = 2*M_PI/k;	// Wavelength			
     double c = L/T;         // Celerity      	
     double n;
+   
     if (h < 0)
     	n = 0.5;
-    else
-    	n = (1 + 2*k*h/sinh(2*k*h))/2.;   
+    else {
+        double tkh = 2*k*h;
+        if (tkh > 709)		// Near the max
+            return Null;
+    	n = (1 + 2*k*h/sinh(tkh))/2.;   
+    }
     return c*n;                
 }
 
@@ -87,7 +93,7 @@ double SeaWaves::BreakingWaveH(double T, double h, double g) {	// m. The maximum
 	double lambda = WaveLength(T, h, g);
 	
 	if (h < 0)
-		return lambda/7;
+		return lambda/7.;
 	return 0.142*lambda*tanh(2*M_PI*h/lambda);	
 }
 	
