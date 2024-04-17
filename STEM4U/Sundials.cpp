@@ -28,7 +28,7 @@ static void CheckRet(int returnvalue, const char *funcname) {
 	if (returnvalue < 0) 
 	  	throw Exc(Format(t_("SUNDIALS_ERROR: %s() failed with retval = %d"), funcname, returnvalue));
 }
-
+/*
 static void PrintFinalStats(void *mem) {
 	int retval;
 	long int nst, nni, nje, nre, nreLS, netf, ncfn, nge;
@@ -71,7 +71,7 @@ static void PrintRootInfo(int *roots, int nroots) {
 	for (int i = 0; i < nroots; ++i)
 		Cout() << roots[i] << " ";
 }
-
+*/
 static String GetIdaErrorMsg(int ret) {
 	switch (ret) {
 	case IDA_TOO_MUCH_WORK:	return "IDASolve: IDA_TOO_MUCH_WORK";

@@ -60,7 +60,7 @@ typename Range::value_type Integral(const Range &x, const Range &y, IntegralType
 
 
 template <class Range>
-inline typename Range::value_type Calc1_3(const Range &y, typename Range::value_type dx, size_t n) {
+inline typename Range::value_type Calc1_3(const Range &y, typename Range::value_type dx, int n) {
 	auto ret = y[0] + y[n-1];
 	for (int i = 1; i < n-1; i++)
 		ret += 2*y[i];

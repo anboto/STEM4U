@@ -295,9 +295,9 @@ void ButterHighPass(int order, typename Range::value_type cutoff, Range &cnum, R
 
 template <class Range>
 void Filter(const Range &x, const Range &cnum, const Range &cden, Range &filtered) {
-	size_t len_x = x.size();
-	size_t len_b = cnum.size();
-	size_t len_a = cden.size();
+	int len_x = x.size();
+	int len_b = cnum.size();
+	int len_a = cden.size();
 
 	Range zi;
 	Resize(zi, len_b, 0.);
@@ -307,13 +307,13 @@ void Filter(const Range &x, const Range &cnum, const Range &cden, Range &filtere
 	if (len_a == 1) {
 		for (int m = 0; m < len_x; m++) {
 			filtered[m] = cnum[0] * x[m] + zi[0];
-			for (int i = 1; i<len_b; i++)
+			for (int i = 1; i < len_b; i++)
 				zi[i - 1] = cnum[i] * x[m] + zi[i];
 		}
 	} else {
 		for (int m = 0; m < len_x; m++) {
 			filtered[m] = cnum[0] * x[m] + zi[0];
-			for (int i = 1; i<len_b; i++)
+			for (int i = 1; i < len_b; i++)
 				zi[i - 1] = cnum[i] * x[m] + zi[i] - cden[i] * filtered[m];
 		}
 	}
@@ -404,7 +404,7 @@ bool Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     std::vector<Scalar> A(Begin(a), End(a)), 
     					B(Begin(b), End(b));
     
-    size_t nfilt = (nb > na) ? nb : na;
+    int nfilt = (nb > na) ? nb : na;
     size_t nfact = 3 * (nfilt - 1); // length of edge transients
 
     if (len <= nfact)

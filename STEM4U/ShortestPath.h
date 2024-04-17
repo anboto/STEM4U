@@ -89,7 +89,7 @@ Vector<SegSP<T>> Dijkstra(const Vector<Vector<SegSP<T>>> &adjList, int start) {
         for(auto &seg : adjList[u]) {
             int v = seg.node;
             T sum = dist[u].weight + seg.weight;
-            if(dist[v].weight > sum) {
+    		if(dist[v].weight > sum) {
                 dist[v].weight = sum;
                 dist[v].node = u;
                 pq << SegSP<T>(v, dist[v].weight);
@@ -113,7 +113,7 @@ Vector<SegSP<T>> BellmanFord(const Vector<Vector<SegSP<T>>> &adjList, int start)
             for(auto &seg : adjList[u]) {
 	            int v = seg.node;
 	            T sum = SumWeight<T>(dist[u].weight, seg.weight);
-	            if(dist[v].weight > sum) {
+	    		if(dist[v].weight > sum) {
 	                dist[v].weight = sum;
 	                dist[v].node = u;
 	            }
@@ -134,7 +134,7 @@ Vector<Vector<T>> FloydWarshall(Vector<Vector<T>> &adjMatrix) {
             Vector<T> &dist_u = dist[u];
             for(int v = 0; v < n; v++) {
                 T sum = dist_u[w] + dist_w[v];
-                if(dist_u[v] > sum)
+        		if(dist_u[v] > sum)
                     dist_u[v] = sum;
             }
         }

@@ -434,7 +434,7 @@ inline intInf intInf::operator*(const intInf& right) const {
         bool found = false;
         for (int i = digit < right.val.GetCount() ? 0 : digit - right.val.GetCount() + 1; i < val.GetCount() && i <= digit; ++i) {
             PRODUCT_TYPE pval = result.val[digit] + val[i] * (PRODUCT_TYPE) right.val[digit - i];
-            if (pval >= BASE || pval <= -BASE)
+    		if (pval >= BASE || pval <= -BASE)
             {
                 auto dt = cdiv<long long>(pval, BASE);
                 carry += dt.quot;
@@ -443,7 +443,7 @@ inline intInf intInf::operator*(const intInf& right) const {
             result.val[digit] = (ELEM_TYPE) pval;
             found = true;
         }
-        if (!found)
+		if (!found)
             break;
     }
     for (; carry > 0; ++digit) {
@@ -502,7 +502,7 @@ inline bool intInf::operator==(const intInf& right) const {
     if (pos != right.pos || val.GetCount() != right.val.GetCount())
         return false;
     for (int i = val.GetCount() - 1; i >= 0; --i)
-        if (val[i] != right.val[i])
+		if (val[i] != right.val[i])
             return false;
     return true;
 }
@@ -511,7 +511,7 @@ inline bool intInf::operator!=(const intInf& right) const {
     if (pos != right.pos || val.GetCount() != right.val.GetCount())
         return true;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i)
-        if (val[i] != right.val[i])
+		if (val[i] != right.val[i])
             return true;
     return false;
 }
@@ -526,9 +526,9 @@ inline bool intInf::operator<(const intInf& right) const {
     if (val.GetCount() < right.val.GetCount())
         return pos ? true : false;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i) {
-        if (val[i] < right.val[i])
+		if (val[i] < right.val[i])
             return pos ? true : false;
-        if (val[i] > right.val[i])
+		if (val[i] > right.val[i])
             return pos ? false : true;
     }
     return false;
@@ -544,9 +544,9 @@ inline bool intInf::operator<=(const intInf& right) const {
     if (val.GetCount() < right.val.GetCount())
         return pos ? true : false;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i) {
-        if (val[i] < right.val[i])
+		if (val[i] < right.val[i])
             return pos ? true : false;
-        if (val[i] > right.val[i])
+		if (val[i] > right.val[i])
             return pos ? false : true;
     }
     return true;
@@ -562,9 +562,9 @@ inline bool intInf::operator>(const intInf& right) const {
     if (val.GetCount() < right.val.GetCount())
         return pos ? false : true;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i) {
-        if (val[i] < right.val[i])
+		if (val[i] < right.val[i])
             return pos ? false : true;
-        if (val[i] > right.val[i])
+		if (val[i] > right.val[i])
             return pos ? true : false;
     }
     return false;
@@ -580,9 +580,9 @@ inline bool intInf::operator>=(const intInf& right) const {
     if (val.GetCount() < right.val.GetCount())
         return pos ? false : true;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i) {
-        if (val[i] < right.val[i])
+		if (val[i] < right.val[i])
             return pos ? false : true;
-        if (val[i] > right.val[i])
+		if (val[i] > right.val[i])
             return pos ? true : false;
     }
     return true;
@@ -609,7 +609,7 @@ inline intInf intInf::intSqrt() const {
     do {
         mid = (hi + lo) / 2; // 8 factor
         mid2 = mid * mid; // 1 factor
-        if (mid2 == *this) {
+		if (mid2 == *this) {
             lo = mid;
             break;
         } else if (mid2 < *this)
@@ -638,7 +638,7 @@ inline String intInf::ToString() const {
         s << '-';
     bool first = true;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i) {
-        if (first) {
+		if (first) {
             s << val[i];
             first = false;
         } else 
@@ -713,10 +713,10 @@ inline unsigned long long intInf::toUnsignedLongLong() const {
 
 inline void intInf::truncateToBase() {
     for (int i = 0; i < val.GetCount(); ++i) { // truncate each
-        if (val[i] >= BASE || val[i] <= -BASE) {
+		if (val[i] >= BASE || val[i] <= -BASE) {
             auto dt = cdiv<int>(val[i], BASE);
             val[i] = dt.rem;
-            if (i + 1 >= val.GetCount())
+    		if (i + 1 >= val.GetCount())
                 val.push_back(dt.quot);
             else
                 val[i + 1] += dt.quot;
@@ -728,7 +728,7 @@ inline bool intInf::equalizeSigns() {
     bool isPositive = true;
     int i = (int) ((val.GetCount())) - 1;
     for (; i >= 0; --i) {
-        if (val[i] != 0) {
+		if (val[i] != 0) {
             isPositive = val[i--] > 0;
             break;
         }
@@ -736,7 +736,7 @@ inline bool intInf::equalizeSigns() {
 
     if (isPositive) {
         for (; i >= 0; --i) {
-            if (val[i] < 0) {
+    		if (val[i] < 0) {
                 int k = 0, index = i + 1;
                 for (; index < val.GetCount() && val[index] == 0; ++k, ++index)
                     ; // count adjacent zeros on left
@@ -753,7 +753,7 @@ inline bool intInf::equalizeSigns() {
         }
     } else {
         for (; i >= 0; --i) {
-            if (val[i] > 0) {
+    		if (val[i] > 0) {
                 int k = 0, index = i + 1;
                 for (; index < val.GetCount() && val[index] == 0; ++k, ++index)
                     ; // count adjacent zeros on right
@@ -773,7 +773,7 @@ inline bool intInf::equalizeSigns() {
 
 inline void intInf::removeLeadingZeros() {
     for (int i = (int) (val.GetCount()) - 1; i > 0; --i) { // remove leading 0's 
-        if (val[i] != 0)
+		if (val[i] != 0)
             return;
         else
             val.Remove(i);
@@ -784,7 +784,7 @@ inline void intInf::correct(bool justCheckLeadingZeros, bool hasValidSign) {
     if (!justCheckLeadingZeros) {
         truncateToBase();
         
-        if (equalizeSigns())
+		if (equalizeSigns())
             pos = ((val.GetCount() == 1 && val[0] == 0) || !hasValidSign) ? true : pos;
         else {
             pos = hasValidSign ? !pos : false;
@@ -804,7 +804,7 @@ inline void intInf::fromString(const String& s) {
         val << atoi(s.Mid(i, DIGIT_COUNT));
     if (i > -DIGIT_COUNT) {
         String ss = s.Left(i + DIGIT_COUNT);
-        if (ss.GetCount() == 1 && ss[0] == '-')
+		if (ss.GetCount() == 1 && ss[0] == '-')
             pos = false;
         else
             val.push_back(atoi(ss));
@@ -823,7 +823,7 @@ inline ELEM_TYPE intInf::dInR(const intInf& R, const intInf& D) {
         auto dt = cdiv<int>(avg, 2);
         avg = dt.rem ? (dt.quot + 1) : dt.quot;
         intInf prod = D * avg;
-        if (R == prod)
+		if (R == prod)
             return avg;
         else if (R > prod)
             min = avg;
@@ -837,7 +837,7 @@ inline void intInf::multiplyByDigit(ELEM_TYPE factor, Vector<ELEM_TYPE>& val) {
     ELEM_TYPE carry = 0;
     for (int i = 0; i < val.GetCount(); ++i) {
         PRODUCT_TYPE pval = val[i] * (PRODUCT_TYPE) factor + carry;
-        if (pval >= BASE || pval <= -BASE) {
+		if (pval >= BASE || pval <= -BASE) {
             auto dt = cdiv<long long>(pval, BASE);
             carry = (ELEM_TYPE) dt.quot;
             pval = dt.rem;

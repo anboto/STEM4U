@@ -102,7 +102,7 @@ combine_discontinuous(BidirIter first1, BidirIter last1,
     {
         for (BidirIter i2 = first2; i2 != last2; ++i2)
         {
-            if (f())
+    		if (f())
                 return true;
             swap(*first1, *i2);
         }
@@ -113,7 +113,7 @@ combine_discontinuous(BidirIter first1, BidirIter last1,
         BidirIter i2 = first2;
         for (D d22 = d2; i2 != last2; ++i2, --d22)
         {
-            if (combine_discontinuous(f1p, last1, d1-1, i2, last2, d22, f, d+1))
+    		if (combine_discontinuous(f1p, last1, d1-1, i2, last2, d22, f, d+1))
                 return true;
             swap(*first1, *i2);
         }
@@ -174,17 +174,17 @@ combine_discontinuous3_(BidirIter first1, BidirIter last1,
     {
         for (BidirIter i2 = first2; i2 != last2; ++i2)
         {
-            if (f())
+    		if (f())
                 return true;
             swap(*first1, *i2);
         }
-        if (f())
+		if (f())
             return true;
         swap(*first1, *std::prev(last2));
         swap(*first1, *first3);
         for (BidirIter i2 = std::next(first3); i2 != last3; ++i2)
         {
-            if (f())
+    		if (f())
                 return true;
             swap(*first1, *i2);
         }
@@ -195,7 +195,7 @@ combine_discontinuous3_(BidirIter first1, BidirIter last1,
         BidirIter i2 = first2;
         for (D d22 = d2; i2 != last2; ++i2, --d22)
         {
-            if (combine_discontinuous3_(f1p, last1, d1-1, i2, last2, d22, first3,
+    		if (combine_discontinuous3_(f1p, last1, d1-1, i2, last2, d22, first3,
                                         last3, d3, f, d+1))
                 return true;
             swap(*first1, *i2);
@@ -203,7 +203,7 @@ combine_discontinuous3_(BidirIter first1, BidirIter last1,
         i2 = first3;
         for (D d22 = d3; i2 != last3; ++i2, --d22)
         {
-            if (combine_discontinuous(f1p, last1, d1-1, i2, last3, d22, f, d+1))
+    		if (combine_discontinuous(f1p, last1, d1-1, i2, last3, d22, f, d+1))
                 return true;
             swap(*first1, *i2);
         }
@@ -214,7 +214,7 @@ combine_discontinuous3_(BidirIter first1, BidirIter last1,
         swap(*std::prev(last2), *first3);
     if (d != 0)
     {
-        if (d2 > 1)
+		if (d2 > 1)
             rotate_discontinuous3(first1, last1, d1, std::next(first2), last2, d2-1, first3, last3, d3);
         else
             rotate_discontinuous(first1, last1, d1, first3, last3, d3);
@@ -256,29 +256,29 @@ permute_(BidirIter first1, BidirIter last1,
     case 1:
         return f();
     case 2:
-        if (f())
+		if (f())
             return true;
         swap(*first1, *std::next(first1));
         return f();
     case 3:
         {
-        if (f())
+		if (f())
             return true;
         BidirIter f2 = std::next(first1);
         BidirIter f3 = std::next(f2);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *f3);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *f2);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*f2, *f3);
         return f();
@@ -287,7 +287,7 @@ permute_(BidirIter first1, BidirIter last1,
     BidirIter fp1 = std::next(first1);
     for (BidirIter p = fp1; p != last1; ++p)
     {
-        if (permute_(fp1, last1, d1-1, f))
+		if (permute_(fp1, last1, d1-1, f))
             return true;
         std::reverse(fp1, last1);
         swap(*first1, *p);
@@ -312,37 +312,37 @@ permute(BidirIter first1, BidirIter last1,
         return f();
     case 2:
         {
-        if (f())
+		if (f())
             return true;
         BidirIter i = std::next(first1);
         swap(*first1, *i);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *i);
         }
         break;
     case 3:
         {
-        if (f())
+		if (f())
             return true;
         BidirIter f2 = std::next(first1);
         BidirIter f3 = std::next(f2);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *f3);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *f2);
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*f2, *f3);
-        if (f())
+		if (f())
             return true;
         swap(*first1, *f3);
         }
@@ -351,12 +351,12 @@ permute(BidirIter first1, BidirIter last1,
         BidirIter fp1 = std::next(first1);
         for (BidirIter p = fp1; p != last1; ++p)
         {
-            if (permute_(fp1, last1, d1-1, f))
+    		if (permute_(fp1, last1, d1-1, f))
                 return true;
             std::reverse(fp1, last1);
             swap(*first1, *p);
         }
-        if (permute_(fp1, last1, d1-1, f))
+		if (permute_(fp1, last1, d1-1, f))
             return true;
         std::reverse(first1, last1);
         break;
@@ -479,7 +479,7 @@ count_each_combination(UInt d1, UInt d2)
         UInt g = gcd(r, k);
         r /= g;
         UInt t = n / (k / g);
-        if (r > std::numeric_limits<UInt>::max() / t)
+		if (r > std::numeric_limits<UInt>::max() / t)
             throw std::overflow_error("overflow in count_each_combination");
         r *= t;
     }
@@ -527,7 +527,7 @@ count_each_permutation(UInt d1, UInt d2)
     UInt r(1);
     for (; n > d2; --n)
     {
-        if (r > std::numeric_limits<UInt>::max() / n)
+		if (r > std::numeric_limits<UInt>::max() / n)
             throw std::overflow_error("overflow in count_each_permutation");
         r *= n;
     }
@@ -562,7 +562,7 @@ public:
     bool
     operator()(BidirIter first, BidirIter last)
     {
-        if (s_ <= 1)
+		if (s_ <= 1)
             return f_(first, last);
         bound_range<Function, BidirIter> f(f_, first, last);
         return permute(std::next(first), last, s_ - 1, f);
@@ -603,26 +603,26 @@ count_each_circular_permutation(UInt d1, UInt d2)
         }
         for (--d1; d1 > UInt(1); --d1)
         {
-            if (r > std::numeric_limits<UInt>::max()/d1)
+    		if (r > std::numeric_limits<UInt>::max()/d1)
                 throw std::overflow_error("overflow in count_each_circular_permutation");
             r *= d1;
         }
     }
     else
     {   // functionally equivalent but faster algorithm
-        if (d1 > std::numeric_limits<UInt>::max() - d2)
+		if (d1 > std::numeric_limits<UInt>::max() - d2)
             throw std::overflow_error("overflow in count_each_circular_permutation");
         UInt n = d1 + d2;
         r = 1;
         for (; n > d1; --n)
         {
-            if (r > std::numeric_limits<UInt>::max()/n)
+    		if (r > std::numeric_limits<UInt>::max()/n)
                 throw std::overflow_error("overflow in count_each_circular_permutation");
             r *= n;
         }
         for (--n; n > d2; --n)
         {
-            if (r > std::numeric_limits<UInt>::max()/n)
+    		if (r > std::numeric_limits<UInt>::max()/n)
                 throw std::overflow_error("overflow in count_each_circular_permutation");
             r *= n;
         }
@@ -771,7 +771,7 @@ reversible_permutation<Function, Size>::operator()(BidirIter first,
     {
         swap(*am1, *a);
         F2 f2(f, first, a, i, ap1, last, s_ - i - 1);
-        if (combine_discontinuous(first, a, i, ap1, last, s_ - i - 1, f2))
+		if (combine_discontinuous(first, a, i, ap1, last, s_ - i - 1, f2))
             return true;
     }
     // If [first, last) has an even number of elements, then fix it up to the
@@ -784,7 +784,7 @@ reversible_permutation<Function, Size>::operator()(BidirIter first,
     else if (s_ == 3)
     {
         swap(*am1, *a);
-        if (f_(first, last))
+		if (f_(first, last))
             return true;
         swap(*am1, *a);
     }
@@ -801,7 +801,7 @@ reversible_permutation<Function, Size>::operator()(BidirIter first,
         BidirIter b = first;
         BidirIter bp1 = std::next(b);
         F2 f2(f, bp1, a, s2-1, ap1, last, s_ - s2 - 1);
-        if (combine_discontinuous(bp1, a, s2-1, ap1, last, s_ - s2 - 1, f2))
+		if (combine_discontinuous(bp1, a, s2-1, ap1, last, s_ - s2 - 1, f2))
             return true;
         // Swap the current first element into every place from first+1 to middle-1.
         //   For each location, hold it steady to create the following discontinuous
@@ -815,7 +815,7 @@ reversible_permutation<Function, Size>::operator()(BidirIter first,
         {
             swap(*bm1, *b);
             F3 f3(f, first, b, i, bp1, a, s2-i-1, ap1, last, s_ - s2 - 1);
-            if (combine_discontinuous3(first, b, i, bp1, a, s2-i-1, ap1, last, s_-s2-1, f3))
+    		if (combine_discontinuous3(first, b, i, bp1, a, s2-i-1, ap1, last, s_-s2-1, f3))
                 return true;
         }
         // swap b into into middle-1, creates a discontinuous range:
@@ -823,7 +823,7 @@ reversible_permutation<Function, Size>::operator()(BidirIter first,
         //     of that discontinuous range.
         swap(*bm1, *b);
         F2 f21(f, first, b, s2-1, ap1, last, s_ - s2 - 1);
-        if (combine_discontinuous(first, b, s2-1, ap1, last, s_ - s2 - 1, f21))
+		if (combine_discontinuous(first, b, s2-1, ap1, last, s_ - s2 - 1, f21))
             return true;
         // Revert [first, last) to original order
         std::reverse(first, b);
@@ -860,20 +860,20 @@ count_each_reversible_permutation(UInt d1, UInt d2)
     if (d1 > UInt(1))
     {
         r = n;
-        if ((n & UInt(1)) == UInt(0))
+		if ((n & UInt(1)) == UInt(0))
             r /= UInt(2);
         --n;
         UInt t = n;
-        if ((t & UInt(1)) == UInt(0))
+		if ((t & UInt(1)) == UInt(0))
             t /= UInt(2);
-        if (r > std::numeric_limits<UInt>::max() / t)
+		if (r > std::numeric_limits<UInt>::max() / t)
             throw std::overflow_error("overflow in count_each_reversible_permutation");
         r *= t;
         --n;
     }
     for (; n > d2; --n)
     {
-        if (r > std::numeric_limits<UInt>::max() / n)
+		if (r > std::numeric_limits<UInt>::max() / n)
             throw std::overflow_error("overflow in count_each_reversible_permutation");
         r *= n;
     }
@@ -908,7 +908,7 @@ public:
     bool
     operator()(BidirIter first, BidirIter last)
     {
-        if (s_ == 1)
+		if (s_ == 1)
             return f_(first, last);
         typedef typename std::iterator_traits<BidirIter>::difference_type D;
         typedef bound_range<Function, BidirIter> BoundFunc;
@@ -950,7 +950,7 @@ count_each_reversible_circular_permutation(UInt d1, UInt d2)
     {
         for (--d1; d1 > UInt(2); --d1)
         {
-            if (r > std::numeric_limits<UInt>::max()/d1)
+    		if (r > std::numeric_limits<UInt>::max()/d1)
                 throw std::overflow_error("overflow in count_each_reversible_circular_permutation");
             r *= d1;
         }

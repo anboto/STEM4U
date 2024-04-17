@@ -78,7 +78,7 @@ double SeaWaves::GroupCelerity(double T, double h, double g) {		// m/s
     	n = 0.5;
     else {
         double tkh = 2*k*h;
-        if (tkh > 709)		// Near the max
+		if (tkh > 709)		// Near the max
             return Null;
     	n = (1 + 2*k*h/sinh(tkh))/2.;   
     }

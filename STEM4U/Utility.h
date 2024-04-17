@@ -179,8 +179,6 @@ typename Range::value_type R2(const Range &serie, const Range &serie0, typename 
 
 template <class Range>
 typename Range::value_type R2(const Range &tserie, const Range &serie, const Range &tserie0, const Range &serie0, typename Range::value_type meanserie = Null) {
-	using Scalar = typename Range::value_type;
-	
 	Range nserie0;
 	Resample(tserie0, serie0, tserie, nserie0);
 	
@@ -217,8 +215,6 @@ typename Range::value_type RMSE(const Range &serie, const Range &serie0) {
 
 template <class Range>
 typename Range::value_type RMSE(const Range &tserie, const Range &serie, const Range &tserie0, const Range &serie0) {
-	using Scalar = typename Range::value_type;
-	
 	Range nserie0;
 	Resample(tserie0, serie0, tserie, nserie0);
 	

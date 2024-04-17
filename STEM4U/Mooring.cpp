@@ -98,7 +98,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 	        
 	        for (int i = 0; i < x.size(); ++i) {
 	            x[i] = i*delta;
-	            if (x[i] < xcatanchor)
+	    		if (x[i] < xcatanchor)
 	        		z[i] = B*(cosh((xcatanchor - x[i])/B) - 1);
 	            else if (x[i] > (xanchorvessel - xcatvessel))
 	                z[i] = B*(cosh((max(0., x[i] - (xanchorvessel - xcatvessel)))/B) - 1);
