@@ -397,15 +397,15 @@ bool Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     using namespace Eigen;
 	using Scalar = typename Range::value_type;
 	
-    size_t len = X.size();     
-    size_t na = a.size();    
-    size_t nb = b.size();
+    int len =(int)X.size();     
+    int na = (int)a.size();    
+    int nb = (int)b.size();
     
     std::vector<Scalar> A(Begin(a), End(a)), 
     					B(Begin(b), End(b));
     
     int nfilt = (nb > na) ? nb : na;
-    size_t nfact = 3 * (nfilt - 1); // length of edge transients
+    int nfact = 3 * (nfilt - 1); // length of edge transients
 
     if (len <= nfact)
         throw Exc("Input data too short! Data must have length more than 3 times filter order.");
