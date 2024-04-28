@@ -30,6 +30,8 @@ rbitrary`-precision][2  including the usual arithmetic.]]
 raveling salesman problem][2  (TSP) solver.]]
 :: [s0;#i150;O0; [^topic`:`/`/STEM4U`/src`/Butterworth`_en`-us^2 Butterworth]]
 :: [s0; [2 Butterworth IIR filter following interface similar to Matlab]]
+:: [s0;#i150;O0; [^topic`:`/`/STEM4U`/src`/Integral`_en`-us^2 Integral]]
+:: [s0; [2 Numerical integration functions]]
 :: [s0;#i150;O0; [^topic`:`/`/STEM4U`/src`/Catenary`_en`-us^2 Catenary]]
 :: [s0; [2 Simple catenary mooring line solver considering sagging and 
 bottom.]]}}&]

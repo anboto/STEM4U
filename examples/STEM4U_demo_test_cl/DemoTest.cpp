@@ -21,6 +21,7 @@
 using namespace Upp;
 using namespace Eigen;
 
+
 void TestVectorMatrixHealing() {
 	UppLog() << "\n\nUncomplete vector and matrix healing and filling";
 	
@@ -102,7 +103,7 @@ void TestRootfinding() {
 	UppLog() << "\n'Root bracketing':";
 	
 	double from, to;
-	bool ok = RootBracketing<double>([&](double x)->double {return sin(x);}, 3*M_PI/4, 0, 2*M_PI, M_PI/4, from, to, false);
+	RootBracketing<double>([&](double x)->double {return sin(x);}, 3*M_PI/4, 0, 2*M_PI, M_PI/4, from, to, false);
 	{
 		int nf = 0;
 		double y = Bisection<double>([&](double x)->double {nf++; return sin(x);}, from, to, 0.001, 50);
@@ -443,6 +444,59 @@ void TestIntegral() {
 		VERIFY(yx_spline - ydx_spline < 1E-10);		VERIFY(abs(yx_spline - res)/res < 0.15);
 	}
 }
+
+void TestIntegralSinCos() {
+	UppLog() << "\n\nIntegral sin cos demo";
+	
+	double a = M_PI;
+	double b = 2*M_PI;
+	double t = 8;
+	double exact;
+	
+	exact = 0.0051257792400619;
+	UppLog() << "\nintegral pi->2*pi 4*exp(-x/2)*cos(8*x) dx = " << exact << "\n#\tError";
+	
+	for (int it = 0; it < 10; it++) {
+	    int n = 10 + it*20 + 1;
+		double dx = (b-a)/(n-1);
+	
+	    VectorXd x(n), f(n);
+	    for (int i = 0; i < n; i++ ) {
+	        x[i] = a + i*dx;
+	        f[i] = 4*exp(-x[i]/2);
+	    }
+	    
+	    double res = IntegralSinCos(x, f, t, true);
+		double error = (res - exact)/exact;
+	
+	    UppLog() << "\n" << n << "\t" << error;
+	    
+	    if (n == 111) 
+	        VERIFY(abs(error) < 1E-6);
+	}
+	
+	exact = 0.082012467840991;
+	UppLog() << "\nintegral pi->2*pi 4*exp(-x/2)*sin(8*x) dx = " << exact << "\n#\tError";
+	
+	for (int it = 0; it < 10; it++) {
+	    int n = 10 + it*20 + 1;
+		double dx = (b-a)/(n-1);
+	
+	    VectorXd x(n), f(n);
+	    for (int i = 0; i < n; i++ ) {
+	        x[i] = a + i*dx;
+	        f[i] = 4*exp(-x[i]/2);
+	    }
+	    
+	    double res = IntegralSinCos(x, f, t, false);
+		double error = (res - exact)/exact;
+	
+	    UppLog() << "\n" << n << "\t" << error;
+	    
+	    if (n == 111) 
+	        VERIFY(abs(error) < 1E-9);
+	}
+}
 	
 	
 void TestSeaWaves() {
@@ -702,6 +756,7 @@ CONSOLE_APP_MAIN
 		TestIntInf();
 	    TestPolynomial();
 	    TestIntegral();
+	    TestIntegralSinCos();
 	    TestSeaWaves();
 	  
 	    UppLog() << "\n\nAll tests passed\n";

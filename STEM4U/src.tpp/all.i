@@ -6,6 +6,10 @@ TOPIC("Combinations_en-us")
 #include "Combinations_en-us.tppi"
 END_TOPIC
 
+TOPIC("Integral_en-us")
+#include "Integral_en-us.tppi"
+END_TOPIC
+
 TOPIC("Polynomial_en-us")
 #include "Polynomial_en-us.tppi"
 END_TOPIC

@@ -324,6 +324,7 @@ void LinearFitting(const Range &x, const Range &y, typename Range::value_type &a
 // https://en.wikipedia.org/wiki/Smoothstep
 template <typename T>
 T SmoothStep(T x, int order = 3, T x0 = 0, T x1 = 1, T y0 = 0, T y1 = 1) {
+	ASSERT (order == 3 || order == 5 || order == 7);
 	if (x < x0)
 		return y0;
 	if (x > x1)
@@ -331,7 +332,7 @@ T SmoothStep(T x, int order = 3, T x0 = 0, T x1 = 1, T y0 = 0, T y1 = 1) {
 	
 	double r = double(x - x0)/double(x1 - x0);
 	
-	T ret;
+	T ret = Null;
 	switch (order) {
 	case 3: 	ret = T(r*r*(3 - 2*r));								break;
 	case 5: 	ret = T(r*r*r*(10 - 15*r + 6*r*r));					break;
