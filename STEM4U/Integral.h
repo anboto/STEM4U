@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2021 - 2022, the Anboto author and contributors
+// Copyright 2021 - 2024, the Anboto author and contributors
 #ifndef _STEM4U_Integral_h_
 #define _STEM4U_Integral_h_
 
@@ -151,12 +151,11 @@ typename Range::value_type Integral(const Range &y, typename Range::value_type d
 }
 
 template <class Range>
-typename Range::value_type IntegralSinCos(const Range &x, const Range &f, typename Range::value_type t, bool iscos) {
+typename Range::value_type IntegralSinCos(typename Range::value_type xfrom, typename Range::value_type dx, const Range &f, typename Range::value_type t, bool iscos) {
 	using Scalar = typename Range::value_type;
 	
 	int n = f.size();
 	
-	ASSERT(x.size() == n);
 	ASSERT(n%2);
 	
 	if (!(n%2))
@@ -164,8 +163,11 @@ typename Range::value_type IntegralSinCos(const Range &x, const Range &f, typena
 	
 	if (n == 0)
 		return 0;
+
+	Range x(n);
+	for (int i = 0; i < n; ++i)
+		x[i] = xfrom + i*dx;
 	
-	Scalar dx = x[1]-x[0];
 	Scalar theta = t*dx;
 	Scalar sint = sin(theta);
 	Scalar cost = cos(theta);
@@ -174,8 +176,8 @@ typename Range::value_type IntegralSinCos(const Range &x, const Range &f, typena
 	Scalar alpha, ceven, codd;
 	if (6*abs(theta) <= 1) {	// Taylor series approximation
 	    alpha = 2*theta3/45. - 2*PowInt(theta, 5)/315. + 2*PowInt(theta, 7)/4725.;
-	    ceven =  2./3. + 2.*theta2/15. - 4.*PowInt(theta, 4)/105. + 2.*PowInt(theta, 6)/567. - 4.*PowInt(theta, 8)/22275.;
-	    codd = 4./3. - 2.*theta2/15.0 + PowInt(theta, 4)/210. - PowInt(theta, 6)/11340.;
+	    ceven =  2/3. + 2*theta2/15. - 4*PowInt(theta, 4)/105. + 2*PowInt(theta, 6)/567. - 4*PowInt(theta, 8)/22275.;
+	    codd = 4/3. - 2.*theta2/15. + PowInt(theta, 4)/210. - PowInt(theta, 6)/11340.;
   	} else {
 		alpha = (theta2 + theta*sint*cost - 2*sint*sint)/theta3;
 		ceven = (2*theta + 2*theta*cost*cost - 4*sint*cost)/theta3;

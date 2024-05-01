@@ -466,7 +466,7 @@ void TestIntegralSinCos() {
 	        f[i] = 4*exp(-x[i]/2);
 	    }
 	    
-	    double res = IntegralSinCos(x, f, t, true);
+	    double res = IntegralSinCos(a, (b-a)/(n-1), f, t, true);
 		double error = (res - exact)/exact;
 	
 	    UppLog() << "\n" << n << "\t" << error;
@@ -488,7 +488,7 @@ void TestIntegralSinCos() {
 	        f[i] = 4*exp(-x[i]/2);
 	    }
 	    
-	    double res = IntegralSinCos(x, f, t, false);
+	    double res = IntegralSinCos(a, (b-a)/(n-1), f, t, false);
 		double error = (res - exact)/exact;
 	
 	    UppLog() << "\n" << n << "\t" << error;
