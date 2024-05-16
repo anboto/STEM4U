@@ -155,24 +155,24 @@ bool Lowest(const Range1 &x, const Range1 &y, typename Range1::value_type xs, Ra
 	if (a <= 0) 			// rightmost pt (may be greater than nright because of ties)
    		return false;
    	else {					// weighted least squares	
-      	for (int j = nleft; j <= nrt; j++)		// normalize weights
-         	weight[j] /= a;
+      	for (int jj = nleft; jj <= nrt; jj++)		// normalize weights
+         	weight[jj] /= a;
       	if (h > 0) {         	// use linear fit
-         	Scalar a = 0;
+         	a = 0;
          	for (j = nleft; j <= nrt; j++)
             	a += weight[j]*x[j]; 			// weighted centre of values
-			Scalar b = xs-a;
+			Scalar b = xs - a;
 			Scalar c = 0;
 			for (j = nleft; j <= nrt; j++)
             	c += weight[j]*sqr(x[j] - a);
          	if (sqrt(c) > 0.001*range) {		// points are spread enough to compute slope
             	b /= c;
             	for (j = nleft; j <= nrt; j++)
-               		weight[j] *= (1. + b*(x[j] - a));
+               		weight[j] *= (1 + b*(x[j] - a));
          	}
       	}
       	ys = 0;
-      	for (int j = nleft; j <= nrt; j++)
+      	for (j = nleft; j <= nrt; j++)
          	ys += weight[j]*y[j];
    	}
    	return true;
@@ -187,6 +187,7 @@ void Lowess(const Range1 &x, const Range1 &y, typename Range1::value_type frac, 
 	using Scalar = typename Range1::value_type;
 	ASSERT(x.size() == y.size());
 	int n = x.size();
+	int i;
 	if (n == 0 || y.size() != n) 
 		return;
 	ys.SetCount(n);
@@ -200,7 +201,7 @@ void Lowess(const Range1 &x, const Range1 &y, typename Range1::value_type frac, 
 		int nleft = 0;
 		int nright = ns-1;
 		int last = -1;					// index of last estimated point
-		int i = 0;						// index of current point
+		i = 0;							// index of current point
 		do {
 			while (nright < n-1) {		// move <nleft,nright> right, while radius decreases
 				Scalar d1 = x[i]-x[nleft];
@@ -234,11 +235,11 @@ void Lowess(const Range1 &x, const Range1 &y, typename Range1::value_type frac, 
 			i = max(last+1,i-1);
 		} while (last < n-1);
 		
-		for (int i = 0; i < n; i++)
+		for (i = 0; i < n; i++)
 			residual[i] = y[i] - ys[i];
 		if (iter == nsteps)
 			break;
-		for (int i = 0; i < n; i++)
+		for (i = 0; i < n; i++)
 			weight[i] = abs(residual[i]);
 		Sort(weight);
 		int m1 = n/2 + 1;
@@ -247,7 +248,7 @@ void Lowess(const Range1 &x, const Range1 &y, typename Range1::value_type frac, 
 		Scalar cmad = 3*(weight[m1] + weight[m2]);
 		Scalar c9 = .999*cmad;
 		Scalar c1 = .001*cmad;
-		for (int i = 0; i < n; i++) {
+		for (i = 0; i < n; i++) {
 			Scalar r = abs(residual[i]);
 			if (r <= c1) 
 				weight[i] = 1;

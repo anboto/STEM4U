@@ -153,9 +153,9 @@ public:
 	}
 	void Init(const Vector<Vector<Pointf>> &perimetersAllowed,
 			  const Vector<Vector<Pointf>> &perimetersForbidden, int rows = 100, int cols = 100);
-	void Init(const Vector<Vector<Pointf>> &perimetersAllowed, int rows = 100, int cols = 100) {
+	void Init(const Vector<Vector<Pointf>> &perimetersAllowed, int _rows = 100, int _cols = 100) {
 		Vector<Vector<Pointf>> perimetersForbidden;
-		Init(perimetersAllowed, perimetersForbidden, rows, cols);
+		Init(perimetersAllowed, perimetersForbidden, _rows, _cols);
 	}
 	void SetInitPoint(int _idFrom) 			{dist = Dijkstra(adjList, idFrom = _idFrom);}
 	void SetInitPoint(const Pointf &end) 	{SetInitPoint(ClosestId(end));}

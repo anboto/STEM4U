@@ -118,7 +118,7 @@ bool SeaWaves::JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma) {
 	return true;
 }
 
-bool SeaWaves::Init(double Tp, double Hs, double dirM, double h, int nd, int nf, double gamma, 
+bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, int _nf, double gamma, 
 					double disp_ang, int seed, double fmin, double fmax) {
 	if (nf == 0) {
 		Clear();
@@ -128,12 +128,12 @@ bool SeaWaves::Init(double Tp, double Hs, double dirM, double h, int nd, int nf,
 		Clear();
 		return false;
 	}
-	this->Tp = Tp; 				
-	this->dirM = dirM; 			
-	this->Hs = Hs;             	
-	this->h = h;                
-	this->nd = nd; 				
-	this->nf = nf = nf/nd;	
+	this->Tp = _Tp; 				
+	this->dirM = _dirM; 			
+	this->Hs = _Hs;             	
+	this->h = _h;                
+	this->nd = _nd; 				
+	this->nf = _nf/nd;	
 
 	frec.resize(nf);
 	k.resize(nf);
@@ -293,7 +293,7 @@ double SeaWaves::ZSurf(double x, double y, double t) {
 	if (nf == 0) 
 		return 0;
 	
-    double zSurf = 0;
+    zSurf = 0;
 	for (int ifr = 0; ifr < nf; ifr++) {
 		double w = 2*M_PI*frec[ifr];
     	for (int id = 0; id < nd; id++) 
@@ -308,13 +308,13 @@ double SeaWaves::Pressure(double x, double y, double z, double t) {
 	if (z >= 0)
 		return 0;
 			
-	double p = -z;  
+	p = -z;  
 	for (int ifr = 0; ifr < nf; ifr++) {
 		double w = 2*M_PI*frec[ifr];
     	for (int id = 0; id < nd; id++) {
 	        double kp = cosh(k[ifr]*(h+z))/cosh(k[ifr]*h);		// Pressure response factor
-    		double et = A(id, ifr)*cos(k[ifr]*cos(dirs[id])*x 	// Z surf component
-    				  + k[ifr]*sin(dirs[id])*y - w*t + ph(id, ifr));         
+	        double arg = k[ifr]*(x*cos(dirs[id]) + y*sin(dirs[id])) - w*t + ph(id, ifr);
+    		double et = A(id, ifr)*cos(arg);   					// Z surf component
     		p += kp*et;	
     	}
 	}
@@ -530,10 +530,10 @@ class JONSWAPEquation : public ExplicitEquation {
 	public:
 		JONSWAPEquation() 						{}
 		JONSWAPEquation(double Hm0, double Tp, double gamma) 	{Init(Hm0, Tp, gamma);}
-		void Init(double Hm0, double Tp, double gamma) {
-			this->Hm0 = Hm0;
-			this->Tp = Tp;
-			this->gamma = gamma;
+		void Init(double _Hm0, double _Tp, double _gamma) {
+			this->Hm0 = _Hm0;
+			this->Tp = _Tp;
+			this->gamma = _gamma;
 		}
 		double f(double T)	{return SeaWaves::JONSWAP_Spectrum(Hm0, Tp, gamma, 1/T);}
 		virtual String GetName() 						{return t_("JONSWAP parametric");}

@@ -434,11 +434,10 @@ inline intInf intInf::operator*(const intInf& right) const {
         bool found = false;
         for (int i = digit < right.val.GetCount() ? 0 : digit - right.val.GetCount() + 1; i < val.GetCount() && i <= digit; ++i) {
             PRODUCT_TYPE pval = result.val[digit] + val[i] * (PRODUCT_TYPE) right.val[digit - i];
-    		if (pval >= BASE || pval <= -BASE)
-            {
-                auto dt = cdiv<long long>(pval, BASE);
-                carry += dt.quot;
-                pval = dt.rem;
+    		if (pval >= BASE || pval <= -BASE) {
+                auto dt2 = cdiv<long long>(pval, BASE);
+                carry += dt2.quot;
+                pval = dt2.rem;
             }
             result.val[digit] = (ELEM_TYPE) pval;
             found = true;

@@ -63,7 +63,7 @@ public:
 	static double BreakingWaveH(double T, double h, double g);
 
 	static double JONSWAP_Spectrum(double Hm0, double Tp, double gamma, double freq);
-	bool JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma);
+	static bool JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma);
 		
 	enum SEA_TYPE {SHALLOW, INTERMEDIATE, DEEP};
 	static SEA_TYPE GetSeaType(double Tp, double h, double g);

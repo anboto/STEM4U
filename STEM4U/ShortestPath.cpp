@@ -7,9 +7,9 @@
 namespace Upp {
 
 void MapShortestPath::Init(const Vector<Vector<Pointf>> &perimetersAllowed,
-						   const Vector<Vector<Pointf>> &perimetersForbidden, int rows, int cols) {
-    this->rows = rows;
-    this->cols = cols;
+						   const Vector<Vector<Pointf>> &perimetersForbidden, int _rows, int _cols) {
+    this->rows = _rows;
+    this->cols = _cols;
     
     rect = EnvelopeOr(perimetersAllowed);
     double width  = rect.GetWidth();
@@ -61,11 +61,11 @@ void MapShortestPath::Init(const Vector<Vector<Pointf>> &perimetersAllowed,
 				int id2 = indx(r-1, c);
 				lst << SegSP<double>(id2, map[id2] ? wy : DBL_MAX);
 				if (c > 0) {
-					int id2 = indx(r-1, c-1);
+					id2 = indx(r-1, c-1);
 					lst << SegSP<double>(id2, map[id2] ? wang : DBL_MAX);
 				}
 				if (c < cols-1) {
-					int id2 = indx(r-1, c+1);
+					id2 = indx(r-1, c+1);
 					lst << SegSP<double>(id2, map[id2] ? wang : DBL_MAX);
 				}
 			}
@@ -77,11 +77,11 @@ void MapShortestPath::Init(const Vector<Vector<Pointf>> &perimetersAllowed,
 				int id2 = indx(r+1, c);
 				lst << SegSP<double>(id2, map[id2] ? wy : DBL_MAX);
 				if (c > 0) {
-					int id2 = indx(r+1, c-1);
+					id2 = indx(r+1, c-1);
 					lst << SegSP<double>(id2, map[id2] ? wang : DBL_MAX);
 				}
 				if (c < cols-1) {
-					int id2 = indx(r+1, c+1);
+					id2 = indx(r+1, c+1);
 					lst << SegSP<double>(id2, map[id2] ? wang : DBL_MAX);
 				}
 			}

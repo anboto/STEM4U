@@ -177,21 +177,21 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 		userData.ResidualZero = ResidualZero;
 		
 	    auto ResFun = [](realtype t, N_Vector _y, N_Vector _dy, N_Vector _res, void *user_data) { 
-			realtype *y = N_VGetArrayPointer(_y);
+			realtype *yy = N_VGetArrayPointer(_y);
 			realtype *dy = N_VGetArrayPointer(_dy);
 			realtype *res = N_VGetArrayPointer(_res);
 			
 			UserData &userData = *(UserData *)user_data;
 			
-			return userData.Residual(t, userData.iiter, y, dy, res) ? 0 : -1;
+			return userData.Residual(t, userData.iiter, yy, dy, res) ? 0 : -1;
 		};
 	    auto ResZeroFun = [](realtype t, N_Vector _y, N_Vector _dy, realtype *res, void *user_data) { 
-			realtype *y = N_VGetArrayPointer(_y);
+			realtype *yy = N_VGetArrayPointer(_y);
 			realtype *dy = N_VGetArrayPointer(_dy);
 			
 			UserData &userData = *(UserData *)user_data;
 			
-			return userData.ResidualZero(t, userData.iiter, y, dy, res) ? 0 : -1;
+			return userData.ResidualZero(t, userData.iiter, yy, dy, res) ? 0 : -1;
 		};	
 		
 		/* Call IDACreate and IDAInit to initialize IDA memory */
@@ -252,8 +252,8 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 			retval = IDASolve(mem, tnext, &titer, yy, yp, IDA_NORMAL);
 			CheckRet(retval, "IDASolve");
 		
-			realtype *y  = N_VGetArrayPointer(yy);
-			realtype *dy = N_VGetArrayPointer(yp);
+			realtype *y2  = N_VGetArrayPointer(yy);
+			realtype *dy2 = N_VGetArrayPointer(yp);
 			
 			//PrintIteration(titer, y, numEq);
 			
@@ -266,7 +266,7 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 			else		
 				throw Exc(Format(t_("Sundials IDA error: %s"), GetIdaErrorMsg(retval)));
 			
-			if(OnIteration && !OnIteration(titer, userData.iiter, y, dy, retval == IDA_ROOT_RETURN, rootsfound))
+			if(OnIteration && !OnIteration(titer, userData.iiter, y2, dy2, retval == IDA_ROOT_RETURN, rootsfound))
 				break;
 			
 			if (retval == IDA_SUCCESS) {

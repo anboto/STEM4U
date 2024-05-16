@@ -77,13 +77,13 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 		
 		  	Buffer<int> consdata(1, 2);		// B > 0
 		  	
-		  	Buffer<double> udata(1, Blimit/2.);	
-			SolveNonLinearEquationsSun(udata, 1, [&](const double y[], double residuals[])->bool {
+		  	Buffer<double> udata2(1, Blimit/2.);	
+			SolveNonLinearEquationsSun(udata2, 1, [&](const double y[], double residuals[])->bool {
 				double B = y[0];
 				residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + sqrt(zanchor*(zanchor + 2*B)) + sqrt(zvessel*(zvessel + 2*B)) - moorlen; 
 				return true;
 			}, consdata);		
-			double B = udata[0];
+			double B = udata2[0];
 	
 	        double xcatanchor = B*acosh(zanchor/B + 1);
 	        double xcatvessel = B*acosh(zvessel/B + 1);
@@ -111,7 +111,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			int neq = 2;
 	        double deltaz = zvessel - zanchor;
 	
-		  	Buffer<double> udata(neq);
+		  	Buffer<double> udata2(neq);
 		  	Buffer<int> consdata(2);
 		  	consdata[0] = 2;			// B > 0
 		  	consdata[1] = 0;
@@ -120,9 +120,9 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 		  	bool done = false;
 		  	for (x1_0 = 0; x1_0 < abs(xanchorvessel) && !done; x1_0 += abs(xanchorvessel)/4) {
 		  		for (B_0 = abs(Blimit); B_0 < 10*B_0 && !done; B_0 += 5*abs(Blimit)/4) {		
-			  		udata[0] = B_0;	
-			  		udata[1] = x1_0;
-					SolveNonLinearEquationsSun(udata, neq, [&](const double y[], double residuals[])->bool {
+			  		udata2[0] = B_0;	
+			  		udata2[1] = x1_0;
+					SolveNonLinearEquationsSun(udata2, neq, [&](const double y[], double residuals[])->bool {
 						double B = y[0];
 						double x1 = y[1];
 						
@@ -131,8 +131,8 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 						
 						return true;
 					}, consdata);
-					B = udata[0];
-					x1 = udata[1];		
+					B = udata2[0];
+					x1 = udata2[1];		
 					if (abs((x1 + xanchorvessel)/B) < 3)
 						done = true;
 		  		}
