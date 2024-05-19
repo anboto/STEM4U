@@ -120,11 +120,11 @@ bool SeaWaves::JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma) {
 
 bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, int _nf, double gamma, 
 					double disp_ang, int seed, double fmin, double fmax) {
-	if (nf == 0) {
+	if (_nf == 0) {
 		Clear();
 		return true;
 	}
-	if(!(nd > 0 && gamma >= 1)) {
+	if(!(_nd > 0 && gamma >= 1)) {
 		Clear();
 		return false;
 	}
@@ -293,13 +293,13 @@ double SeaWaves::ZSurf(double x, double y, double t) {
 	if (nf == 0) 
 		return 0;
 	
-    zSurf = 0;
+    double zzSurf = 0;
 	for (int ifr = 0; ifr < nf; ifr++) {
 		double w = 2*M_PI*frec[ifr];
     	for (int id = 0; id < nd; id++) 
-	        zSurf += A(id, ifr)*cos(k[ifr]*cos(dirs[id])*x + k[ifr]*sin(dirs[id])*y - w*t + ph(id, ifr));  
+	        zzSurf += A(id, ifr)*cos(k[ifr]*cos(dirs[id])*x + k[ifr]*sin(dirs[id])*y - w*t + ph(id, ifr));  
 	}
-    return zSurf;
+    return zzSurf;
 }
 
 double SeaWaves::Pressure(double x, double y, double z, double t) {
@@ -308,17 +308,17 @@ double SeaWaves::Pressure(double x, double y, double z, double t) {
 	if (z >= 0)
 		return 0;
 			
-	p = -z;  
+	double pp = -z;  
 	for (int ifr = 0; ifr < nf; ifr++) {
 		double w = 2*M_PI*frec[ifr];
     	for (int id = 0; id < nd; id++) {
 	        double kp = cosh(k[ifr]*(h+z))/cosh(k[ifr]*h);		// Pressure response factor
 	        double arg = k[ifr]*(x*cos(dirs[id]) + y*sin(dirs[id])) - w*t + ph(id, ifr);
     		double et = A(id, ifr)*cos(arg);   					// Z surf component
-    		p += kp*et;	
+    		pp += kp*et;	
     	}
 	}
-    return p*rho*g;
+    return pp*rho*g;
 }
 
 double SeaWaves::ZWheelerStretching(double z, double et) {
