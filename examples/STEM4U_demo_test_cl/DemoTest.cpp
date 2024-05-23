@@ -734,8 +734,8 @@ void TestHomography() {
 	Pointf p03from(288, 218), p03to(263, 130);
 	Pointf p04from(14, 218), p04to(16, 207);
 	
-	Homography<double, double> h(p01from, p02from, p03from, p04from,
-						 		 p01to, p02to, p03to, p04to);
+	Homography<double> h;
+	h.QuadToQuad(p01from, p02from, p03from, p04from, p01to, p02to, p03to, p04to);
 	
 	UppLog() << "\nIt is tested with itself\n";
 					 
@@ -797,15 +797,20 @@ void TestHomography() {
 	
 	Image deformed = ApplyHomography(original, Green(), 
 				orig00, orig10, orig11, orig01,
-			   	dest00, dest10, dest11, dest01);
+			   	dest00, dest10, dest11, dest01, true);
 			   							  
 	PNGEncoder().SaveFile(AFX(dir, "Homography_deformed.png"), deformed);	
 	
   	Image reconstr = ApplyHomography(deformed, Green(), 
   				dest00, dest10, dest11, dest01,
-  				orig00, orig10, orig11, orig01);
+  				orig00, orig10, orig11, orig01, true);
 			   							  
 	PNGEncoder().SaveFile(AFX(dir, "Homography_reconstructed.png"), reconstr);
+	
+	Image reconstr2= ApplyHomography(deformed, Green(), 
+  				dest00, dest10, dest11, dest01, sz, true);
+			   							  
+	PNGEncoder().SaveFile(AFX(dir, "Homography_reconstructed 2.png"), reconstr2);
 }
 
 void TestLocalFitting(bool test);
