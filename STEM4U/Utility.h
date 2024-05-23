@@ -342,7 +342,60 @@ T SmoothStep(T x, int order = 3, T x0 = 0, T x1 = 1, T y0 = 0, T y1 = 1) {
 	return ret*(y1 - y0) + y0;
 }
 
+template <typename In, typename Q>
+class Homography {
+public:
+	Homography() {}
+	Homography(const Point_<In> &from0, const Point_<In> &from1, const Point_<In> &from2, const Point_<In> &from3,
+			   const Point_<In> &to0,   const Point_<In> &to1,   const Point_<In> &to2,   const Point_<In> &to3) {
+		Init(from0, from1, from2, from3, to0, to1, to2, to3);
+	}
+	
+	void Init(const Point_<In> &from0, const Point_<In> &from1, const Point_<In> &from2, const Point_<In> &from3,
+			   const Point_<In> &to0,   const Point_<In> &to1,   const Point_<In> &to2,   const Point_<In> &to3) {
+	    Eigen::Matrix<Q, 4, 1> x, y, u, v;
+	    
+	    x << from0.x, from1.x, from2.x, from3.x;
+	    y << from0.y, from1.y, from2.y, from3.y;
+	    u << to0.x,   to1.x,   to2.x,   to3.x;
+	    v << to0.y,   to1.y,   to2.y,   to3.y;
 
+    	Eigen::Matrix<Q, 9, 9> A = Eigen::Matrix<Q, 9, 9>::Zero();
+	    int j = 0;
+	
+	    for (int i = 0; i < 4; ++i) {
+	        A(j, 0) = -x(i); 			A(j, 1) = -y(i); 			A(j, 2) = -1;
+	        A(j, 6) = x(i) * u(i); 		A(j, 7) = y(i) * u(i); 		A(j, 8) = u(i);
+	
+	        A(j + 1, 3) = -x(i); 		A(j + 1, 4) = -y(i); 		A(j + 1, 5) = -1;
+	        A(j + 1, 6) = x(i) * v(i); 	A(j + 1, 7) = y(i) * v(i); 	A(j + 1, 8) = v(i);
+	
+	        j += 2;
+	    }
+	    A(8, 8) = 1;  // Assuming h_9 = 1
+
+	    Eigen::Matrix<Q, 9, 1> b;
+	    b << 0, 0, 0, 0, 0, 0, 0, 0, 1;
+
+    	Eigen::Matrix<Q, 9, 1> h = A.colPivHouseholderQr().solve(b);
+    
+    	H = Eigen::Map<Eigen::Matrix<Q, 3, 3>>(h.data()).transpose();
+	}
+
+	Point_<Q> Transform(const Point_<In> &from) {
+		Eigen::Matrix<Q, 3, 1> p;
+		p << from.x, from.y, 1;
+		Eigen::Matrix<Q, 2, 1> p1 = (H * p).hnormalized();
+		return Point_<Q>(p1(0), p1(1));
+	}
+	
+private:
+	Eigen::Matrix<Q, 3, 3> H;
+};
+
+Image ApplyHomography(const Image& orig, const Color &back, 
+			const Point &from0, const Point &from1, const Point &from2, const Point &from3,
+			const Point &to0,   const Point &to1,   const Point &to2,   const Point &to3);
 
 }
 

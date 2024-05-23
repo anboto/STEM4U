@@ -6,6 +6,10 @@ TOPIC("Combinations_en-us")
 #include "Combinations_en-us.tppi"
 END_TOPIC
 
+TOPIC("Homography_en-us")
+#include "Homography_en-us.tppi"
+END_TOPIC
+
 TOPIC("Integral_en-us")
 #include "Integral_en-us.tppi"
 END_TOPIC

@@ -4,7 +4,6 @@
 #include <Functions4U/Functions4U.h>
 #include <Eigen/Eigen.h>
 #include <STEM4U/IntInf.h>
-#include <STEM4U/Rational.h>
 #include <STEM4U/Polynomial.h>
 #include <STEM4U/Sundials.h>
 #include <STEM4U/Integral.h>
@@ -16,7 +15,9 @@
 #include <ScatterDraw/DataSource.h>
 #include <STEM4U/Rootfinding.h>
 #include <Eigen/MultiDimMatrixIndex.h>
-
+#include <STEM4U/Rational.h>
+#include <Painter/Painter.h>
+#include <plugin/png/png.h>
 
 using namespace Upp;
 using namespace Eigen;
@@ -725,6 +726,88 @@ void TestScatter() {		// Functions found in Scatter
 	MovingAverage(t, y, 0.4, t2, yres2, true);
 }
 
+void TestHomography() {
+	UppLog() << "\nVerifying class Homography. They are transformations that describe the motion between two images, when the camera or the observed object moves.\n";
+	
+	Pointf p01from(14, 28), p01to(34, 29);
+	Pointf p02from(288, 28), p02to(281, 25);
+	Pointf p03from(288, 218), p03to(263, 130);
+	Pointf p04from(14, 218), p04to(16, 207);
+	
+	Homography<double, double> h(p01from, p02from, p03from, p04from,
+						 		 p01to, p02to, p03to, p04to);
+	
+	UppLog() << "\nIt is tested with itself\n";
+					 
+	Pointf p01toT = h.Transform(p01from);
+	Cout() << "Pfrom: " << p01from << ", Pto: " << p01to << ", Must be: " << p01toT << "\n";
+	VERIFY(EqualDecimals(p01to.x, p01toT.x, 6) && EqualDecimals(p01to.y, p01toT.y, 6));
+
+	Pointf p02toT = h.Transform(p02from);
+	Cout() << "Pfrom: " << p02from << ", Pto: " << p02to << ", Must be: " << p02toT << "\n";
+	VERIFY(EqualDecimals(p02to.x, p02toT.x, 6) && EqualDecimals(p02to.y, p02toT.y, 6));
+	
+	Pointf p03toT = h.Transform(p03from);
+	Cout() << "Pfrom: " << p03from << ", Pto: " << p03to << ", Must be: " << p03toT << "\n";
+	VERIFY(EqualDecimals(p03to.x, p03toT.x, 6) && EqualDecimals(p03to.y, p03toT.y, 6));
+	
+	Pointf p04toT = h.Transform(p04from);
+	Cout() << "Pfrom: " << p04from << ", Pto: " << p04to << ", Must be: " << p04toT << "\n";
+	VERIFY(EqualDecimals(p04to.x, p04toT.x, 6) && EqualDecimals(p04to.y, p04toT.y, 6));
+	
+	UppLog() << "\nOther examples\n";
+	
+	Pointf p1from(85, 150);
+	Pointf p1to = h.Transform(p1from);
+	Cout() << "Pfrom: " << p1from << ", Pto: " << p1to << "\n";
+	
+	Pointf p2from(185, 100);
+	Pointf p2to = h.Transform(p2from);
+	Cout() << "Pfrom: " << p2from << ", Pto: " << p2to << "\n";
+	
+	Pointf p3from(285, 200);
+	Pointf p3to = h.Transform(p3from);
+	Cout() << "Pfrom: " << p3from << ", Pto: " << p3to << "\n";
+	
+	Pointf p4from(185, 250);
+	Pointf p4to = h.Transform(p4from);
+	Cout() << "Pfrom: " << p4from << ", Pto: " << p4to << "\n";
+	
+	UppLog() << "\nNow reconstructing an image\n";
+	
+	Size sz(700, 250);
+	 
+	ImageBuffer ib(sz);
+	for(int y = 0; y < sz.cy; y++)
+		Fill(ib[y], White(), sz.cx);
+		
+	BufferPainter bp(ib);
+ 	bp.Begin();
+  	bp.DrawText(50, 50, "Hello U++!", Arial(120).Bold(), Black());
+ 	bp.End();
+ 	
+    Image original = ib;
+    
+    String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+	RealizeDirectory(dir);
+	PNGEncoder().SaveFile(AFX(dir, "Homography_original.png"), original);
+	
+	Point orig00(0, 0),   orig10(sz.cx-1, 0), orig11(sz.cx-1, sz.cy-1), orig01(0, sz.cy-1);
+	Point dest00(0, 200), dest10(600, 0), dest11(700, 500), dest01(20, 400);
+	
+	Image deformed = ApplyHomography(original, Green(), 
+				orig00, orig10, orig11, orig01,
+			   	dest00, dest10, dest11, dest01);
+			   							  
+	PNGEncoder().SaveFile(AFX(dir, "Homography_deformed.png"), deformed);	
+	
+  	Image reconstr = ApplyHomography(deformed, Green(), 
+  				dest00, dest10, dest11, dest01,
+  				orig00, orig10, orig11, orig01);
+			   							  
+	PNGEncoder().SaveFile(AFX(dir, "Homography_reconstructed.png"), reconstr);
+}
+
 void TestLocalFitting(bool test);
 void TestMooring(bool test);
 void TestButterworth(bool test);
@@ -740,6 +823,7 @@ CONSOLE_APP_MAIN
 	try {
 		bool test = CommandLine().size() > 0 && CommandLine()[0] == "-test";
 		
+		TestHomography();
 		TestScatter();
 		TestVectorMatrixHealing();
 		TestRootfinding();
