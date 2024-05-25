@@ -14,7 +14,7 @@
 #include <STEM4U/CrossCorrelation.h>
 #include <ScatterDraw/DataSource.h>
 #include <STEM4U/Rootfinding.h>
-#include <Eigen/MultiDimMatrixIndex.h>
+#include <Eigen/MultiDimMatrix.h>
 #include <STEM4U/Rational.h>
 #include <Painter/Painter.h>
 #include <plugin/png/png.h>
