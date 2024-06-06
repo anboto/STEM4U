@@ -643,6 +643,17 @@ void TestOthers() {
 		VERIFY(p[idx(1, 2)] == 27);
 	}
 	{
+		MultiDimMatrix<int> mat(1, 2, 1, 4);	
+		int id = 0;
+		for (int i3 = 0; i3 < mat.size(3); ++i3)
+			for (int i1 = 0; i1 < mat.size(1); ++i1)
+				mat(0, i1, 0, i3) = id++;
+		id = 0;
+		for (int i = 0; i < 8; ++i)
+			VERIFY(id++ == *(mat.begin() + i));
+		
+	}
+	{
 		double x, y, dy, d2y;
 		
 		x = 3;
