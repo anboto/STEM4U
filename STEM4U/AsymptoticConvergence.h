@@ -28,7 +28,7 @@ public:
 		
 		double rangex = Last(xx) - First(xx);
 		double first = Last(xx) - rangex*rangeRatio;
-		int idfirst;
+		int idfirst = Null;
 		for (int i = xx.size()-1; i >= 0; --i) {
 			if (xx[i] <= first) {
 				idfirst = i;
