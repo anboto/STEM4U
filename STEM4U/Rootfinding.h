@@ -189,55 +189,7 @@ T QuasiNewtonRaphson(Function <T(T)> f, const T init, const T ddx, const T toly,
 	}
     return x;
 }
-/*
-template <typename T> 
-T RootFindingSlow(Function <T(T)> f, const T initx, const T tolx, const T toly, const int minData = 3, const int maxIt = 50) {
-	Vector<T> x, y;
-	
-	T a, b;
-	T nx, ny;
-	
-	if (abs(ny = f(initx)) <= toly)
-		return initx;
-	
-	x << initx;
-	y << ny;
-	
-	nx = initx + tolx;
-	if (abs(ny = f(nx)) <= toly)
-		return nx;
-	
-	x << nx;
-	y << ny;
 
-	for (int i = 0; i < maxIt; ++i) {
-		LinearRegression(x, y, a, b);
-		
-		if (a == 0)
-			return Null;
-		
-		nx = -b/a;		// y = ax + b; y = 0 => x = -b/a;
-		ny = f(nx);
-		
-		if (abs(ny) <= toly)
-			return nx;
-		//
-		for (int ix = 0; ix < x.size(); ++ix)
-			if (abs(x[ix] - nx) < tolx/100.)
-				return Null;//
-		
-		x << nx;
-		y << ny;
-
-		IndexSort(y, x, [&](T a, T b)-> bool {return abs(a) < abs(b);});	
-		if (x.size() > minData) {
-			x.SetCount(minData);
-			y.SetCount(minData);
-		}
-	}
-    return Null;
-}
-*/
 }
 
 #endif
