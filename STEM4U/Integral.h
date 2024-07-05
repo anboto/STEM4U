@@ -117,7 +117,7 @@ typename Range::value_type Integral(const Range &y, typename Range::value_type d
 			ret0 = Avg(y(n-1), y(n-2))*dx;
 			--n;
 		}
-		return ret0 + Calc1_3(y, dx, n);
+		return ret0 + Calc1_3(y, dx, (int)n);
 	} else if (type == SIMPSON_3_8) {
 		Scalar ret0 = 0;
 		int rem = (n-1)%3;
