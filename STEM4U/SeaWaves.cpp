@@ -39,7 +39,7 @@ double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// ra
 	
 	if (w == 0)
 		return 0;
-		
+	
 	double y = w*w*h/g;
 	double k1 = 1 + 0.6666666666*y + 0.3555555555*pow(y,2) + 0.1608465608*pow(y,3) 
 				+ 0.0632098765*pow(y,4) + 0.0217540484*pow(y,5) + 0.0065407983*pow(y,6);
