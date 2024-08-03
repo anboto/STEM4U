@@ -18,6 +18,7 @@ file
 	Sundials.h,
 	Rootfinding.h,
 	LocalFitting.h,
+	Iir_fir.h,
 	Butterworth.h,
 	CrossCorrelation.h,
 	Integral.h,
