@@ -127,6 +127,74 @@ private:
 	Eigen::Matrix<T, Dynamic, 1> buffer, kernel;
 };
 
+template <typename T>
+class FFTFilter {
+public:
+	FFTFilter() {}
+	FFTFilter(const FFTFilter& v) {Copy(v);}
+	void Coefficients(T _freqFrom, T _freqTo, T _timeWindow, T _samplingPeriod) {
+		freqFrom = _freqFrom;
+		freqTo = _freqTo;
+		timeWindow = _timeWindow;
+		samplingPeriod = _samplingPeriod;
+		numData = timeWindow/samplingPeriod;
+		d.resize(numData);
+	}
+	T Filter(T input) {
+		data << input;
+		int dsize = data.size();
+		if (dsize < numData)
+			return input;
+		
+		d.resize(numData);
+		for (int i = 0; i < numData; ++i)
+			d(i) = data[i + dsize-numData];
+		
+	    VectorXcd dFFT;
+	    Eigen::FFT<double> fft;
+	    fft.SetFlag(fft.HalfSpectrum);
+	    fft.fwd(dFFT, d);	
+		
+		double deltaf = 1/(samplingPeriod*numData);
+		for (int i = 0; i < dFFT.size(); ++i) {
+	        double freq = i*deltaf;
+			if (IsNull(freqTo)) {
+				if (freq < freqFrom)
+					dFFT[i] = 0;
+			} else if (IsNull(freqFrom)) {
+				if (freq > freqTo)
+					dFFT[i] = 0;
+			} else if (!Between(freq, freqFrom, freqTo))
+	       		dFFT[i] = 0;
+	    }
+		
+		fft.inv(fd, dFFT);
+		
+		return input - Last(fd);		
+	}
+	FFTFilter& operator=(const FFTFilter& f) {
+		Copy(f);
+		return *this;
+	}
+	void Copy(const FFTFilter& f) {
+		freqFrom = f.freqFrom;
+		freqTo = f.freqTo;
+		timeWindow = f.timeWindow;
+		samplingPeriod = f.samplingPeriod;
+		numData = f.numData;
+		data = clone(f.data);
+	}
+	
+private:
+	T freqFrom, freqTo, timeWindow, samplingPeriod;
+	int numData;
+	Vector<T> data;
+	VectorXd d, fd;
+};
+		
+	
+
+
 }
 
 #endif
