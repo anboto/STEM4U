@@ -799,7 +799,7 @@ void TestHomography() {
  	
     Image original = ib;
     
-    String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+    String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 	RealizeDirectory(dir);
 	PNGEncoder().SaveFile(AFX(dir, "Homography_original.png"), original);
 	

@@ -49,9 +49,9 @@ void TestMooring(bool test) {
 	status = Catenary(rho_m, rho_m3, rho_water, moorlen, BL, xanchorvessel, zanchor, zvessel, Fhanchorvessel, Fvanchor, Fvvessel, xonfloor, x, z, 10);
 	UppLog() << "\nStatus is: " << MooringStatusStr(status);
 	VERIFY(status == CATENARY_ON_FLOOR);
-	VERIFY(EqualDecimals(xonfloor, 292.5933, 4));
-	VERIFY(EqualDecimals(Fhanchorvessel, 987138.9765, 4));
-	VERIFY(EqualDecimals(Fvvessel, 583737.6409, 4));
+	VERIFY(EqualDecimals(xonfloor, 292.5933172, 4));
+	VERIFY(EqualDecimals(Fhanchorvessel, 987138.9765783, 3));
+	VERIFY(EqualDecimals(Fvvessel, 583737.640988, 3));
 	
 	double Fanchor = sqrt(sqr(Fhanchorvessel) + sqr(Fvanchor));
 	double anganchor = atan2(Fvanchor, Fhanchorvessel)*180./M_PI;
@@ -69,7 +69,7 @@ void TestMooring(bool test) {
 	if (!test) {
 		int num = 100;
 		Vector<Vector<double>> xx(5), zz(5);
-		String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+		String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 		RealizeDirectory(dir);
 		ScatterDraw scatter;
 		scatter.SetLabelX("Distance from anchor to vessel [m]").

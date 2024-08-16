@@ -31,7 +31,7 @@ void TestLocalFitting(bool test) {
 			scatter.AddSeries(x, y).Legend("Source").NoPlot();
 			scatter.AddSeries(x, ys).Legend("Filtered").NoMark();
 			
-			String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+			String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 			scatter.ZoomToFit(true, true).SetLeftMargin(80).SetSize(Size(1000, 500));
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Lowess1.png"), scatter.GetImage());
 		}
@@ -46,7 +46,7 @@ void TestLocalFitting(bool test) {
 			scatter.AddSeries(x, y).Legend("Source").NoPlot();
 			scatter.AddSeries(x, ys).Legend("Filtered").NoMark();
 			
-			String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+			String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 			scatter.ZoomToFit(true, true).SetLeftMargin(80).SetSize(Size(1000, 500));
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Lowess2.png"), scatter.GetImage());
 		}
@@ -61,7 +61,7 @@ void TestLocalFitting(bool test) {
 			scatter.AddSeries(x, y).Legend("Source").NoPlot();
 			scatter.AddSeries(x, ys).Legend("Filtered").NoMark();
 			
-			String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+			String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 			scatter.ZoomToFit(true, true).SetLeftMargin(80).SetSize(Size(1000, 500));
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Lowess3.png"), scatter.GetImage());
 		}
@@ -76,7 +76,7 @@ void TestLocalFitting(bool test) {
 	CleanNANDupXSort(vx, vy, x, y);	    
 	
 	if (!test) {
-		String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+		String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 		RealizeDirectory(dir);
 		for (int i = 2; i < 10; ++i) {
 			LocalFitting(x, y, resx, resy, resdy, resd2y, 2, i, 20, true);
@@ -121,7 +121,7 @@ void TestButterworth(bool test) {
 		scatter.AddSeries(y_avg, 0., fps).Legend("Source").NoMark();
 		scatter.AddSeries(ys, 0., fps).Legend("Filtered").NoMark();
 		
-		String dir = AppendFileNameX(GetDesktopFolder(), "STEM4U_Demo");
+		String dir = AppendFileNameX(GetExeFolder(), "STEM4U_Demo");
 		scatter.ZoomToFit(true).SetLeftMargin(80).SetSize(Size(1000, 500))
 			   .SetXYMin(Null, -2).SetRange(Null, 4);
 		PNGEncoder().SaveFile(AppendFileNameX(dir, "Butterworth.png"), scatter.GetImage());
