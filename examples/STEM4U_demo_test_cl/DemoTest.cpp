@@ -654,6 +654,26 @@ void TestOthers() {
 		
 	}
 	{
+		MultiDimMatrix<VectorXd> mat(1, 2);
+		mat(0, 0) = VectorXd::Constant(20, 2.5);	
+		mat(0, 1) = VectorXd::Constant(30, 5.2);	
+		VERIFY(!IsNull(mat));
+		mat(0, 0)(5) = Null;
+		VERIFY(IsNull(mat));
+		mat(0, 0) = VectorXd();
+		VERIFY(!IsNull(mat));
+	}
+	{
+		MultiDimMatrix<VectorXd> mat(1, 2);
+		mat(0, 0) = VectorXd::Constant(20, 2.5);	
+		mat(0, 1) = VectorXd::Constant(30, 5.2);	
+		VERIFY(IsNum(mat));
+		mat(0, 0)(5) = std::numeric_limits<double>::quiet_NaN();
+		VERIFY(!IsNum(mat));
+		mat(0, 0) = VectorXd();
+		VERIFY(IsNum(mat));
+	}
+	{
 		double x, y, dy, d2y;
 		
 		x = 3;
@@ -872,6 +892,8 @@ CONSOLE_APP_MAIN
 	UppLog() << "\n";
 	Cout() << "\nPress enter key to end";
 	ReadStdIn();
-	#endif    
+	#else
+	Cout() << "\nPress enter key to end";
+	#endif   
 }
 

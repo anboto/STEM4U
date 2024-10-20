@@ -216,7 +216,7 @@ typename Range::value_type RMSE(const Range &serie, const Range &serie0) {
 template <class Range>
 typename Range::value_type RMSE(const Range &tserie, const Range &serie, const Range &tserie0, const Range &serie0) {
 	Range nserie0;
-	Resample(tserie0, serie0, tserie, nserie0);
+	ResampleY(tserie0, serie0, tserie, nserie0);
 	
 	return RMSE(serie, nserie0);
 }
