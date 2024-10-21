@@ -5,6 +5,28 @@
 
 namespace Upp {
 
+template <typename T>
+bool IsNum(const Upp::Vector<T> &v) {
+	if (v.IsEmpty())
+		return false;
+	for (const T &a : v) {
+		if (!IsNum(a))
+			return false;
+	}
+	return true;
+}
+
+template <typename T>
+bool IsNum(const Upp::Array<T> &v) {
+	if (v.IsEmpty())
+		return false;
+	for (const T &a : v) {
+		if (!IsNum(a))
+			return false;
+	}
+	return true;
+}
+
 template <class Range>
 void CleanOutliers(const Range &x, const Range &y, const Range &filtery, Range &rretx, Range &rrety, 
 				   const typename Range::value_type& ratio, const typename Range::value_type& zero = 0) {

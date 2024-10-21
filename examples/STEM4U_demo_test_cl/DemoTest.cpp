@@ -664,7 +664,7 @@ void TestOthers() {
 		VERIFY(!IsNull(mat));
 	}
 	{
-		MultiDimMatrix<VectorXd> mat(1, 2);
+		MultiDimMatrix<MatrixXd> mat(1, 2);
 		mat(0, 0) = VectorXd::Constant(20, 2.5);	
 		mat(0, 1) = VectorXd::Constant(30, 5.2);	
 		VERIFY(IsNum(mat));
