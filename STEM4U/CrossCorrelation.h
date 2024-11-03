@@ -7,29 +7,26 @@
 namespace Upp {
 
 template <class Range>
-void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale = 'n', size_t maxlag = 0) {
-	ASSERT(_y.size() == 0 || _x.size() == _y.size());
+void XCorr(const Range &_x1, const Range &_x2, Range &r, Range &lags, char scale = 'n', size_t maxlag = 0) {
+	ASSERT(_x2.size() == 0 || _x1.size() == _x2.size());
 	
-	size_t n = std::max(_x.size(), _y.size());
+	size_t n = std::max(_x1.size(), _x2.size());
+	ASSERT(maxlag <= n-1);
 
 	if (maxlag == 0)
 		maxlag = n-1;
-	
-	ASSERT(maxlag <= n-1);
 
-	//size_t P = _x.size();
 	size_t M = size_t(PowInt(2., NextPow2(int(n + maxlag))));
 	
-	Eigen::VectorXd x, y;
+	Eigen::VectorXd x1, x2;
+	Copy(_x1, x1);
 	
-	Copy(_x, x);
-	
-	if (_y.size() == 0) {	
+	if (_x2.size() == 0) {	
 		Eigen::VectorXcd pre;
 		Eigen::FFT<double> fft;
 		
-		PostPad(x, M, 0.);
-		fft.fwd(pre, x);
+		PostPad(x1, M, 0.);
+		fft.fwd(pre, x1);
 		
 		Eigen::VectorXcd post = pre.conjugate();
 		
@@ -45,14 +42,15 @@ void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale =
 		Eigen::VectorXcd pre, post;
 		Eigen::FFT<double> fft;
 		
-		PrePad(x, x.size() + maxlag, 0.);
-		PostPad(x, M, 0.);
-		fft.fwd(pre, x);
+		M = max(M, x1.size() + maxlag);
+		PrePad(x1, x1.size() + maxlag, 0.);
+		PostPad(x1, M, 0.);
+		fft.fwd(pre, x1);
 		
-		Copy(_y, y);
+		Copy(_x2, x2);
 		
-		PostPad(y, M, 0.);
-		fft.fwd(post, y);
+		PostPad(x2, M, 0.);
+		fft.fwd(post, x2);
 		
 		post = post.conjugate();
 		
@@ -77,10 +75,10 @@ void XCorr(const Range &_x, const Range &_y, Range &r, Range &lags, char scale =
   		left.Append(right);
     	r = r.cwiseQuotient(Eigen::Map<Eigen::VectorXd>(left, left.size()));
   	} else if (scale == 'c') {		// coeff
-	    if (y.size() == 0)
+	    if (x2.size() == 0)
 	      	r /= r[maxlag];
 	    else {
-	        double den = ::sqrt(x.squaredNorm()*y.squaredNorm());
+	        double den = ::sqrt(x1.squaredNorm()*x2.squaredNorm());
 	        if (den < 1e-10)
 	            Zero(r);
 	        else
