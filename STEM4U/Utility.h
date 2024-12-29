@@ -225,6 +225,7 @@ typename Range::value_type RMS(const Range &d) {
 
 template <class Range>
 typename Range::value_type RMSE(const Range &serie, const Range &serie0) {
+	ASSERT(serie.size() == 0 || serie.size() == serie0.size());
 	using Scalar = typename Range::value_type;
 	
 	Scalar ret = 0;
@@ -232,6 +233,8 @@ typename Range::value_type RMSE(const Range &serie, const Range &serie0) {
 	for (auto i = 0; i < sz; ++i) 
 		ret += sqr(serie[i] - serie0[i]);
 
+	if (sz == 0)
+		return Null;
 	return sqrt(ret/sz);
 }
 
@@ -241,6 +244,29 @@ typename Range::value_type RMSE(const Range &tserie, const Range &serie, const R
 	ResampleY(tserie0, serie0, tserie, nserie0);
 	
 	return RMSE(serie, nserie0);
+}
+
+template <class Range>
+typename Range::value_type MAE(const Range &serie, const Range &serie0) {
+	ASSERT(serie.size() == 0 || serie.size() == serie0.size());
+	using Scalar = typename Range::value_type;
+	
+	Scalar ret = 0;
+	auto sz = min(serie.size(), serie0.size());
+	for (auto i = 0; i < sz; ++i) 
+		ret += abs(serie[i] - serie0[i]);
+
+	if (sz == 0)
+		return Null;
+	return ret/sz;
+}
+
+template <class Range>
+typename Range::value_type MAE(const Range &tserie, const Range &serie, const Range &tserie0, const Range &serie0) {
+	Range nserie0;
+	ResampleY(tserie0, serie0, tserie, nserie0);
+	
+	return MAE(serie, nserie0);
 }
 
 template <typename T>
