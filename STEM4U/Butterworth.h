@@ -295,9 +295,9 @@ void ButterHighPass(int order, typename Range::value_type cutoff, Range &cnum, R
 
 template <class Range>
 void Filter(const Range &x, const Range &cnum, const Range &cden, Range &filtered) {
-	int len_x = x.size();
-	int len_b = cnum.size();
-	int len_a = cden.size();
+	int len_x = (int)x.size();
+	int len_b = (int)cnum.size();
+	int len_a = (int)cden.size();
 
 	Range zi;
 	Resize(zi, len_b, 0.);

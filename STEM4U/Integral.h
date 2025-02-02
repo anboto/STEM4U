@@ -154,7 +154,7 @@ template <class Range>
 typename Range::value_type IntegralSinCos(typename Range::value_type xfrom, typename Range::value_type dx, const Range &f, typename Range::value_type t, bool iscos) {
 	using Scalar = typename Range::value_type;
 	
-	int n = f.size();
+	int n = (int)f.size();
 	
 	ASSERT(n%2);
 	

@@ -432,14 +432,15 @@ public:
 	}
 			   			
 	Pointf Transform(const Point_<In> &from) {
-		Eigen::Matrix<double, 3, 1> p;
+		Eigen::Vector3d p;
 		p << from.x, from.y, 1;
-		Eigen::Matrix<double, 2, 1> p1 = (H * p).hnormalized();
+		
+		Eigen::Vector2d p1 = Eigen::Vector3d(H * p).hnormalized();
 		return Point_<double>(p1(0), p1(1));
 	}
 	
 private:
-	Eigen::Matrix<double, 3, 3> H;
+	Eigen::Matrix3d H;
 };
 
 Image ApplyHomography(const Image& orig, const Color &back, 

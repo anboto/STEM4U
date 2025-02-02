@@ -12,7 +12,8 @@ file
 	DemoTest.cpp,
 	TestMooring.cpp,
 	TestFilters.cpp,
-	TestCombinations.cpp;
+	TestCombinations.cpp,
+	TestRational.cpp;
 
 mainconfig
 	"" = "";
