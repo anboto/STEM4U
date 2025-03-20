@@ -208,6 +208,11 @@ typename Range::value_type R2(const Range &tserie, const Range &serie, const Ran
 }
 
 template <typename T>
+inline T Slope(const Eigen::Matrix<T, Eigen::Dynamic, 1> &x, const Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+	return x.dot(y)/x.squaredNorm();
+}
+
+template <typename T>
 inline T RMS(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
 	return sqrt(d.array().square().sum()/d.size());
 }
