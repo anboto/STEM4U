@@ -263,8 +263,16 @@ bool SeaWaves::Calc(double x, double y, double z, double t) {
             zSurf += et;
             dzSurf += w*A(id, ifr)*sinaux;         
 	        
-	        double kp     = cosh(k[ifr]*(h+z))/cosh(k[ifr]*h);	// Pressure response factor
-	        double kp_sin = sinh(k[ifr]*(h+z))/cosh(k[ifr]*h);
+	        // double kp     = cosh(k[ifr]*(h+z))/cosh(k[ifr]*h);	// Pressure response factor
+	        // double kp_sin = sinh(k[ifr]*(h+z))/cosh(k[ifr]*h);
+			
+			double kp, kp_sin;
+			
+			if (h > 0 && k[ifr]*h < 700) {						// Pressure response factor
+				kp 	   = cosh(k[ifr]*(h+z))/cosh(k[ifr]*h);
+				kp_sin = sinh(k[ifr]*(h+z))/cosh(k[ifr]*h);
+			} else
+				kp = kp_sin = exp(k[ifr]*z);
 	
 	        double AUXvh = g*A(id, ifr)*k[ifr]/w*kp*cosaux;         
 	        vx += AUXvh*cosdirsd;

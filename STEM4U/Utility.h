@@ -281,6 +281,20 @@ inline T StdDev(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
 	return sqrt((d.array() - d.mean()).square().sum()/(d.size() - 1));
 }
 
+template <typename T>
+T Cdf(T x, T mean, T std) {
+    return 0.5*(1. + std::erf((x - mean)/(std*sqrt(2.))));
+}
+
+// Cumulative distribution function
+template <class Range>
+inline Range Cdf(const Range& x, double mean, double std) {
+    Range result(x.size());
+    for (int i = 0; i < x.size(); ++i)
+        result(i) = Cdf(x[i], mean, std);
+    return result;
+}
+
 template <class Range>
 inline typename Range::value_type StdDev(const Range &d) {
 	if (d.size() < 2)
