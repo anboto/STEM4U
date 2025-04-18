@@ -4,6 +4,8 @@
 #include <Geom/Geom.h>
 #include "ShortestPath.h"
 
+#include <Functions4U/EnableWarnings.h>
+
 namespace Upp {
 
 void MapShortestPath::Init(const Vector<Vector<Pointf>> &perimetersAllowed,
@@ -18,7 +20,7 @@ void MapShortestPath::Init(const Vector<Vector<Pointf>> &perimetersAllowed,
     deltah = height/(rows-1);
     
     indx.SetAxis(rows, cols);
-    map.Alloc(indx.size());
+    map.Alloc((size_t)indx.size());
     for (int r = 0; r < rows; ++r) {
     	for (int c = 0; c < cols; ++c) {
     		Pointf p(rect.left + c*deltaw, rect.top - r*deltah);

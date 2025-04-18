@@ -5,9 +5,9 @@
 #include "Sundials.h"
 #include "Mooring.h"
 
+#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
-
 
 MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moorlen, double BL,
 			  double xanchorvessel, double zanchor, double zvessel, 
@@ -111,7 +111,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			int neq = 2;
 	        double deltaz = zvessel - zanchor;
 	
-		  	Buffer<double> udata2(neq);
+		  	Buffer<double> udata2((size_t)neq);
 		  	Buffer<int> consdata(2);
 		  	consdata[0] = 2;			// B > 0
 		  	consdata[1] = 0;

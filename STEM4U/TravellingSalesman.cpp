@@ -2,6 +2,8 @@
 // Copyright 2021 - 2022, the Anboto author and contributors
 #include <Core/Core.h>
 
+#include <Functions4U/EnableWarnings.h>
+
 namespace Upp {
 
 void OrderToConnections(const Vector<int> &order, Vector<int> &left, Vector<int> &right) {

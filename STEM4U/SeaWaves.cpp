@@ -7,6 +7,7 @@
 #include <ScatterDraw/Equation.h>
 #include "SeaWaves.h"
 
+#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
 
@@ -164,7 +165,7 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 	    k[f] = WaveNumber(1/frec[f], h, g); 
 	}
         
-	Buffer<double> Sf_f(nf);
+	Buffer<double> Sf_f((size_t)nf);
 	
 	if (nf > 1) {
 		double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185*(pow(1.9 + gamma, -1)))*(1.094 - 0.01915*log(gamma));
@@ -193,7 +194,7 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 	    double per = Hs/L0;  								
 	    double Smax = pow(10, -1.2195*log10(per) - 0.5573); 
 	    
-		Buffer<double> incdir_d(nd);
+		Buffer<double> incdir_d((size_t)nd);
 		
 		for (int d = 0; d < nd; ++d)
 			incdir_d[d] = dirs[d] - dirM;
@@ -225,9 +226,9 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 	if (nf > 1) {
 		if (IsNull(seed)) {
 			std::random_device rd;
-			seed = rd();
+			seed = (int)rd();
 		} 
-		std::mt19937 random_engine(seed);
+		std::mt19937 random_engine((unsigned)seed);
 		std::uniform_real_distribution<double> random_distribution(-M_PI, M_PI);
 		for (int f = 0; f < nf; f++) 
 		    for (int d = 0; d < nd; d++) 
@@ -545,9 +546,9 @@ class JONSWAPEquation : public ExplicitEquation {
 		}
 		double f(double T)	{return SeaWaves::JONSWAP_Spectrum(Hm0, Tp, gamma, 1/T);}
 		virtual String GetName() 						{return t_("JONSWAP parametric");}
-		virtual String GetEquation(int numDigits = 3)	{return "";}
-		void SetDegree(int num)							{NEVER();}
-		virtual void GuessCoeff(DataSource &series)		{NEVER();}	
+		virtual String GetEquation(int /*numDigits = 3*/)	{return "";}
+		void SetDegree(int /*num*/)							{NEVER();}
+		virtual void GuessCoeff(DataSource &/*series*/)		{NEVER();}	
 		
 	private:
 		double Hm0, Tp, gamma;		

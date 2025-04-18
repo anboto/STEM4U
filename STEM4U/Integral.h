@@ -74,7 +74,7 @@ inline typename Range::value_type Calc1_3(const Range &y, typename Range::value_
 
 inline double Calc1_3(Eigen::VectorXd &y, double dx, size_t n) {
 	return dx/3*(y(0) + 2*(Eigen::Map<Eigen::VectorXd, 0, Eigen::InnerStride<2>>(y.data()+1, n/2).sum() + 
-									 y.block(1, 0, n-2, 1).sum()) + y(n-1));
+									 y.block(1, 0, n-2, 1).sum()) + y(Eigen::Index(n-1)));
 }
 
 template <class Range>

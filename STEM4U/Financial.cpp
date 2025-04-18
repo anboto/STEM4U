@@ -5,6 +5,8 @@
 
 #include "Financial.h"
 
+#include <Functions4U/EnableWarnings.h>
+
 namespace Upp {
 	
 double NetPresentValue(double discountRate, const Vector<double> &cf) {	

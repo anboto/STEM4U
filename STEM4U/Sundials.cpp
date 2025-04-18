@@ -5,6 +5,8 @@
 #include <Eigen/Eigen.h>
 #include "Sundials.h"
 
+#include <Functions4U/EnableWarnings.h>
+
 namespace Upp {
 
 using namespace Eigen;
@@ -104,7 +106,8 @@ void SolveDAE(const VectorXd &y, const VectorXd &dy, double dt, double maxt, Arr
 		res[i].resize(int(maxt/dt)+1);
 		res[i](0) = y[i];
 	}
-	SolveDAE(y.data(), dy.data(), int(numEq), dt, maxt, Residual, numZero, ResidualZero, [&](double t, Eigen::Index iiter, const double y[], const double dy[], bool isZero, int *whichZero)->int {
+	SolveDAE(y.data(), dy.data(), int(numEq), dt, maxt, Residual, numZero, ResidualZero, 
+			[&](double /*t*/, Eigen::Index iiter, const double y[], const double * /*dy[]*/, bool /*isZero*/, int */*whichZero*/)->int {
 		for (int i = 0; i < int(numEq); ++i)
 			res[i](iiter) = y[i]; 
 		return true;
@@ -125,7 +128,7 @@ void SolveDAE(const VectorXd &y, const VectorXd &dy, double dt, double maxt,
 		dres[i].resize(int(maxt/dt)+1);
 		dres[i](0) = dy[i];
 	}
-	SolveDAE(y.data(), dy.data(), int(numEq), dt, maxt, Residual, numZero, ResidualZero, [&](double t, Eigen::Index iiter, const double y[], const double dy[], bool isZero, int *whichZero)->int {
+	SolveDAE(y.data(), dy.data(), int(numEq), dt, maxt, Residual, numZero, ResidualZero, [&](double /*t*/, Eigen::Index iiter, const double y[], const double dy[], bool /*isZero*/, int */*whichZero*/)->int {
 		for (int i = 0; i < int(numEq); ++i) {
 			res[i](iiter) = y[i]; 
 			dres[i](iiter) = dy[i];
@@ -139,7 +142,7 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 		Function <bool(double t, Eigen::Index iiter, const double y[], const double dy[], double residual[])> ResidualZero,
 		Function <bool(double t, Eigen::Index iiter, const double y[], const double dy[], bool isZero, int *whichZero)>OnIteration) {
 	int retval, retvalr;
-	Buffer<int> rootsfound(numEq);
+	Buffer<int> rootsfound((size_t)numEq);
 	SUNNonlinearSolver NLS = NULL;
 	SUNLinearSolver LS = NULL;
 	SUNMatrix A = NULL;
@@ -156,8 +159,8 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 		CheckMem((void *)avtol, "N_VNew_Serial");
 	
 	  	/* Create and initialize  y, y', and absolute tolerance vectors. */
-		memcpy(N_VGetArrayPointer(yy), y,  numEq*sizeof(double));
-		memcpy(N_VGetArrayPointer(yp), dy, numEq*sizeof(double));
+		memcpy(N_VGetArrayPointer(yy), y,  (size_t)numEq*sizeof(double));
+		memcpy(N_VGetArrayPointer(yp), dy, (size_t)numEq*sizeof(double));
 		
 		realtype rtol = 1.0e-5;
 		
@@ -204,8 +207,8 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 		retval = IDAInit(mem, ResFun, t0, yy, yp);
 		CheckRet(retval, "IDAInit");
 		
-		IDASetErrHandlerFn(mem, [](int error_code, const char *module, const char *function,
-                                char *msg, void *user_data) {
+		IDASetErrHandlerFn(mem, [](int /*error_code*/, const char *module, const char *function,
+                                char *msg, void */*user_data*/) {
         	throw Exc(Format(t_("Sundials %s error (%s): %s"), module, function, msg));
                                 }, nullptr);
                                        
@@ -307,7 +310,7 @@ void SolveNonLinearEquationsSun(double y[], int numEq,
   		N_Vector u = N_VNew_Serial(numEq);	
 		CheckMem((void *)u, "N_VNew_Serial");
   		realtype *udata = NV_DATA_S(u);
- 		memcpy(udata, y, numEq*sizeof(double));		
+ 		memcpy(udata, y, (size_t)numEq*sizeof(double));		
   		
 		s = N_VNew_Serial(numEq);
 	  	CheckMem((void *)s, "N_VNew_Serial");
@@ -321,7 +324,7 @@ void SolveNonLinearEquationsSun(double y[], int numEq,
 	  	kmem = KINCreate();
 	  	CheckMem((void *)kmem, "KINCreate");
 	  	
-	  	auto ErrorFun = [](int error_code, const char *module, const char *function, char *msg, void *data) {
+	  	auto ErrorFun = [](int error_code, const char *module, const char *function, char *msg, void */*data*/) {
 		  	String serror = Format("%d, module %s, function %s", error_code, module, function);
 		  	if (error_code == KIN_WARNING)
 		    	Cout() << Format(t_("Kinsol Warning (%s): %s"), serror, msg);
@@ -402,7 +405,7 @@ void SolveNonLinearEquationsSun(double y[], int numEq,
 		for (int i = 0; i < numEq; ++i) 
 			if (udata[i] != udata[i]) 
 				throw Exc(Format(t_("Obtained NaN in value %d"), i));
-		 memcpy(y, udata, numEq*sizeof(double));		
+		 memcpy(y, udata, (size_t)numEq*sizeof(double));		
 		
   	} catch(Exc err) {
   		error = err;

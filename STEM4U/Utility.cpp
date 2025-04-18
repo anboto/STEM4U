@@ -6,10 +6,10 @@
 #include <ScatterDraw/DataSource.h>
 #include "Utility.h"
 
+#include <Functions4U/EnableWarnings.h>
+
 namespace Upp {
-
 using namespace Eigen;
-
 
 RGBA GetPixelBilinear(const Image &img, double x, double y) {
 	int x1 = int(x);
@@ -77,7 +77,7 @@ Image ApplyHomography(const Image& orig, const Color &back,
 	ib.SetKind(IMAGE_OPAQUE);
 	if (!IsNull(back)) {
 		for(int y = 0; y < szdest.cy; y++)
-			Fill(ib[y], back, szdest.cx);	
+			Fill(ib[y], back, (size_t)szdest.cx);	
 	}
 	
 	int dety0 = 0;
