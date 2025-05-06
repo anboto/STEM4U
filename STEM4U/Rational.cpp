@@ -24,7 +24,7 @@ Rational pow(const Rational &rat, int e) {
 }
 
 Rational sqrt(const Rational &rat) {
-	Rational ret = Rational(rat.num.intSqrt(), rat.den.intSqrt());
+	Rational ret = Rational(double(rat.num.intSqrt()), double(rat.den.intSqrt()));
 	return ret;
 }
 
@@ -147,6 +147,78 @@ Rational Rational::Simplify(bool full) {
 		}
 	}
 	return *this;
+}
+
+//template <typename T>
+Rational operator+(double left, const Rational &right) {
+	Rational ret;
+	ret.num = right.den*left + right.num;
+	ret.den = right.den; 	
+	return ret;
+}
+
+//template <typename T>
+Rational operator+(const Rational& left, double right) {
+	Rational ret;
+	ret.num = left.num + right; 
+	ret.den = left.den;	
+	return ret;
+}
+
+//template <typename T>
+Rational operator-(double left, const Rational &right) {
+	Rational ret;
+	ret.num = right.den*left - right.num;
+	ret.den = right.den; 	
+	return ret;
+}
+
+//template <typename T>
+Rational operator-(const Rational& left, double right) {
+	Rational ret;
+	ret.num = left.num - left.den*right; 
+	ret.den = left.den;	
+	return ret;
+}
+
+//template <typename T>
+Rational operator*(double left, const Rational& right) {
+	Rational ret;
+	ret.num = right.num*intInf(left); 	
+	ret.den = right.den;
+	return ret;
+}
+
+//template <typename T>
+Rational operator*(const Rational& left, double right) {
+	Rational ret;
+	ret.num = left.num*intInf(right); 	
+	ret.den = left.den;
+	return ret;
+}
+
+//template <typename T>
+Rational operator/(double left, const Rational& right) {
+	Rational ret;
+	ret.num = right.den*intInf(left);
+	ret.den = right.num; 	
+	if (ret.den < 0) {
+		ret.num = -ret.num;
+		ret.den = -ret.den;
+	}
+	return ret;
+}
+
+//template <typename T>
+Rational operator/(const Rational& left, double right) {
+	Rational ret;
+	ret.num = left.num;
+	ret.den = left.den*right;
+	if (ret.den < 0) {
+		ret.num = -ret.num;
+		ret.den = -ret.den;
+	}
+	return ret;
 }
 
 }

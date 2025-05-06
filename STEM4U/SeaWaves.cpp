@@ -22,9 +22,9 @@ double SeaWaves::WaveNumber(double T, double h, double g, bool exact) {		// rad/
 		return sqr(2*M_PI/T)/g;
 	
 	double y = 4*M_PI*M_PI*h/g/(T*T);
-	double k1 = 1 + 0.6666666666*y + 0.3555555555*pow(y,2) + 0.1608465608*pow(y,3) 
-				+ 0.0632098765*pow(y,4) + 0.0217540484*pow(y,5) + 0.0065407983*pow(y,6);
-	double k = sqrt((y*y + y/k1))/h;
+	double k1 = 1 + 0.6666666666*y + 0.3555555555*::pow(y,2) + 0.1608465608*::pow(y,3) 
+				+ 0.0632098765*::pow(y,4) + 0.0217540484*::pow(y,5) + 0.0065407983*::pow(y,6);
+	double k = ::sqrt((y*y + y/k1))/h;
 	
 	if (!exact)
 		return k;
@@ -42,9 +42,9 @@ double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// ra
 		return 0;
 	
 	double y = w*w*h/g;
-	double k1 = 1 + 0.6666666666*y + 0.3555555555*pow(y,2) + 0.1608465608*pow(y,3) 
-				+ 0.0632098765*pow(y,4) + 0.0217540484*pow(y,5) + 0.0065407983*pow(y,6);
-	double k = sqrt((y*y + y/k1))/h;
+	double k1 = 1 + 0.6666666666*y + 0.3555555555*::pow(y,2) + 0.1608465608*::pow(y,3) 
+				+ 0.0632098765*::pow(y,4) + 0.0217540484*::pow(y,5) + 0.0065407983*::pow(y,6);
+	double k = ::sqrt((y*y + y/k1))/h;
 	
 	if (!exact)
 		return k;
@@ -108,11 +108,11 @@ double SeaWaves::JONSWAP_Spectrum(double Hm0, double Tp, double gamma, double fr
 	double sigma_f = freq <= 1/Tp ? 0.07 : 0.09;	     
 	double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185/(1.9 + gamma))*(1.094 - 0.01915*log(gamma));
 		
-	return beta*Hm0*Hm0*pow(Tp,-4)*pow(freq, -5)*exp(-5./4.*pow(Tp*freq, -4)) * pow(gamma, exp(-pow((Tp*freq - 1), 2)/(2*sigma_f*sigma_f)));	
+	return beta*Hm0*Hm0*pow(Tp,-4)*pow(freq, -5)*::exp(-5./4.*pow(Tp*freq, -4)) * pow(gamma, ::exp(-pow((Tp*freq - 1), 2)/(2*sigma_f*sigma_f)));	
 }
 
 bool SeaWaves::JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma) {
-	if ((Tp > 5*sqrt(Hm0)) || (Tp < 3.6*sqrt(Hm0)))
+	if ((Tp > 5*::sqrt(Hm0)) || (Tp < 3.6*::sqrt(Hm0)))
 		return false;
 	if (gamma > 7 || gamma < 1) 
 		return false;
@@ -176,8 +176,8 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 			else
 				sigma_f = 0.09;	     
 	
-			Sf_f[f] = beta*sqr(Hs)*pow(Tp,-4)*pow(frec[f], -5)*exp(-1.25*pow(Tp*frec[f], -4)) 
-						  *pow(gamma, exp(-pow((Tp*frec[f]-1), 2)/2/pow(sigma_f, 2)));
+			Sf_f[f] = beta*sqr(Hs)*pow(Tp,-4)*::pow(frec[f], -5)*::exp(-1.25*::pow(Tp*frec[f], -4.)) 
+						  *pow(gamma, ::exp(-::pow((Tp*frec[f]-1), 2.)/2./::pow(sigma_f, 2.)));
 		}
 	} else 
 		Sf_f[0] = 1/2.*sqr(Hs/2.);
@@ -202,13 +202,13 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 		for (int f = 0; f < nf; f++) { 
 			double s_f;
 		    if (frec[f] <= fp)
-		        s_f = pow((frec[f]/fp), 5)*Smax;
+		        s_f = ::pow((frec[f]/fp), 5.)*Smax;
 		    else
-		        s_f = pow((frec[f]/fp), -2.5)*Smax;   
+		        s_f = ::pow((frec[f]/fp), -2.5)*Smax;   
 		    
 		    double G0_f = 0;  
 		    for (int d = 0; d < nd; d++) 
-		        G0_f += pow(cos(incdir_d[d]/2), 2*s_f)*dd;
+		        G0_f += ::pow(cos(incdir_d[d]/2), 2*s_f)*dd;
 		    G0_f = 1/G0_f;
 	
 	      	for (int d = 0; d < nd; d++) {
@@ -450,7 +450,7 @@ void SeaWaves::GetWaveParam(WaveParam &param, const Eigen::VectorXd &fs, double 
 	for (int i = 0; i < fs.size(); ++i)
 		var += sqr(fs[i] - avg);
 	var = var/(fs.size() - 1);
-	param.Hm0_var = 4*sqrt(var);
+	param.Hm0_var = 4.*::sqrt(var);
 	
 	Vector<double> listaTz;
 	for (int i = 0; i < zeros.size() - 1; ++i) 
@@ -479,7 +479,7 @@ void SeaWaves::GetWaveSpectralParam(WaveParam &param, const Upp::Vector<Pointf> 
 	
 	param.Te = param.m_1/param.m0;
 	param.Tm02 = sqrt(param.m0/param.m2);
-	param.Hm0 = 4*sqrt(param.m0);	
+	param.Hm0 = 4.*::sqrt(param.m0);	
 	
 	param.Hm0 *= .75;
 	

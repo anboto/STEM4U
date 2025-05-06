@@ -18,18 +18,18 @@ void TestPolynomial() {
 	Rational NT = 111;
 	
 	int r = int(Pow10Int<double>(int(log10(int(NT))-1)));
-	int m = int(NT/2);
+	int m = int(NT/2.);
 
-	int M = int((NT-1) / 2);
+	int M = int((NT-1.) / 2.);
 
-	int csi_n_num = 2*(2*n+1);
-	int csi_n_den = n+1;
+	double csi_n_num = 2*(2*n+1);
+	double csi_n_den = n+1;
 	
 	Rational gamma_n_num = NT;
-	int gamma_n_den = 2 * n + 1;
+	double gamma_n_den = 2 * n + 1;
 	
 	for (int j = 1; j < n+1; ++j) 
-		gamma_n_num *= NT*NT - j*j;
+		gamma_n_num *= NT*NT - double(j*j);
 	
 	Rational gamma_n = gamma_n_num/gamma_n_den;
 	
@@ -44,7 +44,7 @@ void TestPolynomial() {
 	for (int i = 2; i < n+2; ++i) {
 		Rational ii = i;
 		
-		q << Polynomial<Rational>(0, (2*ii - 1)*2/ii) * q[i-1] - q[i-2] * (((ii-1)*(NT*NT - (ii-1)*(ii-1)))/i);
+		q << Polynomial<Rational>(0, (2.*ii - 1.)*2./ii) * q[i-1] - q[i-2] * (((ii-1.)*(NT*NT - (ii-1.)*(ii-1.)))/double(i));
 		UppLog() << "\n" << q[i];
 	}
 	
@@ -69,7 +69,7 @@ void TestPolynomial() {
 	  	if (l == 0) 
 	    	sum_bN += b[m + l];
 	  	else 
-	    	sum_bN += 2*b[m + l];
+	    	sum_bN += 2.*b[m + l];
 
 	  	if (l % r == 0)
 	    	UppLog() << Format("\nb[%5d] = ", l) << FormatRational(b[l+M], 20);
@@ -79,15 +79,15 @@ void TestPolynomial() {
 		b[m + l] =  b[m - l]; 
 	
 	UppLog() << "\nsumb = " << sum_bN.Simplify();
-	VERIFY(sum_bN.Simplify() == 1);
+	VERIFY(sum_bN.Simplify() == 1.);
 }
 
 // val = 2/1 * 3/2 * 4/3 * ... If done n times, result has to be n
 template<typename T>
 T Loop() {
 	T val = 1;
-	for (T d = 1; d < 100; ++d) 
-		val *= (d+1)/d;
+	for (T d = 1; d < T(100.); ++d) 
+		val *= (d+1.)/d;
 	return val;
 }
 
@@ -98,7 +98,7 @@ void TestRational() {
 	Rational rval = Loop<Rational>();
 	
 	UppLog() << "\ndouble   == 100: " << ((dval == 100) ? "true" : "false");		// Fails
-	UppLog() << "\nRational == 100: " << ((rval == 100) ? "true" : "false");
+	UppLog() << "\nRational == 100: " << ((rval == 100.) ? "true" : "false");
 	
 	UppLog() << "\n";
 	

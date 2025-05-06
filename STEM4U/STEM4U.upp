@@ -1,7 +1,5 @@
 description "Science, technology, engineering, and mathematics libraries\377B44,169,203";
 
-noblitz;
-
 uses
 	Core,
 	plugin/sundials,

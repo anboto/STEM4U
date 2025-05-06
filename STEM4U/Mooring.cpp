@@ -24,7 +24,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 	
 	MooringStatus status;
 	
-	if (moorlen < sqrt(sqr(xanchorvessel) + sqr(zanchor - zvessel))) {
+	if (moorlen < ::sqrt(sqr(xanchorvessel) + sqr(zanchor - zvessel))) {
 		status = BROKEN;
 		if (!IsNull(rho_m)) 
 			Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
@@ -163,7 +163,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
     }
     
 	if (!IsNull(BL))    
-    	if (max(sqrt(sqr(Fhanchorvessel) + sqr(Fvanchor)), sqrt(sqr(Fhanchorvessel) + sqr(Fvvessel))) >= BL)
+    	if (max(::sqrt(sqr(Fhanchorvessel) + sqr(Fvanchor)), ::sqrt(sqr(Fhanchorvessel) + sqr(Fvvessel))) >= BL)
         	status = BL_EXCEDEED;
     
     if (status == BL_EXCEDEED || status == BROKEN) {

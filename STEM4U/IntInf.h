@@ -129,6 +129,7 @@ public:
 
     /* conversion to primitive types */
     int toInt() const; 
+    double toDouble() const;
     long toLong() const; 
     long long toLongLong() const; 
     unsigned int toUnsignedInt() const; 
@@ -136,6 +137,7 @@ public:
     unsigned long long toUnsignedLongLong() const; 
 
 	operator int() 					{return toInt();}
+	operator double()				{return toDouble();}
 	operator long() 				{return toLong();}
 	operator long long()			{return toLongLong();}
 	operator unsigned int() 		{return toUnsignedInt();}
@@ -655,6 +657,16 @@ inline int intInf::toInt() const {
         throw Exc("out of bounds");
 
     int result = 0;
+    for (int i = (int) val.GetCount() - 1; i >= 0; --i)
+        result = result * BASE + val[i];
+    return pos ? result : -result;
+}
+
+inline double intInf::toDouble() const {
+    if (*this > std::numeric_limits<double>::max() || *this < std::numeric_limits<double>::lowest())
+        throw Exc("out of bounds");
+
+    double result = 0;
     for (int i = (int) val.GetCount() - 1; i >= 0; --i)
         result = result * BASE + val[i];
     return pos ? result : -result;

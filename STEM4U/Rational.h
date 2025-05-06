@@ -12,11 +12,14 @@ public:
 		num = v.num;
 		den = v.den;
 	}
-	template <typename T>
-	Rational(T v) {
+	//template <typename T>
+	Rational(double v) {
 		*this = v;
 	}
-	template <typename T>
+	Rational(int v) {
+		*this = v;
+	}
+	/*template <typename T>
 	Rational(T n, T d) {
 		if (d < 0) {	
 			num = -n;
@@ -25,9 +28,21 @@ public:
 			num = n;
 			den = d;
 		}
-	}
+	}*/
 	Rational(double n, double d) {
 		*this = Rational(n)/Rational(d);
+	}
+	Rational(int n, int d) {
+		*this = Rational(n)/Rational(d);
+	}
+	Rational(intInf n, intInf d) {
+		if (d < 0) {	
+			num = -n;
+			den = -d;
+		} else {
+			num = n;
+			den = d;
+		}
 	}
 	Rational operator-() const {
 		Rational ret = *this;
@@ -44,10 +59,12 @@ public:
 			return num%den < right.num%right.den;
 		return false;
 	}
+	/*
 	template <typename T>
 	bool operator<(const T& right) const {
 		return num < den*intInf(right);
 	}
+	*/
 	bool operator>(const Rational& right) const {
 		intInf nd, right_nd;
 		nd = num/den;
@@ -58,6 +75,7 @@ public:
 			return num%den > right.num%right.den;
 		return false;
 	}
+	/*
 	template <typename T>
 	bool operator>(const T& right) const {
 		return num > den*intInf(right);
@@ -67,7 +85,7 @@ public:
   		num = v;
   		den = 1;
   		return *this;
-  	}
+  	}*/
   	const Rational& operator=(double d) {
 		int exp;
 		double man = normalize(d, exp);
@@ -125,19 +143,19 @@ public:
   		right.Simplify();
   		return num == right.num && den == right.den;
   	}
-  	template <typename T>
-  	bool operator==(T right) {
+  	//template <typename T>
+  	bool operator==(double right) {
   		Simplify();
   		if (den == 1)
   			return num == intInf(right);
   		else 
-			return T(num/den) == right;
+			return num/den == right;
   	}
     bool operator!=(Rational& right) {return !operator==(right);}
   	template <typename T>
   	bool operator!=(T right)  		 {return !operator==(right);}
   	    
-  	template <typename T>
+  	/*template <typename T>		// This is giving many warnings
 	operator T() {
 		if (den == 0)
 			throw std::domain_error("Division by zero");
@@ -145,7 +163,7 @@ public:
 			return T(num);
 		Rational ret = T(num)/T(den);
 		return ret;
-	}
+	}*/
 	operator double() {
 		if (den == 0)
 			throw std::domain_error("Division by zero");
@@ -156,7 +174,7 @@ public:
 	}
   	Rational Simplify(bool full = false);
   	String ToString() const {return FormatRational(*this, Null);}
-  	
+	
 private:
 	intInf num, den;
 	
@@ -172,25 +190,25 @@ private:
 	friend Rational sqrt(const Rational &l);
 	friend String FormatRational(const Rational &d, int numDec);
 	
-	template <typename T>
-	friend Rational operator+(T left, const Rational &right);
-	template <typename T>
-	friend Rational operator+(const Rational& left, T right);
+	//template <typename T>
+	friend Rational operator+(double left, const Rational &right);
+	//template <typename T>
+	friend Rational operator+(const Rational& left, double right);
 	friend Rational operator+(const Rational& left, const Rational& right);
-	template <typename T>
-	friend Rational operator-(T left, const Rational &right);
-	template <typename T>
-	friend Rational operator-(const Rational& left, T right);
+	//template <typename T>
+	friend Rational operator-(double left, const Rational &right);
+	//template <typename T>
+	friend Rational operator-(const Rational& left, double right);
 	friend Rational operator-(const Rational& left, const Rational& right);
-	template <typename T>
-	friend Rational operator*(T left, const Rational &right);
-	template <typename T>
-	friend Rational operator*(const Rational& left, T right);
+	//template <typename T>
+	friend Rational operator*(double left, const Rational &right);
+	//template <typename T>
+	friend Rational operator*(const Rational& left, double right);
 	friend Rational operator*(const Rational& left, const Rational& right);
-	template <typename T>
-	friend Rational operator/(T left, const Rational &right);
-	template <typename T>
-	friend Rational operator/(const Rational& left, T right);
+	//template <typename T>
+	friend Rational operator/(double left, const Rational &right);
+	//template <typename T>
+	friend Rational operator/(const Rational& left, double right);
 	friend Rational operator/(const Rational& left, const Rational& right);
 };
   	
@@ -198,79 +216,7 @@ Rational abs(const Rational &l);
 Rational pow(const Rational &l, int e);
 Rational sqrt(const Rational &l);
 String FormatRational(const Rational &d, int numDec);
-
-template <typename T>
-Rational operator+(T left, const Rational &right) {
-	Rational ret;
-	ret.num = right.den*left + right.num;
-	ret.den = right.den; 	
-	return ret;
-}
-
-template <typename T>
-Rational operator+(const Rational& left, T right) {
-	Rational ret;
-	ret.num = left.num + right; 
-	ret.den = left.den;	
-	return ret;
-}
-
-template <typename T>
-Rational operator-(T left, const Rational &right) {
-	Rational ret;
-	ret.num = right.den*left - right.num;
-	ret.den = right.den; 	
-	return ret;
-}
-
-template <typename T>
-Rational operator-(const Rational& left, T right) {
-	Rational ret;
-	ret.num = left.num - left.den*right; 
-	ret.den = left.den;	
-	return ret;
-}
-
-template <typename T>
-Rational operator*(T left, const Rational& right) {
-	Rational ret;
-	ret.num = right.num*intInf(left); 	
-	ret.den = right.den;
-	return ret;
-}
-
-template <typename T>
-Rational operator*(const Rational& left, T right) {
-	Rational ret;
-	ret.num = left.num*intInf(right); 	
-	ret.den = left.den;
-	return ret;
-}
-
-template <typename T>
-Rational operator/(T left, const Rational& right) {
-	Rational ret;
-	ret.num = right.den*intInf(left);
-	ret.den = right.num; 	
-	if (ret.den < 0) {
-		ret.num = -ret.num;
-		ret.den = -ret.den;
-	}
-	return ret;
-}
-
-template <typename T>
-Rational operator/(const Rational& left, T right) {
-	Rational ret;
-	ret.num = left.num;
-	ret.den = left.den*right;
-	if (ret.den < 0) {
-		ret.num = -ret.num;
-		ret.den = -ret.den;
-	}
-	return ret;
-}
- 
+	
 }
  
 #endif

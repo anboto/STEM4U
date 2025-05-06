@@ -56,7 +56,7 @@ Vector<double> InternalRateOfReturn(const Vector<double> &cf, double lowRate, do
 }
 
 double PMT(double rate, double nper, double pv) {
-	return -pv * rate * pow(1 + rate, nper) / (pow(1 + rate, nper) - 1);
+	return -pv * rate * ::pow(1 + rate, nper) / (::pow(1 + rate, nper) - 1);
 }
 	
 }
