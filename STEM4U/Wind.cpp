@@ -19,7 +19,7 @@ double WindDensity(double wind, double rho, double rho0) {
     else
         gamma = 1 / 3. + (wind - 8) * (2 / 3. - 1 / 3.) / (12 - 8);
 
-    return wind * pow(rho / rho0, gamma);
+    return wind * ::pow(rho / rho0, gamma);
 }
 
 // https://en.wikipedia.org/wiki/Density_of_air & https://www.homerenergy.com/products/pro/docs/latest/altitude.html
@@ -43,7 +43,7 @@ double RhoHeight(double height, double rho0, double height0, double temp0, doubl
 		return rho0*exp(-(height - height0)/10400);	
 	else {
 		double temp = temp0 - L*(height - height0);
-		double press = press0*pow((1 - L*height/(temp0 + T0)), g*M/R/L);
+		double press = press0*::pow((1 - L*height/(temp0 + T0)), g*M/R/L);
 		return rho0*press/press0*((temp0 + T0)/(temp + T0));
 	}	
 }
@@ -60,7 +60,7 @@ double GetWindShearCoeff(double height0, double height1, double wind0, double wi
 
 double GetWindHub(double height0, double heightHub, double wind0, int shearLaw, double coeff) {
 	if (shearLaw == 'e') 			// Exponential, coeff. alpha
-		return wind0*pow(heightHub/height0, coeff);
+		return wind0*::pow(heightHub/height0, coeff);
 	else 						// Logarithmic, coeff. z0
 		return wind0*(1 + log(heightHub/height0)/log(height0/coeff));
 }

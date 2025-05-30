@@ -95,7 +95,7 @@ double SeaWaves::BreakingWaveH(double T, double h, double g) {	// m. The maximum
 	
 	if (h < 0)
 		return lambda/7.;
-	return 0.142*lambda*tanh(2*M_PI*h/lambda);	
+	return 0.142*lambda*::tanh(2*M_PI*h/lambda);	
 }
 	
 double SeaWaves::Power(double Te, double Hs, double h, double g, double rho) {		// kW/m
@@ -106,9 +106,9 @@ double SeaWaves::Power(double Te, double Hs, double h, double g, double rho) {		
 
 double SeaWaves::JONSWAP_Spectrum(double Hm0, double Tp, double gamma, double freq) {
 	double sigma_f = freq <= 1/Tp ? 0.07 : 0.09;	     
-	double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185/(1.9 + gamma))*(1.094 - 0.01915*log(gamma));
+	double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185/(1.9 + gamma))*(1.094 - 0.01915*::log(gamma));
 		
-	return beta*Hm0*Hm0*pow(Tp,-4)*pow(freq, -5)*::exp(-5./4.*pow(Tp*freq, -4)) * pow(gamma, ::exp(-pow((Tp*freq - 1), 2)/(2*sigma_f*sigma_f)));	
+	return beta*Hm0*Hm0*::pow(Tp,-4)*::pow(freq, -5)*::exp(-5./4.*::pow(Tp*freq, -4)) * ::pow(gamma, ::exp(-::pow((Tp*freq - 1), 2)/(2*sigma_f*sigma_f)));	
 }
 
 bool SeaWaves::JONSWAP_Spectrum_test(double Hm0, double Tp, double gamma) {
@@ -168,7 +168,7 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 	Buffer<double> Sf_f((size_t)nf);
 	
 	if (nf > 1) {
-		double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185*(pow(1.9 + gamma, -1)))*(1.094 - 0.01915*log(gamma));
+		double beta = 0.0624/(0.230 + 0.0336*gamma - 0.185*(::pow(1.9 + gamma, -1)))*(1.094 - 0.01915*::log(gamma));
 		for(int f = 0; f < nf; f++) {
 			double sigma_f;
 			if(frec[f] <= fp)
@@ -176,8 +176,8 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 			else
 				sigma_f = 0.09;	     
 	
-			Sf_f[f] = beta*sqr(Hs)*pow(Tp,-4)*::pow(frec[f], -5)*::exp(-1.25*::pow(Tp*frec[f], -4.)) 
-						  *pow(gamma, ::exp(-::pow((Tp*frec[f]-1), 2.)/2./::pow(sigma_f, 2.)));
+			Sf_f[f] = beta*sqr(Hs)*::pow(Tp,-4)*::pow(frec[f], -5)*::exp(-1.25*::pow(Tp*frec[f], -4.)) 
+						  *::pow(gamma, ::exp(-::pow((Tp*frec[f]-1), 2.)/2./::pow(sigma_f, 2.)));
 		}
 	} else 
 		Sf_f[0] = 1/2.*sqr(Hs/2.);
@@ -192,7 +192,7 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 
 	    double L0 = g*Tp*Tp/2./M_PI; 
 	    double per = Hs/L0;  								
-	    double Smax = pow(10, -1.2195*log10(per) - 0.5573); 
+	    double Smax = ::pow(10, -1.2195*::log10(per) - 0.5573); 
 	    
 		Buffer<double> incdir_d((size_t)nd);
 		
@@ -212,7 +212,7 @@ bool SeaWaves::Init(double _Tp, double _Hs, double _dirM, double _h, int _nd, in
 		    G0_f = 1/G0_f;
 	
 	      	for (int d = 0; d < nd; d++) {
-		        double G_fd = G0_f*pow(cos(incdir_d[d]/2.), 2*s_f);
+		        double G_fd = G0_f*::pow(cos(incdir_d[d]/2.), 2*s_f);
 		        double Sfd_fd = Sf_f[f]*G_fd;
 		        A(d, f) = sqrt(2*Sfd_fd*df*dd);
 		    }

@@ -471,7 +471,9 @@ Image ApplyHomography(const Image& orig, const Color &back,
 
 RGBA GetPixelBilinear(const Image &img, double x, double y);
 RGBA GetPixel(const Image &img, double x, double y, bool bilinear);
-			
+
+Eigen::Affine3d TrackballRotation(const Point &p0, const Point &p1, const Size &sz, const Eigen::Vector3d& centre);
+	
 }
 
 #endif

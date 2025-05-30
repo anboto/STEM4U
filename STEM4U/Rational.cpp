@@ -152,7 +152,7 @@ Rational Rational::Simplify(bool full) {
 //template <typename T>
 Rational operator+(double left, const Rational &right) {
 	Rational ret;
-	ret.num = right.den*left + right.num;
+	ret.num = right.den*intInf(left) + right.num;
 	ret.den = right.den; 	
 	return ret;
 }
@@ -168,7 +168,7 @@ Rational operator+(const Rational& left, double right) {
 //template <typename T>
 Rational operator-(double left, const Rational &right) {
 	Rational ret;
-	ret.num = right.den*left - right.num;
+	ret.num = right.den*intInf(left) - right.num;
 	ret.den = right.den; 	
 	return ret;
 }
@@ -176,7 +176,7 @@ Rational operator-(double left, const Rational &right) {
 //template <typename T>
 Rational operator-(const Rational& left, double right) {
 	Rational ret;
-	ret.num = left.num - left.den*right; 
+	ret.num = left.num - left.den*intInf(right); 
 	ret.den = left.den;	
 	return ret;
 }
@@ -213,7 +213,7 @@ Rational operator/(double left, const Rational& right) {
 Rational operator/(const Rational& left, double right) {
 	Rational ret;
 	ret.num = left.num;
-	ret.den = left.den*right;
+	ret.den = left.den*intInf(right);
 	if (ret.den < 0) {
 		ret.num = -ret.num;
 		ret.den = -ret.den;

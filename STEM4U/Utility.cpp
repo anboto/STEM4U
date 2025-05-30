@@ -99,4 +99,35 @@ Image ApplyHomography(const Image& orig, const Color &back,
 	return ApplyHomography(orig, back, from0, from1, from2, from3, Point(0, 0), Point(sz.cx, 0), Point(sz.cx, sz.cy), Point(0, sz.cy), bilinear);
 }
 
+static void MapToSphere(const Point &p, const Size &sz, Vector3d& v) {	// Maps 2D mouse to a virtual unit sphere (trackball), centered in the screen.
+    double nx = (sz.cx - 2 * p.x)/(double)sz.cx;// Normalise x and y to range [-1, 1], with origin at screen centre
+    double ny = (sz.cy - 2 * p.y)/(double)sz.cy;
+
+    double len2 = nx*nx + ny*ny;				// Compute squared distance from centre
+
+    if (len2 > 1) {
+        double norm = 1/::sqrt(len2);			// Outside unit circle: project onto the sphere by normalisation
+        v = Vector3d(nx*norm, ny*norm, 0);		// lies on circle in XY plane
+    } else
+        v = Vector3d(nx, ny, ::sqrt(1 - len2));	// Inside unit circle: point on hemisphere (z > 0)
+}
+
+Affine3d TrackballRotation(const Point &p0, const Point &p1, const Size &sz, const Vector3d& centre) {
+    Vector3d v0, v1;
+    MapToSphere(p0, sz, v0);
+    MapToSphere(p1, sz, v1);
+
+    double angle = ::acos(std::clamp(v0.dot(v1), -1., 1.));	// Get the angle between the two vectors using the dot product
+	
+	Vector3d axis = v0.cross(v1);							// Get the rotation axis using the cross product
+	axis.normalize();
+
+	Affine3d ret = Affine3d::Identity();
+	
+    if (axis.norm() < 1e-6 || ::abs(angle) < 1e-6)			// No rotation
+        return ret;
+
+    return ret.translate(centre).rotate(AngleAxisd(angle, axis)).translate(-centre);
+}
+
 }
