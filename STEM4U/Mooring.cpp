@@ -40,7 +40,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			double sqvessel = zvessel*(zvessel + 2*Blimit);
 			if (sqvessel < 0)
 				return false;
-			residuals[0] =  sqrt(sqanchor) + sqrt(sqvessel) - moorlen; 
+			residuals[0] = ::sqrt(sqanchor) + ::sqrt(sqvessel) - moorlen; 
 			return true;
 		});
 		double Blimit = udata[0];
