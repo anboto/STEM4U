@@ -18,3 +18,7 @@ TOPIC("Polynomial_en-us")
 #include "Polynomial_en-us.tppi"
 END_TOPIC
 
+TOPIC("Rational_en-us")
+#include "Rational_en-us.tppi"
+END_TOPIC
+

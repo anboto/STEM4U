@@ -175,6 +175,10 @@ public:
   	Rational Simplify(bool full = false);
   	String ToString() const {return FormatRational(*this, Null);}
 	
+	Rational abs();
+	Rational pow(int e);
+	Rational sqrt();
+	
 private:
 	intInf num, den;
 	
@@ -184,10 +188,7 @@ private:
 			den /= val;
 		}
 	}
-	
-	friend Rational abs(const Rational &rat);
-	friend Rational pow(const Rational &l, int e);
-	friend Rational sqrt(const Rational &l);
+
 	friend String FormatRational(const Rational &d, int numDec);
 	
 	//template <typename T>
@@ -212,9 +213,6 @@ private:
 	friend Rational operator/(const Rational& left, const Rational& right);
 };
   	
-Rational abs(const Rational &l);
-Rational pow(const Rational &l, int e);
-Rational sqrt(const Rational &l);
 String FormatRational(const Rational &d, int numDec);
 	
 }

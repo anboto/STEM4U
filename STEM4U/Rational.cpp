@@ -8,23 +8,23 @@
 
 namespace Upp {
 
-Rational abs(const Rational &rat) {
-	if (rat.num >= 0)
-		return rat;
+Rational Rational::abs() {
+	if (num >= 0)
+		return *this;
 	else
-		return -rat;
+		return -(*this);
 }
 
-Rational pow(const Rational &rat, int e) {
+Rational Rational::pow(int e) {
 	ASSERT(e >= 0);
 	Rational ret = 1;
 	for (; e > 0; --e)	
-		ret *= rat;
+		ret *= *this;
 	return ret;
 }
 
-Rational sqrt(const Rational &rat) {
-	Rational ret = Rational(double(rat.num.intSqrt()), double(rat.den.intSqrt()));
+Rational Rational::sqrt() {
+	Rational ret = Rational(double(num.intSqrt()), double(den.intSqrt()));
 	return ret;
 }
 

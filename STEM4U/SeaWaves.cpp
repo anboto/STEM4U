@@ -52,6 +52,12 @@ double SeaWaves::WaveNumber_w(double w, double h, double g, bool exact) {		// ra
 	return SolveNonLinearEquation(k, [&](double k)->double {return w*w - g*k*tanh(k*h);});
 }
 
+double SeaWaves::FrequencyFromWaveNumber(double k, double h, double g) {
+	if (h < 0) // Infinite depth
+		return sqrt(g*k);
+	return sqrt(g*k*tanh(k*h));
+}
+
 SeaWaves::SEA_TYPE SeaWaves::GetSeaType(double T, double h, double g) {
 	if (h < 0)
 		return DEEP;
@@ -66,6 +72,10 @@ SeaWaves::SEA_TYPE SeaWaves::GetSeaType(double T, double h, double g) {
 }
 
 double SeaWaves::WaveLength(double T, double h, double g) 	{return 2*M_PI/WaveNumber(T, h, g);}	// m
+
+double SeaWaves::FrequencyFromWaveLength(double wl, double h, double g) {
+	return FrequencyFromWaveNumber(2*M_PI/wl, h, g);
+}
 
 double SeaWaves::Celerity(double T, double h, double g)	  	{return WaveLength(T, h, g)/T;}			// m/s
 
@@ -576,8 +586,8 @@ bool SeaWaves::JONSWAP_Fit(const Vector<Pointf> &psd, double Hm0, double Tp, dou
 double Te_fTp(double Tp, double gamma) 	  {return Tp*(4.2 + gamma)/(5 + gamma);}
 double Tp_fTe(double Te, double gamma) 	  {return Te*(5 + gamma)/(4.2 + gamma);}
 double gamma_fTp_Te(double Tp, double Te) {return (Te*5 - Tp*4.2)/(Tp - Te);}
-double Tp_fTm(double Tm, double gamma) 	  {return Tm/(0.7303 + 0.04936*gamma - 0.006556*pow(gamma, 2) + 0.0003610*pow(gamma, 3));}
-double Tp_fTz(double Tz, double gamma) 	  {return Tz/(0.6673 + 0.05037*gamma - 0.006230*pow(gamma, 2) + 0.0003341*pow(gamma, 3));}
+double Tp_fTm(double Tm, double gamma) 	  {return Tm/(0.7303 + 0.04936*gamma - 0.006556*::pow(gamma, 2) + 0.0003610*::pow(gamma, 3));}
+double Tp_fTz(double Tz, double gamma) 	  {return Tz/(0.6673 + 0.05037*gamma - 0.006230*::pow(gamma, 2) + 0.0003341*::pow(gamma, 3));}
 	
 double gamma_fTp_Tz(double Tp, double Tz) {
 	VectorXd x(1);

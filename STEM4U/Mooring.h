@@ -8,7 +8,8 @@ namespace Upp {
 enum MooringStatus {
 	LOOSE_ON_FLOOR, 
 	CATENARY_ON_FLOOR, 
-	CATENARY, 
+	CATENARY,
+	TAUT, 
 	BROKEN, 
 	BL_EXCEDEED
 };

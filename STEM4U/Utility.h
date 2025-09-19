@@ -27,6 +27,56 @@ bool IsNum(const Upp::Array<T> &v) {
 	return true;
 }
 
+template <typename T>
+void Nvl2(Upp::Vector<Upp::Vector<T>> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		Nvl2(a, val);
+}
+
+template <typename T>
+void Nvl2(Upp::Vector<Upp::Array<T>> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		Nvl2(a, val);
+}
+
+template <typename T>
+void Nvl2(Upp::Array<Vector<T>> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		Nvl2(a, val);
+}
+
+template <typename T>
+void Nvl2(Upp::Array<Array<T>> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		Nvl2(a, val);
+}
+
+template <typename T>
+void Nvl2(Upp::Vector<T> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		if (!IsNum(a))
+		a =  val;
+}
+
+template <typename T>
+void Nvl2(Upp::Array<T> &v, T val) {
+	if (v.IsEmpty())
+		return;
+	for (T &a : v)
+		if (!IsNum(a))
+		a =  val;
+}
+
 template <class Range>
 void CleanOutliers(const Range &x, const Range &y, const Range &filtery, Range &rretx, Range &rrety, 
 				   const typename Range::value_type& ratio, const typename Range::value_type& zero = 0) {
@@ -275,13 +325,6 @@ typename Range::value_type MAE(const Range &tserie, const Range &serie, const Ra
 }
 
 template <typename T>
-inline T StdDev(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d) {
-	if (d.size() < 2)
-		return Null;
-	return sqrt((d.array() - d.mean()).square().sum()/(d.size() - 1));
-}
-
-template <typename T>
 T Cdf(T x, T mean, T std) {
     return 0.5*(1. + std::erf((x - mean)/(std*sqrt(2.))));
 }
@@ -295,14 +338,24 @@ inline Range Cdf(const Range& x, double mean, double std) {
     return result;
 }
 
+template <typename T>
+inline T StdDev(const Eigen::Matrix<T, Eigen::Dynamic, 1> &d, T avg = Null) {
+	if (d.size() < 2)
+		return Null;
+	if (IsNull(avg))
+		avg = d.mean();
+	return sqrt((d.array() - avg).square().sum()/(d.size() - 1));
+}
+
 template <class Range>
-inline typename Range::value_type StdDev(const Range &d) {
+inline typename Range::value_type StdDev(const Range &d, typename Range::value_type avg = Null) {
 	if (d.size() < 2)
 		return Null;
 	
 	using Scalar = typename Range::value_type;
 	
-	Scalar avg = Avg(d);
+	if (IsNull(avg))
+		avg = Avg(d);
 
 	Scalar accum = 0;
 	std::for_each (std::begin(d), std::end(d), [&](const Scalar v) {

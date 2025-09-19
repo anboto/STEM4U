@@ -322,15 +322,15 @@ void Filter(const Range &x, const Range &cnum, const Range &cden, Range &filtere
 // Zero phase filter implementation based on Hugh Nolan code posted here: https://stackoverflow.com/questions/17675053/matlabs-filtfilt-algorithm/27270420#27270420
 
 template <class Range>
-void filter_(const Range &b, const Range &a, const Range &X, Range &Y, Range &Zi) {
+bool filter_(const Range &b, const Range &a, const Range &X, Range &Y, Range &Zi) {
 	using Scalar = typename Range::value_type;
 	
     if (a.size() == 0)
-        throw Exc("The feedback filter coefficients are empty.");
-    if (std::all_of(a.data(), a.data()+a.size(), [](Scalar coef){return coef == 0;}))
-        throw Exc("At least one of the feedback filter coefficients has to be non-zero.");
+        throw Exc("The feedback filter coefficients are empty");
+    if (std::all_of(a.data(), a.data() + a.size(), [](Scalar coef){return coef == 0;}))
+        throw Exc("At least one of the feedback filter coefficients has to be non-zero");
     if (a[0] == 0)
-		throw Exc("First feedback coefficient has to be non-zero.");
+		throw Exc("First feedback coefficient has to be non-zero");
 
 	std::vector<Scalar> A(a.size()), B(b.size());
 	std::copy(Begin(a), End(a), A.begin());
@@ -351,20 +351,30 @@ void filter_(const Range &b, const Range &a, const Range &X, Range &Y, Range &Zi
 
     for (size_t i = 0; i < input_size; ++i) {
         size_t order = filter_order - 1;
-        while (order) {
-            if (i >= order)
+        while (order > 0) {
+            if (i >= order) {
+                double aa = B[order]*X[i - order];
+                double bb1 = - A[order];
+                double bb2 = Y[i - order];
+                double bb = - A[order]*Y[i - order];
+                double cc = Zi[order];
                 Zi[order - 1] = B[order]*X[i - order] - A[order]*Y[i - order] + Zi[order];
+            }
             --order;
         }
         Y[i] = B[0]*X[i] + Zi[0];
+        if (abs(Y[i]) > 1E305)
+            return false;;
     }
     ResizeConservative(Zi, filter_order - 1);
+    
+    return true;
 }
 
 template <class Range>
-void filter_(const Range &B, const Range &A, const Range &X, Range &Y) {
+bool filter_(const Range &B, const Range &A, const Range &X, Range &Y) {
 	Range zi;
-   	filter_(B, A, X, Y, zi);
+   	return filter_(B, A, X, Y, zi);
 }
 
 template <class Range>
@@ -476,11 +486,13 @@ bool Filtfilt(const Range &X, const Range &b, const Range &a, Range &Y) {
     // Do the forward and backward filtering
     y0 = signal1[0];
     std::transform(zzi.data(), zzi.data() + zzi.size(), zi.begin(), [y0](Scalar val){ return val*y0; });
-    filter_(B, A, signal1, signal2, zi);
+    if (!filter_(B, A, signal1, signal2, zi))
+        return false;
     std::reverse(signal2.begin(), signal2.end());   
     y0 = signal2[0];
     std::transform(zzi.data(), zzi.data() + zzi.size(), zi.begin(), [y0](Scalar val){ return val*y0; });
-    filter_(B, A, signal2, signal1, zi);
+    if (!filter_(B, A, signal2, signal1, zi))
+    	return false;
     subvector_reverse(signal1, signal1.size() - nfact - 1, nfact, Y);
     
     return true;

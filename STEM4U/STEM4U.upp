@@ -9,6 +9,7 @@ uses
 file
 	Numerical readonly separator,
 	Rational.cpp,
+	Rational.h,
 	IntInf.h,
 	Polynomial.h,
 	Sundials.cpp,

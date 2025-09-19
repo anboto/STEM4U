@@ -56,6 +56,8 @@ public:
 	static double WaveNumber(double T, double h, double g, bool exact = true);
 	static double WaveNumber_w(double w, double h, double g, bool exact = true);
 	static double WaveLength(double T, double h, double g);
+	static double FrequencyFromWaveNumber(double k, double h, double g);
+	static double FrequencyFromWaveLength(double wl, double h, double g);
 	static double Celerity(double T, double h, double g);		
 	static double GroupCelerity(double T, double h, double g);
 	
