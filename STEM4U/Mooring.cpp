@@ -33,6 +33,12 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 	} else if (moorlen*1.02 > straightLen && moorlen < straightLen) {		// 2% elongation allowed
 		status = TAUT;
 		Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;				// Unknown without EA
+		x.SetCount(num);
+		z.SetCount(num);
+		for (int i = 0; i < num; ++i) {
+			x[i] = i*(xanchorvessel/(num-1.));
+			z[i] = zanchor + i*((zvessel - zanchor)/(num-1.));
+		}
     } else if (xanchorvessel < moorlen - zanchor - zvessel) {				
 			status = LOOSE_ON_FLOOR;
 			
@@ -70,15 +76,13 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 	  		dn = false;
 	  	}
 	  	if (!dn) {
-	  		status = BROKEN;
+	  		status = CALCULATION_PROBLEM;
 			if (!IsNull(rho_m)) 
 				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
 			else
 				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
 	  	} else {
 			double Blimit = udata[0];
-			//if (Blimit < 0)	// Like status == BROKEN
-			//	throw Exc("Catenary. Solution not found");
 				
 		    double xanchorvessel_limit = Blimit*(acosh(zanchor/Blimit + 1) + acosh(zvessel/Blimit + 1));
 			
@@ -105,7 +109,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			  		done = false;
 			  	}
 			  	if (!done) {
-			  		status = BROKEN;
+			  		status = CALCULATION_PROBLEM;
 					if (!IsNull(rho_m)) 
 						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
 					else
@@ -175,7 +179,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			  	}
 			  	if (!done) {
 					//throw Exc("Catenary. Solving problem");
-					status = BROKEN;
+					status = CALCULATION_PROBLEM;
 					if (!IsNull(rho_m)) 
 						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
 					else
@@ -196,7 +200,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			        }
 			  	}
 		    } else {
-				status = BROKEN;
+				status = CALCULATION_PROBLEM;
 				if (!IsNull(rho_m)) 
 					Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
 				else
@@ -209,7 +213,7 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
     	if (max(std::sqrt(sqr(Fhanchorvessel) + sqr(Fvanchor)), std::sqrt(sqr(Fhanchorvessel) + sqr(Fvvessel))) >= BL)
         	status = BL_EXCEDEED;
     
-    if (status == BL_EXCEDEED || status == BROKEN || status == TAUT) {
+    if (status == BL_EXCEDEED || status == BROKEN || status == CALCULATION_PROBLEM) {
         x.SetCount(2);
         z.SetCount(2);
         x[0] = 0;				z[0] = zanchor;
@@ -289,9 +293,9 @@ MooringStatus CatenaryGetLen(double rho_m, double rho_m3, double rho_water, doub
 }
 
 const char *MooringStatusStr(MooringStatus status) {
-	const char *str[6] = {t_("loose on seabed"), t_("catenary on seabed"), t_("catenary"), t_("taut"),
-						  t_("line length exceeded"), t_("break load exdeeded")};
-	ASSERT(int(status) < 5);
+	const char *str[7] = {t_("loose on seabed"), t_("catenary on seabed"), t_("catenary"), t_("taut"),
+						  t_("line length exceeded"), t_("break load exdeeded"), t_("Calculation problem")};
+	ASSERT(int(status) < 6);
 	return str[int(status)];
 }
 

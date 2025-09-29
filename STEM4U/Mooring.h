@@ -11,7 +11,8 @@ enum MooringStatus {
 	CATENARY,
 	TAUT, 
 	BROKEN, 
-	BL_EXCEDEED
+	BL_EXCEDEED,
+	CALCULATION_PROBLEM
 };
 	
 MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moorlen, double BL,
