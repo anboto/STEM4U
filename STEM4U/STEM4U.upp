@@ -8,8 +8,8 @@ uses
 
 file
 	Numerical readonly separator,
-	Rational.cpp,
 	Rational.h,
+	Rational.cpp,
 	IntInf.h,
 	Polynomial.h,
 	Sundials.cpp,

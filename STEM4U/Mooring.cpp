@@ -102,7 +102,11 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			  	try {
 					SolveNonLinearEquationsSun(udata2, 1, [&](const double y[], double *residuals)->bool {
 						double B = y[0];
-						residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(zanchor*(zanchor + 2*B)) + std::sqrt(zvessel*(zvessel + 2*B)) - moorlen; 
+						double a = zanchor*(zanchor + 2*B);
+						double b = zvessel*(zvessel + 2*B);
+						if (a < 0 || b < 0)
+							return false;
+						residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(a) + std::sqrt(b) - moorlen; 
 						return true;
 					}, consdata);
 			  	} catch(...) {
@@ -161,8 +165,14 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 								double B = y[0];
 								double x1 = y[1];
 								
-								residuals[0] = B*(sinh((x1 + xanchorvessel)/B) - sinh(x1/B)) - moorlen;
-								residuals[1] = B*(cosh((x1 + xanchorvessel)/B) - cosh(x1/B)) - deltaz;
+								double a = (x1 + xanchorvessel)/B;
+								double b = x1/B;
+								
+								if (abs(a) >= 710 || abs(b) >= 710)
+									return false;
+								
+								residuals[0] = B*(sinh(a) - sinh(b)) - moorlen;
+								residuals[1] = B*(cosh(a) - cosh(b)) - deltaz;
 								
 								return true;
 							}, consdata);
@@ -262,7 +272,11 @@ bool CatenaryGetLen0(double xonfloor, double xanchorvessel, double zanchor, doub
 	SolveNonLinearEquationsSun(udata, 2, [&](const double y[], double *residuals)->bool {
 		double B = y[0];
 		double moorlen = y[1];
-		residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(zanchor*(zanchor + 2*B)) + std::sqrt(zvessel*(zvessel + 2*B)) - moorlen; 
+		double a = zanchor*(zanchor + 2*B);
+		double b = zvessel*(zvessel + 2*B);
+		if (a < 0 || b < 0)
+			return false;		
+		residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(a) + std::sqrt(b) - moorlen; 
     	double xcatanchor = B*acosh(zanchor/B + 1);
     	double xcatvessel = B*acosh(zvessel/B + 1);
 		residuals[1] = xanchorvessel - xcatanchor - xcatvessel - xonfloor;
