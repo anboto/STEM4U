@@ -192,7 +192,6 @@ bool DetectGrid(UVector<Pointf>& pts, double tol, Pointf &topLeft, Pointf &botto
 
                     g.cols = col;
                     g.rows = row;
-                    g.bottomRight = clone(idx[FindWithTolerance(idx, Pointf(g.topLeft.x + (col-1)*dx, g.topLeft.y + (row-1)*dy), tol)]);
 					
                     for (int r = 0; r < row; r++) {			// Collect valid grid points
                         for (int c = 0; c < col; c++) {
@@ -200,9 +199,15 @@ bool DetectGrid(UVector<Pointf>& pts, double tol, Pointf &topLeft, Pointf &botto
                             int id;
                             if((id = FindWithTolerance(idx, test, tol)) >= 0)
                                 g.ids << id;
+                            else {		// Break, there is a hole in the grid
+                                r = row;
+                                c = col;
+                                g.ids.Clear();
+                            }
                         }
                     }
                     if(g.ids.size() > bestCount) {
+                        g.bottomRight = pick(idx[FindWithTolerance(idx, Pointf(g.topLeft.x + (col-1)*dx, g.topLeft.y + (row-1)*dy), tol)]);
                         best = pick(g);
                         bestCount = best.ids.size();
                         if (pts.size() <= best.rows*(best.cols+1) || pts.size() <= (best.rows+1)*best.cols) {	// Impossible to get a bigger grid

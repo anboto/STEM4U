@@ -772,7 +772,7 @@ void TestGridFit() {
         pts.Remove(ids[id]);
 
 	VERIFY(topLeft == Pointf(0, 0));
-	VERIFY(bottomRight == Pointf(22, 22));
+	VERIFY(bottomRight == Pointf(20, 21));
 	VERIFY(cols == 3);
 	VERIFY(rows == 3);
 	UppLog() << "\nFound 3x3";
