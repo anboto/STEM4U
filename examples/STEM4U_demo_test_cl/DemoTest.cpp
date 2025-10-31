@@ -519,7 +519,7 @@ void TestXCorr() {
 
 void TestOthers() {
 	{
-		UppLog() << "\nVerifying SmoothStep():\n";
+		UppLog() << "\n\nVerifying SmoothStep():\n";
 		
 		for (int order : UVector<int>({3, 5, 7})) {
 			VERIFY(-10 == SmoothStep(-11., order, -10., 20., -10., 30.));
@@ -660,7 +660,7 @@ void TestScatter() {		// Functions found in Scatter
 }
 
 void TestHomography() {
-	UppLog() << "\nVerifying class Homography. They are transformations that describe the motion between two images, when the camera or the observed object moves.\n";
+	UppLog() << "\n\nVerifying class Homography. They are transformations that describe the motion between two images, when the camera or the observed object moves.\n";
 	
 	Pointf p01from(14, 28), p01to(34, 29);
 	Pointf p02from(288, 28), p02to(281, 25);
@@ -746,6 +746,46 @@ void TestHomography() {
 	PNGEncoder().SaveFile(AFX(dir, "Homography_reconstructed 2.png"), reconstr2);
 }
 
+void TestGridFit() {
+	UppLog() << "\n\nFinding the biggest grid in a list of points";
+	
+	UVector<Pointf> pts = {
+        Pointf(101,100), Pointf(200,200), 
+        Pointf(10,121), Pointf(223,20), 				// Noise
+        Pointf(100,200), Pointf(200,100),									// Small grid
+        
+        Pointf(15,100), Pointf(200,20), 				// Noise
+        
+        Pointf(0,0), Pointf(11,0), Pointf(20,1),							// Main grid
+        Pointf(0,20), Pointf(10,20), Pointf(20,21),
+        Pointf(70,100), Pointf(123,20), 				// Noise
+        Pointf(0,11), Pointf(10,10), Pointf(20,10)
+    };
+    
+	Pointf topLeft, bottomRight;
+	int cols, rows;
+	UVector<int> ids;
+	    
+	VERIFY(DetectGrid(pts, 2.,  topLeft, bottomRight, cols, rows, ids));	// Main grid
+
+    for (int id = ids.size()-1; id >= 0; --id)	// Remove detected points from original list
+        pts.Remove(ids[id]);
+
+	VERIFY(topLeft == Pointf(0, 0));
+	VERIFY(bottomRight == Pointf(22, 22));
+	VERIFY(cols == 3);
+	VERIFY(rows == 3);
+	UppLog() << "\nFound 3x3";
+	
+	VERIFY(DetectGrid(pts, 2.,  topLeft, bottomRight, cols, rows, ids));	// Small grid
+	VERIFY(topLeft == Pointf(101, 100));
+	VERIFY(bottomRight == Pointf(200, 200));
+	VERIFY(cols == 2);
+	VERIFY(rows == 2);
+	UppLog() << "\nFound 2x2";	
+}
+
+
 void TestLocalFitting(bool test);
 void TestMooring(bool test);
 void TestButterworth(bool test);
@@ -764,6 +804,7 @@ CONSOLE_APP_MAIN
 	try {
 		bool test = CommandLine().size() > 0 && CommandLine()[0] == "-test";
 		
+		TestGridFit();
 		TestHomography();
 		TestScatter();
 		TestVectorMatrixHealing();
