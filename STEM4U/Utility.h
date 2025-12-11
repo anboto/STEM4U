@@ -259,7 +259,10 @@ typename Range::value_type R2(const Range &tserie, const Range &serie, const Ran
 
 template <typename T>
 inline T Slope(const Eigen::Matrix<T, Eigen::Dynamic, 1> &x, const Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-	return x.dot(y)/x.squaredNorm();
+	auto xc = x.array() - x.mean();
+	auto yc = y.array() - y.mean();
+
+	return (xc*yc).sum()/xc.square().sum();
 }
 
 template <typename T>
@@ -417,7 +420,7 @@ typename Range::value_type SawTeethRatio(const Range &d) {
 // y = ax + b
 template <class Range>
 void LinearFitting(const Range &x, const Range &y, typename Range::value_type &a, typename Range::value_type &b, const int clen = Null) {
-	int len = IsNull(clen) ? x.size() : clen;
+	int len = IsNull(clen) ? (int)x.size() : clen;
 	ASSERT(len <= x.size() && len <= y.size());
 	using Scalar = typename Range::value_type;
 

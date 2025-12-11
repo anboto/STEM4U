@@ -590,6 +590,8 @@ void TestOthers() {
 		VERIFY(EqualDecimals(d2y, -2.666666666666, 10));
 	}
 	{
+		UppLog() << "\nLinear fitting and slope:\n";
+		
 		UVector<double> x = {0, 2, 4, 6};
 		UVector<double> y = {0, 8, 16, 32};
 		
@@ -597,6 +599,19 @@ void TestOthers() {
 		LinearRegression(x, y, a, b);
 		VERIFY(EqualDecimals(a, 5.2, 10));	
 		VERIFY(EqualDecimals(b, -1.6, 10));
+	}
+	{
+		VectorXd x = Eigen::VectorXd::LinSpaced(21, 0, 2);
+		VectorXd y = 10*(M_PI*x.array()).sin() + 5*x.array();
+
+		double slope = Slope(x, y);
+		VERIFY(EqualDecimals(slope, -3.1996772918, 10));
+		
+		double a, b;
+		LinearFitting(x, y, a, b);
+		
+		VERIFY(EqualDecimals(a, -3.1996772918, 10));	
+		VERIFY(EqualDecimals(b, 8.1996772918, 10));
 	}
 	{
 		MatrixXd a(4, 4);
