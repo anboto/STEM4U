@@ -4,7 +4,6 @@
 #include <Geom/Geom.h>
 #include "ShortestPath.h"
 
-#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
 

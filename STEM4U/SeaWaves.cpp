@@ -7,7 +7,6 @@
 #include <ScatterDraw/Equation.h>
 #include "SeaWaves.h"
 
-#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
 

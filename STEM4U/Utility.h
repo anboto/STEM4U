@@ -166,7 +166,7 @@ void LinSpaced(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, int n, T min, T max) {
 
 template <class Range>
 void LinSpaced(Range &v, int n, typename Range::value_type min, typename Range::value_type max) {
-	ASSERT(n > 0);
+	ASSERT(n > 1);
 	Resize(v, n);
 	if (n == 1)
 		v[0] = min;

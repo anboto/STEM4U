@@ -4,7 +4,6 @@
 
 #include "Wind.h"
 
-#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
 

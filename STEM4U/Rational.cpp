@@ -4,7 +4,6 @@
 #include "IntInf.h"
 #include "Rational.h"
 
-#include <Functions4U/EnableWarnings.h>
 
 namespace Upp {
 
