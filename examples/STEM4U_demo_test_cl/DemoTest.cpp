@@ -90,13 +90,13 @@ void TestRootfinding() {
 	{
 		int nf = 0, ndf = 0;
 		double y = NewtonRaphson<double>([&](double x)->double {nf++; return sin(x);}, [&](double x)->double {ndf++; return cos(x);}, 3*M_PI/4, 0.001, 50);
-		UppLog() << Format("\nNewtonRaphson:      %2d f(x) %2d df(x) y = %f", nf, ndf, y); 
+		UppLog() << F("\nNewtonRaphson:      %2d f(x) %2d df(x) y = %f", nf, ndf, y); 
 		VERIFY(abs(y - M_PI) < 0.001);
 	}
 	{
 		int nf = 0;
 		double y = QuasiNewtonRaphson<double>([&](double x)->double {nf++; return sin(x);}, 3*M_PI/4, 0.01, 0.001, 50);
-		UppLog() << Format("\nQuasiNewtonRaphson: %2d f(x)          y = %f", nf, y);
+		UppLog() << F("\nQuasiNewtonRaphson: %2d f(x)          y = %f", nf, y);
 		VERIFY(abs(y - M_PI) < 0.001);
 	}
 	
@@ -107,13 +107,13 @@ void TestRootfinding() {
 	{
 		int nf = 0;
 		double y = Bisection<double>([&](double x)->double {nf++; return sin(x);}, from, to, 0.001, 50);
-		UppLog() << Format("\nBisection:          %2d f(x)          y = %f", nf, y);
+		UppLog() << F("\nBisection:          %2d f(x)          y = %f", nf, y);
 		VERIFY(abs(y - M_PI) < 0.001);
 	}
 	{
 		int nf = 0;
 		double y = Brent<double>([&](double x)->double {nf++; return sin(x);}, from, to, 0.001, 50);
-		UppLog() << Format("\nBrent:              %2d f(x)          y = %f", nf, y);
+		UppLog() << F("\nBrent:              %2d f(x)          y = %f", nf, y);
 		VERIFY(abs(y - M_PI) < 0.001);
 	}
 		
@@ -215,9 +215,9 @@ void TestShortestPath() {
 	{
 		UVector<Seg> dist = Dijkstra(adjList, start);
 		
-		UppLog() << Format("\nShortest distance from node %d", start);
+		UppLog() << F("\nShortest distance from node %d", start);
     	for(int i = 0; i < dist.size(); i++) 
-    		UppLog() << Format("\nto node %d: %d", i, dist[i].weight);
+    		UppLog() << F("\nto node %d: %d", i, dist[i].weight);
 		VERIFY(dist[end].weight == 5);
 	    int currnode = end;
 	    String sorder;
@@ -226,16 +226,16 @@ void TestShortestPath() {
 	        currnode = dist[currnode].node;
 	        sorder << " <- " << currnode;
 	    }
-		UppLog() << Format("\nThe path from %d to %d is: %s", start, end, sorder);
+		UppLog() << F("\nThe path from %d to %d is: %s", start, end, sorder);
 		VERIFY(sorder == "6 <- 5 <- 1 <- 0"); 
 	}
 	UppLog() << "\n\nBellman-Ford method";
 	{
 		UVector<Seg> dist = BellmanFord(adjList, start);
 		
-		UppLog() << Format("\nShortest distance from node %d", start);
+		UppLog() << F("\nShortest distance from node %d", start);
     	for(int i = 0; i < dist.size(); i++) 
-    		UppLog() << Format("\nto node %d: %d", i, dist[i].weight);
+    		UppLog() << F("\nto node %d: %d", i, dist[i].weight);
 		VERIFY(dist[end].weight == 5);
 	    int currnode = end;
 	    String sorder;
@@ -244,7 +244,7 @@ void TestShortestPath() {
 	        currnode = dist[currnode].node;
 	        sorder << " <- " << currnode;
 	    }
-		UppLog() << Format("\nThe path from %d to %d is: %s", start, end, sorder);
+		UppLog() << F("\nThe path from %d to %d is: %s", start, end, sorder);
 		VERIFY(sorder == "6 <- 5 <- 1 <- 0"); 
 	}
 	UppLog() << "\n\nFloyd-Warshall method";
@@ -287,7 +287,7 @@ void TestDAESolver() {
 			return true;
 		},
 		[&](double t, Eigen::Index iiter, const double y[], const double dy[], bool isZero, int *whichZero)->bool {
-			UppLog() << Format("\n>T: %7.4f %8.4f %8.4f %s", t, y[0], y[1], isZero ? "Y" : "");
+			UppLog() << F("\n>T: %7.4f %8.4f %8.4f %s", t, y[0], y[1], isZero ? "Y" : "");
 			return true;
 		}
 	);
@@ -301,7 +301,7 @@ void TestIntegral() {
 	double res = M_PI*sqr(R)/2;
 	UppLog() << "\nSemicircle integral value is " << res;
 	UppLog() << "\nNumerically integrated with simple and composite versions:";
-	UppLog() << Format("\n%s\t%s\t%s\t%s\t%s\t\t%s\t%s", "#Points", "Trapezoidal", "Simpson 1/3", "Simpson 3/8", "Spline", "Hermite 3 point", "Hermite 5 point");
+	UppLog() << F("\n%s\t%s\t%s\t%s\t%s\t\t%s\t%s", "#Points", "Trapezoidal", "Simpson 1/3", "Simpson 3/8", "Spline", "Hermite 3 point", "Hermite 5 point");
 	for (int nump = 5; nump <= 30; ++nump) {
 		double dx = 2*R/(nump-1);
 		VectorXd y(nump), x(nump);
@@ -321,13 +321,13 @@ void TestIntegral() {
 		double ydx_herm5  = Integral(y, dx, HERMITE_5);
 		double ydx_spline = Integral(y, dx, SPLINE);
 		
-		UppLog() << Format("\n%d", nump);
-		UppLog() << Format("\t%7.5f=%7.5f", yx_trap, ydx_trap);
-		UppLog() << Format("\t%7.5f=%7.5f", yx_simp13, ydx_simp13);
-		UppLog() << Format("\t%7.5f=%7.5f", yx_simp38, ydx_simp38);
-		UppLog() << Format("\t%7.5f=%7.5f", yx_spline, ydx_spline);
-		UppLog() << Format("\t%7.5f", ydx_herm3);
-		UppLog() << Format("\t\t%7.5f", ydx_herm5);
+		UppLog() << F("\n%d", nump);
+		UppLog() << F("\t%7.5f=%7.5f", yx_trap, ydx_trap);
+		UppLog() << F("\t%7.5f=%7.5f", yx_simp13, ydx_simp13);
+		UppLog() << F("\t%7.5f=%7.5f", yx_simp38, ydx_simp38);
+		UppLog() << F("\t%7.5f=%7.5f", yx_spline, ydx_spline);
+		UppLog() << F("\t%7.5f", ydx_herm3);
+		UppLog() << F("\t\t%7.5f", ydx_herm5);
 		VERIFY(yx_trap - ydx_trap < 1E-10);			VERIFY(abs(yx_trap   - res)/res < 0.15);
 		VERIFY(yx_simp13 - ydx_simp13 < 1E-10);		VERIFY(abs(yx_simp13 - res)/res < 0.15);
 		VERIFY(yx_simp38 - ydx_simp38 < 1E-10);		VERIFY(abs(yx_simp38 - res)/res < 0.15);
@@ -398,30 +398,30 @@ void TestSeaWaves() {
 	double rho = 1025, g = 9.81;
 	
 	double waveNumber  = SeaWaves::WaveNumber(T, depth, g, false);
-	UppLog() << "\n" << Format("Wave number: %f rad/m", waveNumber);
+	UppLog() << "\n" << F("Wave number: %f rad/m", waveNumber);
 	double waveNumberE = SeaWaves::WaveNumber(T, depth, g, true);
-	UppLog() << "\n" << Format("Wave number (exact): %f rad/m", waveNumberE);
+	UppLog() << "\n" << F("Wave number (exact): %f rad/m", waveNumberE);
 	double waveLength = SeaWaves::WaveLength(T, depth, g);
-	UppLog() << "\n" << Format("Wave length: %f m", waveLength);
+	UppLog() << "\n" << F("Wave length: %f m", waveLength);
 	double c = SeaWaves::Celerity(T, depth, g);		
-	UppLog() << "\n" << Format("Celerity: %f m/s", c);
+	UppLog() << "\n" << F("Celerity: %f m/s", c);
 	double gc = SeaWaves::GroupCelerity(T, depth, g);
-	UppLog() << "\n" << Format("Group celerity: %f m/s", gc);
+	UppLog() << "\n" << F("Group celerity: %f m/s", gc);
 	SeaWaves::SEA_TYPE seaType = SeaWaves::GetSeaType(T, depth, g);
-	UppLog() << "\n" << Format("Sea: %s", seaType == SeaWaves::SHALLOW ? "shallow" : seaType == SeaWaves::INTERMEDIATE ? "intermediate" : "deep");
+	UppLog() << "\n" << F("Sea: %s", seaType == SeaWaves::SHALLOW ? "shallow" : seaType == SeaWaves::INTERMEDIATE ? "intermediate" : "deep");
 	double power = SeaWaves::Power(T, H, depth, g, rho);
-	UppLog() << "\n" << Format("Power: %f kW/m", power);
+	UppLog() << "\n" << F("Power: %f kW/m", power);
 		
 	double Tz = 12;
 	double gamma = 2;
 	double Tp = Tp_fTz(Tz, gamma);
 	double gamma2 = gamma_fTp_Tz(Tp, Tz);
-	UppLog() << "\n" << Format("Tp: %.2f, Tz: %.2f, gamma: %.4f, %.4f", Tp, Tz, gamma, gamma2);
+	UppLog() << "\n" << F("Tp: %.2f, Tz: %.2f, gamma: %.4f, %.4f", Tp, Tz, gamma, gamma2);
 	VERIFY(abs(gamma - gamma2) < 0.000001);
 
 	double freq = 2*M_PI/T;
 	double psd = SeaWaves::JONSWAP_Spectrum(H, T, 3.3, freq);
-	UppLog() << "\n" << Format("JONSWAP PSD (%f): %f", freq, psd);
+	UppLog() << "\n" << F("JONSWAP PSD (%f): %f", freq, psd);
 
 	{
 		SeaWaves waves;
@@ -430,15 +430,15 @@ void TestSeaWaves() {
 		waves.Init(Tp, Hs, 0, h);
 		double x = 100, y = 100, z = -10, t = 10;
 		waves.Calc(x, y, z, t);
-		UppLog() << "\n" << Format("Sea data for Hs: %.2f m, Tp; %.2f s, at x: %.2f m, y: %.2f m, z: %.2f m, t: %.3f s", Hs, Tp, x, y, z, t);
-		UppLog() << "\n" << Format("Free surface z: %f m = %f m", waves.zSurf, waves.ZSurf(x, y, t));
+		UppLog() << "\n" << F("Sea data for Hs: %.2f m, Tp; %.2f s, at x: %.2f m, y: %.2f m, z: %.2f m, t: %.3f s", Hs, Tp, x, y, z, t);
+		UppLog() << "\n" << F("Free surface z: %f m = %f m", waves.zSurf, waves.ZSurf(x, y, t));
 		VERIFY(abs(waves.zSurf - waves.ZSurf(x, y, t)) < 0.000001);
 		VERIFY(abs(waves.zSurf + 0.0758260574) < 0.000001);
-		UppLog() << "\n" << Format("vx: %f m/s, vy: %f m/s, vz: %f m/s", waves.vx, waves.vy, waves.vz);
+		UppLog() << "\n" << F("vx: %f m/s, vy: %f m/s, vz: %f m/s", waves.vx, waves.vy, waves.vz);
 		VERIFY(abs(waves.vz + 0.168306635) < 0.000001);
-		UppLog() << "\n" << Format("ax: %f m/s2, ay: %f m/s2, az: %f m/s2", waves.ax, waves.ay, waves.az);
+		UppLog() << "\n" << F("ax: %f m/s2, ay: %f m/s2, az: %f m/s2", waves.ax, waves.ay, waves.az);
 		VERIFY(abs(waves.az - 0.00269468) < 0.000001);
-		UppLog() << "\n" << Format("p: %.3f Pa = %.3f Pa", waves.p, waves.Pressure(x, y, z, t));
+		UppLog() << "\n" << F("p: %.3f Pa = %.3f Pa", waves.p, waves.Pressure(x, y, z, t));
 		VERIFY(abs(waves.p - waves.Pressure(x, y, z, t)) < 0.000001);
 		
 		double duration = 60*60, deltaT = 0.1;
@@ -447,7 +447,7 @@ void TestSeaWaves() {
 		
 		WaveParam param;
 		SeaWaves::GetWaveParam(param, et, deltaT, h, g, rho);
-		Cout() << Format("\nWave obtained %s", param.ToString());
+		Cout() << F("\nWave obtained %s", param.ToString());
 	}
 }
 

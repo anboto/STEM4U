@@ -22,12 +22,12 @@ using namespace Eigen;
 
 static void CheckMem(void *returnvalue, const char *funcname) {
 	if (returnvalue == NULL) 
-		throw Exc(Format(t_("SUNDIALS_ERROR: %s() failed - returned NULL pointer"), funcname));
+		throw Exc(F(t_("SUNDIALS_ERROR: %s() failed - returned NULL pointer"), funcname));
 }
 
 static void CheckRet(int returnvalue, const char *funcname) {
 	if (returnvalue < 0) 
-	  	throw Exc(Format(t_("SUNDIALS_ERROR: %s() failed with retval = %d"), funcname, returnvalue));
+	  	throw Exc(F(t_("SUNDIALS_ERROR: %s() failed with retval = %d"), funcname, returnvalue));
 }
 /*
 static void PrintFinalStats(void *mem) {
@@ -62,9 +62,9 @@ static void PrintFinalStats(void *mem) {
 }
 
 static void PrintIteration(realtype t, realtype *y, int neq) {
-	Cout() << "\n" << Format("%7.3f ", t);
+	Cout() << "\n" << F("%7.3f ", t);
 	for (int i = 0; i < neq; ++i)
-		Cout() << Format("%12.4e ", y[i]);
+		Cout() << F("%12.4e ", y[i]);
 }
 
 static void PrintRootInfo(int *roots, int nroots) {
@@ -91,7 +91,7 @@ static String GetIdaErrorMsg(int ret) {
  	case IDA_CONSTR_FAIL:	return "the inequality constraints could not be met";	
  	case IDA_LINESEARCH_FAIL:return"the linesearch failed (either on steptol test or on the maxbacks test)";
  	case IDA_CONV_FAIL:		return "the Newton iterations failed to converge";
-	default:				return Format("Unknown Sundials error %d", ret);
+	default:				return F("Unknown Sundials error %d", ret);
 	}
 }
                 	
@@ -208,7 +208,7 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 		
 		IDASetErrHandlerFn(mem, [](int /*error_code*/, const char *module, const char *function,
                                 char *msg, void */*user_data*/) {
-        	throw Exc(Format(t_("Sundials %s error (%s): %s"), module, function, msg));
+        	throw Exc(F(t_("Sundials %s error (%s): %s"), module, function, msg));
                                 }, nullptr);
                                        
 		/* Call IDASVtolerances to set tolerances */
@@ -266,7 +266,7 @@ void SolveDAE(const double y[], const double dy[], int numEq, double dt, double 
 			} else if (retval == IDA_SUCCESS) 
 				;
 			else		
-				throw Exc(Format(t_("Sundials IDA error: %s"), GetIdaErrorMsg(retval)));
+				throw Exc(F(t_("Sundials IDA error: %s"), GetIdaErrorMsg(retval)));
 			
 			if(OnIteration && !OnIteration(titer, userData.iiter, y2, dy2, retval == IDA_ROOT_RETURN, rootsfound))
 				break;
@@ -324,14 +324,14 @@ void SolveNonLinearEquationsSun(double y[], int numEq,
 	  	CheckMem((void *)kmem, "KINCreate");
 	  	
 	  	auto ErrorFun = [](int error_code, const char *module, const char *function, char *msg, void */*data*/) {
-		  	String serror = Format("%d, module %s, function %s", error_code, module, function);
+		  	String serror = F("%d, module %s, function %s", error_code, module, function);
 		  	if (error_code == KIN_WARNING)
-		    	Cout() << Format(t_("Kinsol Warning (%s): %s"), serror, msg);
+		    	Cout() << F(t_("Kinsol Warning (%s): %s"), serror, msg);
 		  	else {
 		  		char *str = KINGetReturnFlagName(error_code);
 		  		String cerror(str);
 		  		free(str);
-		    	throw Exc(Format(t_("Kinsol Error %s (%s): %s"), cerror, serror, msg));
+		    	throw Exc(F(t_("Kinsol Error %s (%s): %s"), cerror, serror, msg));
 		  	}
 		};
 	  	
@@ -403,7 +403,7 @@ void SolveNonLinearEquationsSun(double y[], int numEq,
 		
 		for (int i = 0; i < numEq; ++i) 
 			if (udata[i] != udata[i]) 
-				throw Exc(Format(t_("Obtained NaN in value %d"), i));
+				throw Exc(F(t_("Obtained NaN in value %d"), i));
 		 memcpy(y, udata, (size_t)numEq*sizeof(double));		
 		
   	} catch(Exc err) {

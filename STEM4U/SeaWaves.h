@@ -8,7 +8,7 @@ namespace Upp {
 
 struct WaveParam {
 	String ToString() {
-		return Format("H1/3=%.3f, Hm0=%.3f, Tp=%.3f, Tz=%.3f, Te=%.3f, Tm02=%.3f, gamma=%.3f (%.3f)",
+		return F("H1/3=%.3f, Hm0=%.3f, Tp=%.3f, Tz=%.3f, Te=%.3f, Tm02=%.3f, gamma=%.3f (%.3f)",
 					H1_3, Hm0, Tp, Tz, Te, Tm02, gamma, r2gamma);
 	}
 	double H1_3;

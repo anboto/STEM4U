@@ -385,7 +385,7 @@ bool SeaWaves::SaveZSurf(double x, double y, String filename, double duration, d
 	String out;
 	out << "time" << separator << "fs\n";					
 	for (int i = 0; i < t.size(); ++i) 
-		out << t[i] << separator << Format("%.10f", et[i]) << "\n";					
+		out << t[i] << separator << F("%.10f", et[i]) << "\n";					
 	return SaveFile(filename, out);
 }
 

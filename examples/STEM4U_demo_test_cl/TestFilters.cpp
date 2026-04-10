@@ -86,7 +86,7 @@ void TestLocalFitting(bool test) {
 			scatter.AddSeries(resx, resy).Legend("Filtered").NoMark();
 			
 			scatter.ZoomToFit(true, true).SetLeftMargin(80).SetSize(Size(1000, 500));
-			PNGEncoder().SaveFile(AppendFileNameX(dir, Format("LocalFitting_%d.png", i)), scatter.GetImage());
+			PNGEncoder().SaveFile(AppendFileNameX(dir, F("LocalFitting_%d.png", i)), scatter.GetImage());
 		}
 	}
 }
@@ -116,7 +116,7 @@ void TestButterworth(bool test) {
 	
 	if (!test) {
 		ScatterDraw scatter;
-		scatter.SetTitle(Format("Order:1. Lower:%.1f. Upper:%.1f", fcutlow, fcuthigh));
+		scatter.SetTitle(F("Order:1. Lower:%.1f. Upper:%.1f", fcutlow, fcuthigh));
 		VectorXd y_avg = y.array() - y.mean();
 		scatter.AddSeries(y_avg, 0., fps).Legend("Source").NoMark();
 		scatter.AddSeries(ys, 0., fps).Legend("Filtered").NoMark();

@@ -57,13 +57,13 @@ void TestMooring(bool test) {
 	double anganchor = atan2(Fvanchor, Fhanchorvessel)*180./M_PI;
 	double Fvessel = sqrt(sqr(Fhanchorvessel) + sqr(Fvvessel));
 	double angvessel = atan2(Fvvessel, Fhanchorvessel)*180./M_PI;
-	UppLog() << Format("\nFhanchorvessel=%.2f, Fvanchor=%.2f, Fanchor=%.2f, ang_anchor=%.1f grad\nFvvessel=%.2f, Fvessel=%.2f, ang_vessel=%.1f, xonfloor=%.1f", 
+	UppLog() << F("\nFhanchorvessel=%.2f, Fvanchor=%.2f, Fanchor=%.2f, ang_anchor=%.1f grad\nFvvessel=%.2f, Fvessel=%.2f, ang_vessel=%.1f, xonfloor=%.1f", 
 		Fhanchorvessel, -Fvanchor, Fanchor, anganchor, -Fvvessel, Fvessel, angvessel, xonfloor);
 	VERIFY(FormatF(angvessel, 4) == "30.5976");
 		
 	UppLog() << "\nX\tY";
 	for (int i = 0; i < x.size(); ++i) 
-		UppLog() << Format("\n%.2f\t%.4f", x[i], z[i]);
+		UppLog() << F("\n%.2f\t%.4f", x[i], z[i]);
 	VERIFY(FormatF(z[7], 4) == "9.8116");
 	
 	if (!test) {
@@ -82,7 +82,7 @@ void TestMooring(bool test) {
 				Catenary(rho_m, rho_m3, rho_water, moorlen, BL, 
 					xanchorvessel-iz*15, zanchor, zvessel, Fhanchorvessel, Fvanchor, Fvvessel, 
 					xonfloor, xx[iz], zz[iz], num);
-				String legend = Format("Xanchorvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
+				String legend = F("Xanchorvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						xanchorvessel-iz*15, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
 				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
@@ -97,7 +97,7 @@ void TestMooring(bool test) {
 				Catenary(rho_m, rho_m3, rho_water, moorlen, BL, 
 					xanchorvessel, zanchor, zvessel+iz*10, Fhanchorvessel, Fvanchor, Fvvessel, 
 					xonfloor, xx[iz], zz[iz], num);
-				String legend = Format("Zvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
+				String legend = F("Zvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						zvessel+iz*10, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
 				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
@@ -112,7 +112,7 @@ void TestMooring(bool test) {
 				Catenary(rho_m, rho_m3, rho_water, moorlen, BL, 
 					xanchorvessel, zanchor+iz*30, zvessel, Fhanchorvessel, Fvanchor, Fvvessel, 
 					xonfloor, xx[iz], zz[iz], num);
-				String legend = Format("Zanchor:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
+				String legend = F("Zanchor:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						zanchor+iz*30, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
 				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
