@@ -56,166 +56,149 @@ MooringStatus Catenary(double rho_m, double rho_m3, double rho_water, double moo
 			x[1] = 0;				z[1] = 0;
 			x[2] = xanchorvessel;	z[2] = 0;
 			x[3] = xanchorvessel;	z[3] = zvessel;
-    } else {
-	  	Buffer<double> udata(1, 1);	
-	  	bool dn = true;
-	  	try {
-			SolveNonLinearEquationsSun(udata, 1, [&](const double y[], double *residuals)->bool {
-				double Blimit = y[0];
-				double sqanchor = zanchor*(zanchor + 2*Blimit);
-				if (sqanchor < 0)
-					return false;
-				double sqvessel = zvessel*(zvessel + 2*Blimit);
-				if (sqvessel < 0)
-					return false;
-				residuals[0] = std::sqrt(sqanchor) + std::sqrt(sqvessel) - moorlen; 
-				return true;
-			});
-	  	} catch (...) {
-	  		dn = false;
-	  	}
-	  	if (!dn) {
-	  		status = CALCULATION_PROBLEM;
-			if (!IsNull(rho_m)) 
-				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
-			else
-				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
-	  	} else {
-			double Blimit = udata[0];
-				
-		    double xanchorvessel_limit = Blimit*(acosh(zanchor/Blimit + 1) + acosh(zvessel/Blimit + 1));
-			
-			double delta = 0;
-			if (num > 1)
-				delta = xanchorvessel/(num - 1);
-			x.SetCount(num);
-			z.SetCount(num);
-			
-			if (xanchorvessel < xanchorvessel_limit) {
-		        status = CATENARY_ON_FLOOR;
-			
-			  	Buffer<int> consdata(1, 2);		// B > 0
-			  	
-			  	Buffer<double> udata2(1, Blimit/2.);	
-			  	bool done = true;
-			  	try {
-					SolveNonLinearEquationsSun(udata2, 1, [&](const double y[], double *residuals)->bool {
-						double B = y[0];
-						double a = zanchor*(zanchor + 2*B);
-						double b = zvessel*(zvessel + 2*B);
-						if (a < 0 || b < 0)
-							return false;
-						residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(a) + std::sqrt(b) - moorlen; 
-						return true;
-					}, consdata);
-			  	} catch(...) {
-			  		done = false;
-			  	}
-			  	if (!done) {
-			  		status = CALCULATION_PROBLEM;
-					if (!IsNull(rho_m)) 
-						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
-					else
-						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
-			  	} else {
-					double B = udata2[0];
-			
-			        double xcatanchor = B*acosh(zanchor/B + 1);
-			        double xcatvessel = B*acosh(zvessel/B + 1);
-					xonfloor = xanchorvessel - xcatanchor - xcatvessel;
-			
-					if (!IsNull(rho_m)) {
-				        Fhanchorvessel = lmb*g*B;        
-				        Fvanchor = Fhanchorvessel*sinh(xcatanchor/B); 
-				        Fvvessel = Fhanchorvessel*sinh(xcatvessel/B); 
-					} else
-						Fhanchorvessel = Fvanchor = Fvvessel = Null;
-			        
-			        for (int i = 0; i < x.size(); ++i) {
-			            x[i] = i*delta;
-			    		if (x[i] < xcatanchor)
-			        		z[i] = B*(cosh((xcatanchor - x[i])/B) - 1);
-			            else if (x[i] > (xanchorvessel - xcatvessel))
-			                z[i] = B*(cosh((max(0., x[i] - (xanchorvessel - xcatvessel)))/B) - 1);
-			            else
-			                z[i] = 0;
-			        }
-			  	}
-		    } else if (xanchorvessel < std::sqrt(sqr(moorlen) - sqr(zvessel - zanchor))) {
-		        status = CATENARY;
-		        
-				int neq = 2;
-		        double deltaz = zvessel - zanchor;
+    } else {	// sqrt(zanchor*(zanchor + 2*Blimit)) + sqrt(zvessel*(zvessel + 2*Blimit)) = moorlen
+        double Blimit;
+        if (abs(zvessel - zanchor) > 1E-9) {		
+		  	double K = sqr(moorlen) + sqr(zvessel) - sqr(zanchor);
+		  	double A = 8*sqr(moorlen)*zvessel - 4*K*(zvessel - zanchor);
+		  	double B = sqr(4*K*(zvessel - zanchor) - 8*sqr(moorlen)*zvessel) - 16*sqr(zvessel - zanchor)*(sqr(K) - 4*sqr(moorlen*zvessel));
+		  	double C = 8*sqr(zvessel - zanchor);
+		  	Blimit   = (A + sqrt(B))/C;
+        } else								// To avoid 0/0
+            Blimit = (sqr(moorlen) - 4*sqr(zanchor))/(8*zanchor);
+        
+	    double xanchorvessel_limit = Blimit*(acosh(zanchor/Blimit + 1) + acosh(zvessel/Blimit + 1));
 		
-			  	Buffer<double> udata2((size_t)neq);
-			  	Buffer<int> consdata(2);
-			  	consdata[0] = 2;			// B > 0
-			  	consdata[1] = 0;
-			  	
-			  	double x1_0, B_0, x1, B;
-			  	bool done = false;
-			  	for (x1_0 = 0; x1_0 < abs(xanchorvessel) && !done; x1_0 += abs(xanchorvessel)/4) {
-			  		for (B_0 = abs(Blimit); B_0 < 10*B_0 && !done; B_0 += 5*abs(Blimit)/4) {		
-				  		udata2[0] = B_0;	
-				  		udata2[1] = x1_0;
-				  		bool don = true;
-				  		try {
-							SolveNonLinearEquationsSun(udata2, neq, [&](const double y[], double *residuals)->bool {
-								double B = y[0];
-								double x1 = y[1];
-								
-								double a = (x1 + xanchorvessel)/B;
-								double b = x1/B;
-								
-								if (abs(a) >= 710 || abs(b) >= 710)
-									return false;
-								
-								residuals[0] = B*(sinh(a) - sinh(b)) - moorlen;
-								residuals[1] = B*(cosh(a) - cosh(b)) - deltaz;
-								
-								return true;
-							}, consdata);
-				  		} catch (...) {
-				  			don = false;
-				  		}
-				  		if (don) {
-							B = udata2[0];
-							x1 = udata2[1];		
-							if (abs((x1 + xanchorvessel)/B) < 3)
-								done = true;
-				  		}
+		double delta = 0;
+		if (num > 1)
+			delta = xanchorvessel/(num - 1);
+		x.SetCount(num);
+		z.SetCount(num);
+		
+		if (xanchorvessel < xanchorvessel_limit) {
+	        status = CATENARY_ON_FLOOR;
+		
+		  	Buffer<int> consdata(1, 2);		// B > 0
+		  	
+		  	Buffer<double> udata2(1, Blimit/2.);	
+		  	bool done = true;
+		  	try {
+				SolveNonLinearEquationsSun(udata2, 1, [&](const double y[], double *residuals)->bool {
+					double B = y[0];
+					double a = zanchor*(zanchor + 2*B);
+					double b = zvessel*(zvessel + 2*B);
+					if (a < 0 || b < 0)
+						return false;
+					residuals[0] = xanchorvessel - B*acosh(zanchor/B + 1) - B*acosh(zvessel/B + 1) + std::sqrt(a) + std::sqrt(b) - moorlen; 
+					return true;
+				}, consdata);
+		  	} catch(...) {
+		  		done = false;
+		  	}
+		  	if (!done) {
+		  		status = CALCULATION_PROBLEM;
+				if (!IsNull(rho_m)) 
+					Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
+				else
+					Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
+		  	} else {
+				double B = udata2[0];
+		
+		        double xcatanchor = B*acosh(zanchor/B + 1);
+		        double xcatvessel = B*acosh(zvessel/B + 1);
+				xonfloor = xanchorvessel - xcatanchor - xcatvessel;
+		
+				if (!IsNull(rho_m)) {
+			        Fhanchorvessel = lmb*g*B;        
+			        Fvanchor = Fhanchorvessel*sinh(xcatanchor/B); 
+			        Fvvessel = Fhanchorvessel*sinh(xcatvessel/B); 
+				} else
+					Fhanchorvessel = Fvanchor = Fvvessel = Null;
+		        
+		        for (int i = 0; i < x.size(); ++i) {
+		            x[i] = i*delta;
+		    		if (x[i] < xcatanchor)
+		        		z[i] = B*(cosh((xcatanchor - x[i])/B) - 1);
+		            else if (x[i] > (xanchorvessel - xcatvessel))
+		                z[i] = B*(cosh((max(0., x[i] - (xanchorvessel - xcatvessel)))/B) - 1);
+		            else
+		                z[i] = 0;
+		        }
+		  	}
+	    } else if (xanchorvessel < std::sqrt(sqr(moorlen) - sqr(zvessel - zanchor))) {
+	        status = CATENARY;
+	        
+			int neq = 2;
+	        double deltaz = zvessel - zanchor;
+	
+		  	Buffer<double> udata2((size_t)neq);
+		  	Buffer<int> consdata(2);
+		  	consdata[0] = 2;			// B > 0
+		  	consdata[1] = 0;
+		  	
+		  	double x1_0, B_0, x1, B;
+		  	bool done = false;
+		  	for (x1_0 = 0; x1_0 < abs(xanchorvessel) && !done; x1_0 += abs(xanchorvessel)/4) {
+		  		for (B_0 = abs(Blimit); B_0 < 10*B_0 && !done; B_0 += 5*abs(Blimit)/4) {		
+			  		udata2[0] = B_0;	
+			  		udata2[1] = x1_0;
+			  		bool don = true;
+			  		try {
+						SolveNonLinearEquationsSun(udata2, neq, [&](const double y[], double *residuals)->bool {
+							double B = y[0];
+							double x1 = y[1];
+							
+							double a = (x1 + xanchorvessel)/B;
+							double b = x1/B;
+							
+							if (abs(a) >= 710 || abs(b) >= 710)
+								return false;
+							
+							residuals[0] = B*(sinh(a) - sinh(b)) - moorlen;
+							residuals[1] = B*(cosh(a) - cosh(b)) - deltaz;
+							
+							return true;
+						}, consdata);
+			  		} catch (...) {
+			  			don = false;
 			  		}
-			  	}
-			  	if (!done) {
-					//throw Exc("Catenary. Solving problem");
-					status = CALCULATION_PROBLEM;
-					if (!IsNull(rho_m)) 
-						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
-					else
-						Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
-			  	} else {
-					if (!IsNull(rho_m)) {
-				        Fhanchorvessel = lmb*g*abs(B);    
-				        Fvanchor = -Fhanchorvessel*sinh(x1/B);  			
-				        Fvvessel = Fhanchorvessel*sinh((x1 + xanchorvessel)/B);  	
-					} else
-						Fhanchorvessel = Fvanchor = Fvvessel = Null;
-					
-			        xonfloor = 0;
-			        
-			        for (int i = 0; i < x.size(); ++i) {
-			            x[i] = i*delta;
-			        	z[i] = B*(cosh((x[i] + x1)/B) - 1) - B*(cosh(x1/B) - 1) + zanchor;
-			        }
-			  	}
-		    } else {
+			  		if (don) {
+						B = udata2[0];
+						x1 = udata2[1];		
+						if (abs((x1 + xanchorvessel)/B) < 3)
+							done = true;
+			  		}
+		  		}
+		  	}
+		  	if (!done) {
+				//throw Exc("Catenary. Solving problem");
 				status = CALCULATION_PROBLEM;
 				if (!IsNull(rho_m)) 
 					Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
 				else
 					Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
-		    }
-    	}
+		  	} else {
+				if (!IsNull(rho_m)) {
+			        Fhanchorvessel = lmb*g*abs(B);    
+			        Fvanchor = -Fhanchorvessel*sinh(x1/B);  			
+			        Fvvessel = Fhanchorvessel*sinh((x1 + xanchorvessel)/B);  	
+				} else
+					Fhanchorvessel = Fvanchor = Fvvessel = Null;
+				
+		        xonfloor = 0;
+		        
+		        for (int i = 0; i < x.size(); ++i) {
+		            x[i] = i*delta;
+		        	z[i] = B*(cosh((x[i] + x1)/B) - 1) - B*(cosh(x1/B) - 1) + zanchor;
+		        }
+		  	}
+	    } else {
+			status = CALCULATION_PROBLEM;
+			if (!IsNull(rho_m)) 
+				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = 0;
+			else
+				Fhanchorvessel = Fvanchor = Fvvessel = xonfloor = Null;
+	    }
     }
     
 	if (!IsNull(BL))    
@@ -308,7 +291,7 @@ MooringStatus CatenaryGetLen(double rho_m, double rho_m3, double rho_water, doub
 const char *MooringStatusStr(MooringStatus status) {
 	const char *str[7] = {t_("loose on seabed"), t_("catenary on seabed"), t_("catenary"), t_("taut"),
 						  t_("line length exceeded"), t_("break load exdeeded"), t_("Calculation problem")};
-	ASSERT(int(status) < 6);
+	ASSERT(int(status) < 7);
 	return str[int(status)];
 }
 
