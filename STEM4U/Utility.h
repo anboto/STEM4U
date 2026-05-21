@@ -185,8 +185,12 @@ void Arange(Eigen::Matrix<T, Eigen::Dynamic, 1> &v, T min, T max, T step = 1) {
 
 template <class Range>
 void Arange(Range &v, typename Range::value_type min, typename Range::value_type max, typename Range::value_type step = 1) {
-	int num = int((max - min)/step)+1;
-	LinSpaced(v, num, min, min + (num-1)*step);
+	if (min == max)
+		LinSpaced(v, 1, min, min);		
+	else {
+		int num = int((max - min)/step)+1;
+		LinSpaced(v, num, min, min + (num-1)*step);
+	}
 }
 
 
