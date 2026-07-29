@@ -587,6 +587,7 @@ double Tp_fTe(double Te, double gamma) 	  {return Te*(5 + gamma)/(4.2 + gamma);}
 double gamma_fTp_Te(double Tp, double Te) {return (Te*5 - Tp*4.2)/(Tp - Te);}
 double Tp_fTm(double Tm, double gamma) 	  {return Tm/(0.7303 + 0.04936*gamma - 0.006556*::pow(gamma, 2) + 0.0003610*::pow(gamma, 3));}
 double Tp_fTz(double Tz, double gamma) 	  {return Tz/(0.6673 + 0.05037*gamma - 0.006230*::pow(gamma, 2) + 0.0003341*::pow(gamma, 3));}
+double Tz_fTp(double Tp, double gamma) 	  {return Tp*(0.6673 + 0.05037*gamma - 0.006230*::pow(gamma, 2) + 0.0003341*::pow(gamma, 3));}
 	
 double gamma_fTp_Tz(double Tp, double Tz) {
 	VectorXd x(1);

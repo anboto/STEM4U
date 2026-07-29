@@ -85,8 +85,8 @@ void TestMooring(bool test) {
 				String legend = F("Xanchorvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						xanchorvessel-iz*15, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
-				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
-				scatter.AddSeries(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
 			}
 			scatter.ZoomToFit(true, true);
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Moor xanchorvessel.png"), scatter.GetImage());
@@ -100,8 +100,8 @@ void TestMooring(bool test) {
 				String legend = F("Zvessel:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						zvessel+iz*10, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
-				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
-				scatter.AddSeries(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
 			}
 			scatter.ZoomToFit(true, true);
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Moor zvessel.png"), scatter.GetImage());
@@ -115,8 +115,8 @@ void TestMooring(bool test) {
 				String legend = F("Zanchor:%.0f, Fx:%.0f, Fzanchor:%.0f, Fzvessel:%.0f, xonfloor:%.1f", 
 						zanchor+iz*30, Fhanchorvessel/1000., Fvanchor/1000., Fvvessel/1000., xonfloor);
 				scatter.AddSeries(xx[iz], zz[iz]).Legend(legend).NoMark();
-				scatter.AddSeries(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
-				scatter.AddSeries(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz][0], 1, xx[iz][0], 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
+				scatter.AddSeries<double>(&zz[iz].Top(), 1, xx[iz].Top(), 0).NoSeriesLegend().MarkStyle<CircleMarkPlot>().MarkWidth(15);
 			}
 			scatter.ZoomToFit(true, true);
 			PNGEncoder().SaveFile(AppendFileNameX(dir, "Moor zanchor.png"), scatter.GetImage());
