@@ -3,6 +3,9 @@
 #ifndef _STEM4U_utility_h_
 #define _STEM4U_utility_h_
 
+#include <Eigen/Eigen.h>
+#include <Draw/Draw.h>
+
 namespace Upp {
 
 template <typename T>
