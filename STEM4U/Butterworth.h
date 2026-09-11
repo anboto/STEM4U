@@ -72,7 +72,7 @@ void CoefficientsHighPass(int order, Range &coeffs) {
 }
 
 template <class Range>
-void DCoefficientsLowHigh(int order, typename Range::value_type cutoff, Range &cden, double st, double ct) {
+void DCoefficientsLowHigh(int order, typename Range::value_type /*cutoff*/, Range &cden, double st, double ct) {
 	using Scalar = typename Range::value_type;
 	
 	Range rcoeffs(2*order);  
@@ -353,11 +353,11 @@ bool filter_(const Range &b, const Range &a, const Range &X, Range &Y, Range &Zi
         size_t order = filter_order - 1;
         while (order > 0) {
             if (i >= order) {
-                double aa = B[order]*X[i - order];
-                double bb1 = - A[order];
-                double bb2 = Y[i - order];
-                double bb = - A[order]*Y[i - order];
-                double cc = Zi[order];
+                //double aa = B[order]*X[i - order];
+                //double bb1 = - A[order];
+                //double bb2 = Y[i - order];
+                //double bb = - A[order]*Y[i - order];
+                //double cc = Zi[order];
                 Zi[order - 1] = B[order]*X[i - order] - A[order]*Y[i - order] + Zi[order];
             }
             --order;
