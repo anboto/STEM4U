@@ -12,7 +12,7 @@
 
 namespace Upp {
 
-#if defined(MSC_VER) || defined (__APPLE__)
+#if defined(_MSC_VER) || defined (__APPLE__)
 #define LONG_LONG_MIN LLONG_MIN
 #define LONG_LONG_MAX LLONG_MAX
 #define ULONG_LONG_MAX ULLONG_MAX
