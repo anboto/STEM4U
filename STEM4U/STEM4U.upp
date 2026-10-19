@@ -41,6 +41,7 @@ file
 	Mooring.h,
 	Other readonly separator,
 	Utility.cpp,
+	stem4u.t,
 	Utility.h,
 	srcimp.tpp,
 	src.tpp,

@@ -80,7 +80,7 @@ void XCorr(const Range &_x1, const Range &_x2, Range &r, Range &lags, char scale
 	    else {
 	        double den = ::sqrt(x1.squaredNorm()*x2.squaredNorm());
 	        if (den < 1e-10)
-	            Zero(r);
+	            SetZero(r);
 	        else
 	      		r /= den;
 	    }

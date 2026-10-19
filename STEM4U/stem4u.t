@@ -1,0 +1,142 @@
+#ifdef _MSC_VER
+#pragma setlocale("C")
+#endif
+// Sundials.cpp
+
+T_("SUNDIALS_ERROR: %s() failed - returned NULL pointer")
+caES("SUNDIALS_ERROR: %s() ha fallat - punter NULL")
+deDE("SUNDIALS_ERROR: %s() gescheitert - NULL-Zeiger")
+esES("SUNDIALS_ERROR: %s() fall\303\263 - puntero NULL")
+euES("SUNDIALS_ERROR: %s() huts - NULL erakuslea")
+ptPT("SUNDIALS_ERROR: %s() falhou - ponteiro NULL")
+zhCN("SUNDIALS_ERROR\357\274\232%s()\345\244\261\350\264\245 - \350\277\224\345\233\236NULL\346\214\207\351\222\210")
+
+T_("SUNDIALS_ERROR: %s() failed with retval = %d")
+caES("SUNDIALS_ERROR: %s() ha fallat, retval = %d")
+deDE("SUNDIALS_ERROR: %s() gescheitert, retval = %d")
+esES("SUNDIALS_ERROR: %s() fall\303\263, retval = %d")
+euES("SUNDIALS_ERROR: %s() huts, retval = %d")
+ptPT("SUNDIALS_ERROR: %s() falhou, retval = %d")
+zhCN("SUNDIALS_ERROR\357\274\232%s()\345\244\261\350\264\245\357\274\214retval "
+     "= %d")
+
+T_("Sundials %s error (%s): %s")
+caES("Error Sundials %s (%s): %s")
+deDE("Sundials %s Fehler (%s): %s")
+esES("Error Sundials %s (%s): %s")
+euES("Sundials %s errorea (%s): %s")
+ptPT("Erro Sundials %s (%s): %s")
+zhCN("Sundials %s\351\224\231\350\257\257(%s)\357\274\232%s")
+
+T_("Sundials IDA error: %s")
+caES("Error Sundials IDA: %s")
+deDE("Sundials IDA-Fehler: %s")
+esES("Error Sundials IDA: %s")
+euES("Sundials IDA errorea: %s")
+ptPT("Erro Sundials IDA: %s")
+zhCN("Sundials IDA\351\224\231\350\257\257\357\274\232%s")
+
+T_("Kinsol Warning (%s): %s")
+caES("Av\303\255s Kinsol (%s): %s")
+deDE("Kinsol-Warnung (%s): %s")
+esES("Aviso Kinsol (%s): %s")
+euES("Kinsol abisua (%s): %s")
+ptPT("Aviso Kinsol (%s): %s")
+zhCN("Kinsol\350\255\246\345\221\212(%s)\357\274\232%s")
+
+T_("Kinsol Error %s (%s): %s")
+caES("Error Kinsol %s (%s): %s")
+deDE("Kinsol-Fehler %s (%s): %s")
+esES("Error Kinsol %s (%s): %s")
+euES("Kinsol errorea %s (%s): %s")
+ptPT("Erro Kinsol %s (%s): %s")
+zhCN("Kinsol\351\224\231\350\257\257%s(%s)\357\274\232%s")
+
+T_("Obtained NaN in value %d")
+caES("NaN al valor %d")
+deDE("NaN bei Wert %d")
+esES("NaN en el valor %d")
+euES("NaN %d balioan")
+ptPT("NaN no valor %d")
+zhCN("\345\200\274%d\344\270\272NaN")
+
+
+// LocalFitting.h
+
+T_("LocalFitting: Impossible to get coefficients")
+caES("LocalFitting: No es poden obtenir coeficients")
+deDE("LocalFitting: Koeffizienten nicht ermittelbar")
+esES("LocalFitting: No se obtienen coeficientes")
+euES("LocalFitting: Ezin lortu koefizienteak")
+ptPT("LocalFitting: N\303\243o se obt\303\252m coeficientes")
+zhCN("LocalFitting\357\274\232\346\227\240\346\263\225\350\216\267\345\217\226\347\263\273\346\225\260")
+
+
+// SeaWaves.cpp
+
+T_("JONSWAP parametric")
+caES("JONSWAP param\303\250tric")
+deDE("JONSWAP parametr.")
+esES("JONSWAP param\303\251trico")
+euES("JONSWAP parametr.")
+ptPT("JONSWAP param\303\251trico")
+zhCN("\345\217\202\346\225\260\345\214\226JONSWAP")
+
+
+// Mooring.cpp
+
+T_("loose on seabed")
+caES("fluix al fons")
+deDE("lose am Grund")
+esES("flojo en el fondo")
+euES("hondoan lasai")
+ptPT("solto no fundo")
+zhCN("\346\235\276\345\274\233\344\272\216\346\265\267\345\272\212")
+
+T_("catenary on seabed")
+caES("caten\303\240ria al fons")
+deDE("Kettenlinie am Grund")
+esES("catenaria en el fondo")
+euES("katenaria hondoan")
+ptPT("caten\303\241ria no fundo")
+zhCN("\346\265\267\345\272\212\346\202\254\351\223\276\347\272\277")
+
+T_("catenary")
+caES("caten\303\240ria")
+deDE("Kettenlinie")
+esES("catenaria")
+euES("katenaria")
+ptPT("caten\303\241ria")
+zhCN("\346\202\254\351\223\276\347\272\277")
+
+T_("taut")
+caES("tens")
+deDE("straff")
+esES("tenso")
+euES("tenkatua")
+ptPT("tenso")
+zhCN("\345\274\240\347\264\247")
+
+T_("line length exceeded")
+caES("Longitud excedida")
+deDE("Leinenl\303\244nge \303\274berschritten")
+esES("Longitud excedida")
+euES("Luzera gainditua")
+ptPT("Comprimento excedido")
+zhCN("\350\266\205\350\277\207\347\274\206\347\272\277\351\225\277\345\272\246")
+
+T_("break load exdeeded")
+caES("C\303\240rrega ruptura excedida")
+deDE("Bruchlast \303\274berschritten")
+esES("Carga rotura excedida")
+euES("Haustura karga gainditua")
+ptPT("Carga rutura excedida")
+zhCN("\350\266\205\350\277\207\347\240\264\346\226\255\350\275\275\350\215\267")
+
+T_("Calculation problem")
+caES("Problema de c\303\240lcul")
+deDE("Rechenproblem")
+esES("Problema de c\303\241lculo")
+euES("Kalkulu arazoa")
+ptPT("Problema de c\303\241lculo")
+zhCN("\350\256\241\347\256\227\351\227\256\351\242\230")
