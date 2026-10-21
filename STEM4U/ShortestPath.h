@@ -65,13 +65,6 @@ template <typename T>
 inline bool operator<(const SegSP<T>& left, const SegSP<T>& right) {return left.weight < right.weight;}
 
 template <typename T>
-T SumWeight(T a, T b) {
-	if (a == std::numeric_limits<T>::max() || b == std::numeric_limits<T>::max())
-		return std::numeric_limits<T>::max();
-	return a+b;
-}
-
-template <typename T>
 Vector<SegSP<T>> Dijkstra(const Vector<Vector<SegSP<T>>> &adjList, int start) {
     Vector<SegSP<T>> dist(adjList.size());
     
@@ -84,7 +77,11 @@ Vector<SegSP<T>> Dijkstra(const Vector<Vector<SegSP<T>>> &adjList, int start) {
     
     while(!pq.empty()) {
         int u = pq[0].node;
-        pq.Remove(0);
+		T queuedWeight = pq[0].weight;
+		pq.Remove(0);
+		
+		if(queuedWeight > dist[u].weight)
+		    continue;  // Skip an entry superseded by a shorter route
       
         for(auto &seg : adjList[u]) {
             int v = seg.node;
@@ -97,6 +94,13 @@ Vector<SegSP<T>> Dijkstra(const Vector<Vector<SegSP<T>>> &adjList, int start) {
         }
     }
     return dist;
+}
+
+template <typename T>
+T SumWeight(T a, T b) {
+	if (a == std::numeric_limits<T>::max() || b == std::numeric_limits<T>::max())
+		return std::numeric_limits<T>::max();
+	return a+b;
 }
 
 template <typename T>
